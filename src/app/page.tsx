@@ -3,8 +3,8 @@ import { MODULES, MODULE_STYLES } from "@/curriculum/modules";
 import { LESSONS } from "@/curriculum/lessons";
 import { getLessonStatuses } from "@/curriculum/progress";
 import { getUserId } from "@/lib/supabase/server";
-import { SkillTags } from "@/components/skill-tags";
-import { StatusIcon } from "@/components/status-icon";
+import { SKILLS } from "@/curriculum/skills";
+import { IslandMap } from "@/components/island-map";
 
 export default async function TimelinePage() {
   const [statuses, userId] = await Promise.all([getLessonStatuses(), getUserId()]);
@@ -35,17 +35,18 @@ export default async function TimelinePage() {
         </div>
       </section>
 
-      {MODULES.map((module) => {
+      {MODULES.map((module, index) => {
         const lessons = LESSONS.filter((lesson) => lesson.module === module.id);
         const done = lessons.filter((lesson) => statuses[lesson.id] === "completed").length;
         const style = MODULE_STYLES[module.id];
         return (
-          <section key={module.id} aria-labelledby={`module-${module.id}`} className="mb-12">
-            <header className="mb-4 flex items-baseline justify-between gap-4 border-b border-line pb-3">
+          <section key={module.id} aria-labelledby={`module-${module.id}`}>
+            {index > 0 && <SeaRoute />}
+            <header className="mb-2 flex items-baseline justify-between gap-4">
               <div>
                 <h2 id={`module-${module.id}`} className="flex items-center gap-2 text-xl font-semibold">
                   <span aria-hidden className={`size-3 rounded-full ${style.bg}`} />
-                  {module.title}
+                  {module.title} Island
                 </h2>
                 <p className="mt-1 text-sm text-muted">{module.description}</p>
               </div>
@@ -53,41 +54,35 @@ export default async function TimelinePage() {
                 {done}/{lessons.length}
               </span>
             </header>
-
-            <ol className="relative ml-4 border-l-2 border-line">
-              {lessons.map((lesson) => {
-                const status = statuses[lesson.id];
-                const locked = status === "locked";
-                return (
-                  <li key={lesson.id} className="relative -ml-[17px] flex gap-4 pb-6 last:pb-0">
-                    <StatusIcon status={status} />
-                    <div
-                      className={`flex-1 rounded-lg border border-line bg-surface p-4 ${locked ? "opacity-60" : "shadow-sm"}`}
-                    >
-                      <p className={`text-xs font-medium uppercase tracking-wide ${style.text}`}>
-                        Lesson {lesson.order}
-                      </p>
-                      <h3 className="mt-1 font-semibold">
-                        {locked ? (
-                          lesson.title
-                        ) : (
-                          <Link href={`/lessons/${lesson.id}`} className="hover:text-accent">
-                            {lesson.title}
-                          </Link>
-                        )}
-                      </h3>
-                      <p className="mt-1 text-sm text-muted">{lesson.summary}</p>
-                      <div className="mt-3">
-                        <SkillTags skills={lesson.skills} />
-                      </div>
-                    </div>
-                  </li>
-                );
-              })}
-            </ol>
+            <IslandMap
+              moduleId={module.id}
+              title={module.title}
+              lessons={lessons.map((lesson) => ({
+                id: lesson.id,
+                order: lesson.order,
+                title: lesson.title,
+                summary: lesson.summary,
+                skills: lesson.skills.map((skill) => SKILLS[skill]),
+                status: statuses[lesson.id],
+              }))}
+            />
           </section>
         );
       })}
     </div>
+  );
+}
+
+/** The dotted crossing between two islands. */
+function SeaRoute() {
+  return (
+    <svg aria-hidden viewBox="0 0 120 90" className="mx-auto -my-2 block h-20 w-28 text-sky-400/70">
+      <path d="M60 2 C 20 30, 100 55, 60 88" fill="none" stroke="currentColor" strokeWidth="3" strokeDasharray="2 8" strokeLinecap="round" />
+      <g transform="translate(70 34)">
+        <path d="M-12 10 h24 l-5 7 h-14 z" className="fill-amber-700" />
+        <path d="M0 -10 v20" stroke="#6b4a2b" strokeWidth="2" />
+        <path d="M1 -9 l11 15 h-11 z" className="fill-white" />
+      </g>
+    </svg>
   );
 }
