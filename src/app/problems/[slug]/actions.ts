@@ -6,10 +6,12 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { filesForGrading, problemSources } from "@/grader/problem-sources";
 import { runTests } from "@/grader/run";
 import type { TestResult } from "@/grader/results";
+import { checkSyntax, type SyntaxIssue } from "@/grader/syntax";
 
 export type SubmissionOutcome =
-  | { ok: true; results: TestResult[]; passedCount: number; solved: boolean }
-  | { ok: false; error: string };
+  | { status: "graded"; results: TestResult[]; passedCount: number; solved: boolean }
+  | { status: "syntax-error"; issues: SyntaxIssue[] }
+  | { status: "rejected"; error: string };
 
 const MAX_SOURCE_LENGTH = 100_000;
 const MIN_SECONDS_BETWEEN_RUNS = 3;
@@ -30,11 +32,16 @@ function parseFiles(problem: Problem, files: unknown): Record<string, string> | 
 
 export async function submitSolution(problemId: string, files: unknown): Promise<SubmissionOutcome> {
   const userId = await getUserId();
-  if (!userId) return { ok: false, error: "Sign in to run tests." };
+  if (!userId) return { status: "rejected", error: "Sign in to run tests." };
   const problem = getProblem(problemId);
-  if (!problem) return { ok: false, error: "That problem does not exist." };
+  if (!problem) return { status: "rejected", error: "That problem does not exist." };
   const studentFiles = parseFiles(problem, files);
-  if (typeof studentFiles === "string") return { ok: false, error: studentFiles };
+  if (typeof studentFiles === "string") return { status: "rejected", error: studentFiles };
+
+  // Code that does not parse is reported before grading and is not recorded as an attempt: a typo should not count
+  // against a student the way a wrong answer does.
+  const issues = checkSyntax(studentFiles);
+  if (issues.length > 0) return { status: "syntax-error", issues };
 
   const supabase = await createClient();
   const { data: last } = await supabase
@@ -45,7 +52,7 @@ export async function submitSolution(problemId: string, files: unknown): Promise
     .limit(1)
     .maybeSingle();
   if (last && Date.now() - Date.parse(last.created_at) < MIN_SECONDS_BETWEEN_RUNS * 1000) {
-    return { ok: false, error: "Please wait a few seconds between test runs." };
+    return { status: "rejected", error: "Please wait a few seconds between test runs." };
   }
 
   const results = await runTests(filesForGrading(problem, studentFiles), problemSources(problem).tests);
@@ -68,5 +75,5 @@ export async function submitSolution(problemId: string, files: unknown): Promise
     .select("solved_at")
     .eq("problem_id", problem.id)
     .maybeSingle();
-  return { ok: true, results, passedCount, solved: Boolean(progress?.solved_at) };
+  return { status: "graded", results, passedCount, solved: Boolean(progress?.solved_at) };
 }

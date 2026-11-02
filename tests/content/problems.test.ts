@@ -6,6 +6,7 @@ import { PROBLEMS } from "@/curriculum/problems";
 import { LESSONS } from "@/curriculum/lessons";
 import { PROBLEM_SOURCES } from "@/generated/problem-sources";
 import { runTests } from "@/grader/run";
+import { checkSyntax } from "@/grader/syntax";
 
 describe("problem index", () => {
   it("has unique ids that match a source folder, and no orphaned folders", () => {
@@ -36,6 +37,13 @@ describe.each(PROBLEMS.map((problem) => [problem.id, problem] as const))("proble
       expect(Object.keys(sources.solution)).toContain(path);
     }
     for (const path of Object.keys(sources.solution)) expect(problem.editable).toContain(path);
+  });
+
+  it("has starter and solution files that pass the syntax check students face", () => {
+    for (const kind of ["starter", "solution"] as const) {
+      const files = Object.fromEntries(problem.editable.map((path) => [path, sources[kind][path]]));
+      expect(checkSyntax(files)).toEqual([]);
+    }
   });
 
   it("solution passes every test, and there are at least three", async () => {
