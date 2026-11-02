@@ -2,7 +2,12 @@ import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/proxy";
 import { loginPath } from "@/lib/redirect";
 
-const PROTECTED = [/^\/problems(\/|$)/, /^\/profile(\/|$)/, /^\/lessons\/[^/]+\/complete$/];
+const PROTECTED = [
+  /^\/problems(\/|$)/,
+  /^\/profile(\/|$)/,
+  /^\/leaderboard(\/|$)/,
+  /^\/lessons\/[^/]+\/complete$/,
+];
 
 export async function proxy(request: NextRequest) {
   const { response, userId } = await updateSession(request);

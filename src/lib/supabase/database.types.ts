@@ -326,6 +326,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      leaderboard: {
+        Args: never
+        Returns: {
+          avatar_url: string | null
+          display_name: string
+          easy: number
+          hard: number
+          is_me: boolean
+          medium: number
+          points: number
+          rank: number
+          username: string
+        }[]
+      }
       lesson_statuses: {
         Args: never
         Returns: {

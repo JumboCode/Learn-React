@@ -183,3 +183,25 @@ describe("curriculum", () => {
     expect(anonError?.code).toBe("42501");
   });
 });
+
+describe("leaderboard", () => {
+  it("is visible to signed-in users only", async () => {
+    const { error } = await anon.rpc("leaderboard");
+    expect(error?.code).toBe("42501");
+  });
+
+  it("scores solved problems and exposes only leaderboard fields", async () => {
+    const { data, error } = await alice.client.rpc("leaderboard");
+    expect(error).toBeNull();
+    const aliceRow = data!.find((row) => row.is_me)!;
+    // Alice solved one easy problem in the submissions tests above; Bob solved nothing.
+    expect(aliceRow).toMatchObject({ username: `zz${run}`, easy: 1, medium: 0, hard: 0, points: 1 });
+    const bobRow = data!.find((row) => row.username.startsWith(`zz${run}`.slice(0, 7) + "_"))!;
+    expect(bobRow).toMatchObject({ points: 0, is_me: false });
+    expect(Object.keys(aliceRow).sort()).toEqual(
+      ["avatar_url", "display_name", "easy", "hard", "is_me", "medium", "points", "rank", "username"].sort(),
+    );
+    const ranks = data!.map((row) => row.rank);
+    expect(ranks).toEqual([...ranks].sort((a, b) => a - b));
+  });
+});

@@ -10,6 +10,7 @@ built on.
   solved on its first full pass.
 - **Profile:** lessons and problems by module and difficulty, a per-skill score chart labelled Strong or Needs
   improvement, recommendations drawn from weak skills, and recent activity.
+- **Leaderboard:** every signed-in learner ranked by points for solved problems (easy 1, medium 2, hard 3).
 - **Resources:** curated links for HTML, CSS, JavaScript, React, and tooling.
 
 Built with Next.js 16 (App Router, Server Components), TypeScript, Tailwind CSS 4, Supabase (Auth, Postgres, Row Level
