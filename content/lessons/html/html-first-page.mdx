@@ -1,0 +1,57 @@
+Every website you have ever used, including every React app, starts as **HTML**: a text file that tells the browser what is on the page. React does not replace HTML. It is a tool for *generating* HTML, so understanding HTML is step one.
+
+## What the browser does
+
+When you open a page, the browser downloads an HTML file, reads it top to bottom, and draws what it describes. HTML is not a programming language: it has no variables or loops. It is a **markup** language, which means it labels pieces of content ("this is a heading", "this is a paragraph") so the browser knows how to show them.
+
+## The skeleton
+
+Almost every HTML file has the same outline:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My first page</title>
+  </head>
+  <body>
+    <h1>Hello, web!</h1>
+    <p>This is my first page.</p>
+  </body>
+</html>
+```
+
+| Part | What it does |
+| --- | --- |
+| `<!DOCTYPE html>` | Tells the browser this is modern HTML. |
+| `<html>` | Wraps the whole document. |
+| `<head>` | Information *about* the page, like the tab title. Not shown on the page itself. |
+| `<body>` | Everything the visitor actually sees. |
+
+## Try it
+
+The editor below is live. Change the heading text, add another paragraph, and watch the preview update.
+
+```html-live
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My first page</title>
+  </head>
+  <body>
+    <h1>Hello, web!</h1>
+    <p>This is my first page.</p>
+    <!-- Try adding another <p> here. This line is a comment: the browser ignores it. -->
+  </body>
+</html>
+```
+
+<Note>
+In a React app you rarely write the skeleton yourself. A single HTML file contains an empty `<div id="root">` inside the `<body>`, and React fills it in. Everything you build in React ends up inside that one element.
+</Note>
+
+## Recap
+
+- HTML describes the content of a page; the browser reads it and draws it.
+- `<head>` holds information about the page; `<body>` holds what people see.
+- React apps still produce HTML. React just writes it for you.

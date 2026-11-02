@@ -1,0 +1,19 @@
+Build a small `Badge` component that picks its colors from CSS classes, plus an inline style for bold badges.
+
+## Requirements
+
+In `App.js`:
+
+- Export a component named `Badge`: `export function Badge({ label, status, bold })`.
+- It renders a `<span>` showing the `label`, with **two** classes: `badge` and `badge-` followed by the status. For example, `status="success"` gives `className="badge badge-success"`.
+- When `bold` is `true`, the span also gets the inline style `fontWeight: "bold"`. When `bold` is missing or false, it gets no bold style.
+- The default export `App` renders three badges: `Passed` (status `success`), `Pending` (status `warning`), and `Failed` (status `error`, bold).
+
+In `styles.css` (already imported by `App.js`):
+
+- Keep the existing rules, and add a `.badge-error` rule with `background-color: #fee2e2` and `color: #b91c1c`.
+
+## Hints
+
+- `className` is just a string, so a template literal works: `` `badge badge-${status}` ``.
+- The `style` prop takes an object: `style={{ fontWeight: "bold" }}`. A ternary can choose between that object and `undefined`, or between `"bold"` and `"normal"`.

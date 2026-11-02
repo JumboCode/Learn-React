@@ -1,0 +1,18 @@
+Build a reusable `Card` with three **slots** (`title`, `children`, and `footer`), then build a more specific `ProfileCard` by wrapping it.
+
+## Requirements
+
+- Export a component named `Card` (`export function Card(...)`) that takes three props:
+  - `title`: shown inside an `<h2>` heading. It can be plain text or any JSX, like `<span>New <em>(1)</em></span>`.
+  - `children`: shown below the title.
+  - `footer`: optional. When it is given, show it inside a `<footer>` element below the children. When it is missing, render **no** `<footer>` element at all.
+- Export a component named `ProfileCard` that takes `name` and `role` props and **uses `Card`**: the `name` is the card's title, the `role` is shown in a paragraph as the card's children, and the footer is a link with the text **View profile** and the `href` `#/profile`.
+- The default export `App` renders:
+  - a `Card` titled **Welcome** containing the text `Thanks for joining the club.` with a **Get started** button as its footer, and
+  - a `ProfileCard` for **Ada Lovelace** with the role **Mathematician**.
+
+## Hints
+
+- Props can hold JSX, so `footer={<button>Get started</button>}` works just like any other prop.
+- `{footer && <footer>{footer}</footer>}` renders nothing when `footer` is missing.
+- `ProfileCard` should not copy `Card`'s markup. Return a `<Card ...>` and fill its slots.

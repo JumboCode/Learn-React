@@ -1,0 +1,105 @@
+In the HTML module you learned that the browser turns your HTML into a tree of objects called the **DOM**. JavaScript can reach into that tree while the page is open: find an element, change its text or classes, and add brand-new elements. This is how pages changed before React, and it is what React does for you behind the scenes.
+
+## Finding elements
+
+`document` is the whole page. `document.querySelector` takes a CSS selector, the same kind you wrote in the CSS module, and returns the first matching element:
+
+```js
+const title = document.querySelector("h1");
+const intro = document.querySelector("#intro");      // by id
+const firstCard = document.querySelector(".card");   // by class
+const allCards = document.querySelectorAll(".card"); // every match
+```
+
+If nothing matches, `querySelector` returns `null`. Trying to use `null` as an element causes the classic error "Cannot read properties of null", which usually means a typo in the selector or a script that ran before the element existed.
+
+## Changing text, attributes, and classes
+
+Once you have an element, you can change it through its properties:
+
+| Code | What it changes |
+| --- | --- |
+| `el.textContent = "Hi"` | the text inside the element |
+| `el.setAttribute("href", "/about")` | any attribute |
+| `el.classList.add("active")` | adds a class |
+| `el.classList.remove("active")` | removes a class |
+| `el.classList.toggle("active")` | adds it if missing, removes it if present |
+| `el.style.color = "red"` | one inline style |
+
+Edit the script below and watch the preview:
+
+```html-live
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body { font-family: sans-serif; padding: 16px; }
+      .highlight { background: gold; padding: 4px 8px; border-radius: 4px; }
+    </style>
+  </head>
+  <body>
+    <h1>Original title</h1>
+    <p id="intro">This text will be replaced.</p>
+    <a id="link" href="#">A link</a>
+
+    <script>
+      const title = document.querySelector("h1");
+      title.textContent = "Changed by JavaScript!";
+
+      const intro = document.querySelector("#intro");
+      intro.textContent = "Scripts can rewrite the page after it loads.";
+      intro.classList.add("highlight");
+
+      const link = document.querySelector("#link");
+      link.setAttribute("href", "https://developer.mozilla.org");
+      link.textContent = "Visit MDN";
+
+      // Try removing the highlight class with classList.remove.
+      // Try changing title.style.color to "tomato".
+    </script>
+  </body>
+</html>
+```
+
+Notice that the `<script>` sits at the *bottom* of the body. Scripts run as soon as the browser reaches them, so the elements they look for must already be above them.
+
+## Creating and adding elements
+
+`document.createElement` makes a new element that is not on the page yet. Set it up, then attach it to a parent with `append`:
+
+```html-live
+<!DOCTYPE html>
+<html>
+  <body style="font-family: sans-serif; padding: 16px;">
+    <h2>Shopping list</h2>
+    <ul id="list"></ul>
+
+    <script>
+      const items = ["Milk", "Eggs", "Bread"];
+      const list = document.querySelector("#list");
+
+      items.forEach((item) => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        list.append(li);
+      });
+
+      // Try adding "Cheese" to the items array.
+      // Try giving each li a class with li.classList.add(...).
+    </script>
+  </body>
+</html>
+```
+
+This loop is the hand-made version of rendering a list: take an array of data and build one element per item.
+
+<Note>
+In React you almost never call `querySelector`, `textContent`, or `append` yourself. You describe what the page *should* look like for the current data, and React works out which DOM changes to make. Knowing what happens underneath helps you understand why React exists: keeping many manual updates like these in sync by hand gets hard fast.
+</Note>
+
+## Recap
+
+- `document.querySelector(selector)` finds the first matching element, or `null`.
+- `textContent` changes text, `setAttribute` changes attributes, and `classList` adds, removes, or toggles classes.
+- `document.createElement` makes a new element and `parent.append(child)` puts it on the page.
+- A script must run after the elements it touches exist, so put it at the end of the body.

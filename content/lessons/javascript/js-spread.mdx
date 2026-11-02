@@ -1,0 +1,97 @@
+Earlier lessons warned that `push` and `user.age = 37` change, or **mutate**, the original value. Often you want a *new* array or object with a change applied, leaving the original as it was. The **spread** syntax, three dots `...`, makes that easy. The same three dots in a different spot, called **rest**, gather values up instead.
+
+## Spreading arrays
+
+`...array` inside square brackets lays out the array's items as if you had typed them one by one. Use it to copy, combine, or add without touching the original:
+
+```js-live
+const fruits = ["apple", "banana"];
+
+const copy = [...fruits];
+const more = [...fruits, "cherry"];
+const both = [...fruits, ...["kiwi", "mango"]];
+const atStart = ["lemon", ...fruits];
+
+console.log(more);
+console.log(both);
+console.log(atStart);
+console.log(fruits); // still ["apple", "banana"]
+
+// Try making a new array with "grape" in the middle of fruits.
+```
+
+## Spreading objects
+
+`...object` inside curly braces copies all of the object's keys into a new object. Keys written *after* the spread override the copied ones:
+
+```js-live
+const user = { name: "Ada", age: 36, city: "London" };
+
+const older = { ...user, age: 37 };
+const withEmail = { ...user, email: "ada@example.com" };
+
+console.log(older);
+console.log(withEmail);
+console.log(user); // unchanged
+
+// Try putting age: 37 BEFORE ...user. Which age wins, and why?
+```
+
+Order matters: later keys win. So `{ ...user, age: 37 }` means "everything from `user`, but with `age` set to 37".
+
+## Spread is shallow
+
+Spread copies one level deep. If the object holds another object or array, the copy points at the *same* inner value:
+
+```js
+const a = { name: "Ada", tags: ["math"] };
+const b = { ...a };
+b.tags.push("code"); // also changes a.tags!
+```
+
+To change something nested, spread at each level: `{ ...a, tags: [...a.tags, "code"] }`.
+
+## Rest: gathering values
+
+In a function's parameter list, `...name` collects any number of arguments into an array. In destructuring, it collects "everything else":
+
+```js-live
+function sum(...numbers) {
+  // numbers is a real array of every argument passed in
+  let total = 0;
+  for (const n of numbers) {
+    total = total + n;
+  }
+  return total;
+}
+console.log(sum(1, 2, 3));
+console.log(sum(5, 10, 15, 20));
+
+const [first, ...others] = ["gold", "silver", "bronze"];
+console.log(first, others);
+
+const { name, ...details } = { name: "Grace", age: 45, city: "NYC" };
+console.log(name, details);
+
+// Try calling sum with no arguments.
+```
+
+| Where the dots appear | Name | What it does |
+| --- | --- | --- |
+| In an array or object you are building | spread | spreads values out |
+| In parameters or on the left of `=` | rest | gathers values up |
+
+## Why "don't mutate" matters
+
+React decides whether to redraw by checking if you gave it a *different* array or object than before. If you `push` onto the same array, it is still the same array, so React may not notice anything changed. Spread gives React what it needs: a brand-new value.
+
+<Note>
+Updating state in React almost always looks like this: `setTodos([...todos, newTodo])` to add an item, and `setUser({ ...user, age: 37 })` to change one field. Combine spread with `map` and `filter` from earlier, and you can add, remove, and edit items without ever mutating.
+</Note>
+
+## Recap
+
+- `[...arr]` and `{ ...obj }` make shallow copies you can safely change.
+- Spread combines arrays and objects; later keys override earlier ones.
+- `...rest` in parameters or destructuring gathers the remaining values.
+- React needs new arrays and objects to notice changes, so prefer spread over mutating.

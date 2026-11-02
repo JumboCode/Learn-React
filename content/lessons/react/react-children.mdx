@@ -1,0 +1,82 @@
+Some components are containers: a card, a panel, a dialog box. They draw a border or a background, but what goes *inside* changes every time. Passing all that inner content as an attribute would be clumsy. Instead, React lets you nest content between a component's opening and closing tags, just like HTML, and hands it to the component as a special prop called `children`.
+
+## The children prop
+
+```jsx-live
+function Card({ children }) {
+  return (
+    <div style={{ border: "2px solid #6c63ff", borderRadius: 8, padding: 12, marginBottom: 12 }}>
+      {children}
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <Card>
+        <h3>Welcome!</h3>
+        <p>This text was written by App, but Card drew the border.</p>
+      </Card>
+      <Card>
+        <p>Cards can hold anything, even a button:</p>
+        <button>Click me</button>
+      </Card>
+      {/* Try putting a Card inside another Card. */}
+    </div>
+  );
+}
+```
+
+Whatever you put between `<Card>` and `</Card>` arrives as `props.children`. Here we destructure it as `{ children }` and place it inside the styled `div` with `{children}`. `Card` does not know or care what the content is. It just decides where it goes.
+
+This is the same nesting you have been doing all along with HTML elements: a `<div>` does not know what is inside it either. Now your own components can work that way too.
+
+## Mixing children with other props
+
+`children` is just a prop, so it works alongside regular ones. A common pattern is a component that supplies the frame and a title, while the parent supplies the body:
+
+```jsx-live
+function Panel({ title, children }) {
+  return (
+    <section style={{ border: "1px solid #ccc", borderRadius: 8, marginBottom: 12 }}>
+      <h3 style={{ margin: 0, padding: 8, background: "#f0f0f0" }}>{title}</h3>
+      <div style={{ padding: 8 }}>{children}</div>
+    </section>
+  );
+}
+
+export default function App() {
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <Panel title="Shopping list">
+        <ul>
+          <li>Eggs</li>
+          <li>Milk</li>
+        </ul>
+      </Panel>
+      <Panel title="Notes">
+        <p>Remember to call Grandma.</p>
+      </Panel>
+      {/* Try adding a third Panel with a different title and body. */}
+    </div>
+  );
+}
+```
+
+## Why this is useful
+
+Without `children`, you might write one component per combination: `ShoppingPanel`, `NotesPanel`, and so on, each repeating the same border styles. With `children`, you write the wrapper once and reuse it everywhere. Change the border in `Panel`, and every panel updates.
+
+This idea of building bigger pieces by wrapping smaller ones is called **composition**. It comes back in a later lesson with more patterns.
+
+<Note>
+`children` can be text, a single element, several elements, or nothing at all. If a component never puts `{children}` in its returned JSX, anything nested inside it is silently ignored, which is a common reason for "my content disappeared."
+</Note>
+
+## Recap
+
+- Content between a component's tags arrives as the `children` prop.
+- Place `{children}` in the returned JSX wherever the content should appear.
+- `children` works alongside ordinary props like `title`.
+- Wrapper components let you write layout and styling once and reuse it.

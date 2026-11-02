@@ -1,0 +1,18 @@
+Write your first custom hook, `useToggle`, and use it twice in the same component.
+
+## Requirements
+
+- Export a function named `useToggle` (`export function useToggle(initial)`):
+  - It returns an array of two items: the current boolean value, and a function that flips it.
+  - The value starts as `initial`. If `initial` is not given, it starts as `false`.
+  - Every call to `useToggle` has its own, independent value.
+- The default export `App` uses `useToggle` **twice**:
+  - A **Show details** button. When clicked, it shows the text `Here are the details.` and its own text changes to **Hide details**. Clicking **Hide details** hides the text again.
+  - A **Turn on notifications** button that changes to **Turn off notifications** when clicked (and back again). This one starts off.
+  - The two toggles must not affect each other.
+
+## Hints
+
+- A custom hook is just a function whose name starts with `use` and that calls other hooks, like `useState`.
+- Give the parameter a default value: `function useToggle(initial = false)`.
+- Return `[value, toggle]`, so callers can name them whatever they like, like `const [showDetails, toggleDetails] = useToggle();`.

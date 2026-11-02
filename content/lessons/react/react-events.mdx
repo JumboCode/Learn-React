@@ -1,0 +1,94 @@
+In the JavaScript module you made pages interactive with `addEventListener`. React has a simpler way: you pass an **event handler** function straight to an element as a prop, like `onClick`. You already saw this with `useState`; this lesson looks at events properly.
+
+## onClick
+
+Event props are camelCase versions of the HTML event names: `onClick`, `onChange`, `onSubmit`, `onMouseEnter`, `onKeyDown`, and so on. Their value is a function that React calls when the event happens:
+
+```jsx-live
+import { useState } from "react";
+
+export default function App() {
+  const [likes, setLikes] = useState(0);
+
+  function handleLike() {
+    setLikes(likes + 1);
+  }
+
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <button onClick={handleLike}>Like ({likes})</button>
+      <button onClick={() => setLikes(0)} style={{ marginLeft: 8 }}>
+        Reset
+      </button>
+      {/* Try adding a "Dislike" button that subtracts 1. */}
+    </div>
+  );
+}
+```
+
+There are two common styles here. `handleLike` is a named function defined inside the component, then passed by name. The Reset button uses an inline arrow function. Both are fine; named handlers keep JSX tidy when the logic is more than one line. By convention, handler names start with `handle`.
+
+## Pass the function, do not call it
+
+This is the most common beginner bug in React:
+
+| You write | What happens |
+| --- | --- |
+| `onClick={handleLike}` | Passes the function. React calls it on click. |
+| `onClick={handleLike()}` | Calls it *right now*, during render, and passes its return value. |
+| `onClick={() => handleLike()}` | Passes a new arrow function that calls `handleLike` on click. |
+
+Remember callbacks from the JavaScript module: you hand a function to someone else, and *they* decide when to call it. `addEventListener("click", handleLike)` has no parentheses for the same reason.
+
+The arrow-function form is what you use when you need to pass arguments: `onClick={() => addToCart(item.id)}`.
+
+## The event object
+
+React passes your handler an **event object**, just as `addEventListener` did. The most useful property is `e.target`, the element the event came from. For an input, `e.target.value` is the current text:
+
+```jsx-live
+import { useState } from "react";
+
+export default function App() {
+  const [text, setText] = useState("");
+  const [submitted, setSubmitted] = useState("");
+
+  function handleChange(e) {
+    setText(e.target.value);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    setSubmitted(text);
+  }
+
+  return (
+    <form onSubmit={handleSubmit} style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <input aria-label="Type something" onChange={handleChange} placeholder="Type something" />
+      <button type="submit">Send</button>
+      <p>Live: {text}</p>
+      <p>Last sent: {submitted}</p>
+      {/* Try deleting e.preventDefault() and pressing Send. */}
+    </form>
+  );
+}
+```
+
+`onChange` in React fires on every keystroke, not only when the input loses focus as it does in plain HTML.
+
+## preventDefault and onSubmit
+
+By default, submitting an HTML form reloads the page, which wipes out your React app's state. Calling `e.preventDefault()` in the `onSubmit` handler stops that, so you can handle the data in JavaScript instead. Put `onSubmit` on the `<form>` rather than `onClick` on the button: that way pressing Enter in the input submits too.
+
+The next lessons build on this: forms with inputs fully controlled by state come right after we look at updating arrays and objects.
+
+<Note>
+If your handler seems to run as soon as the page loads, or you get an error about "too many re-renders," look for parentheses: `onClick={setCount(count + 1)}` calls the setter during render. Wrap it in an arrow function: `onClick={() => setCount(count + 1)}`.
+</Note>
+
+## Recap
+
+- Event props are camelCase, like `onClick`, `onChange`, and `onSubmit`, and take a function.
+- Pass the function (`onClick={handleClick}`), do not call it (`onClick={handleClick()}`).
+- Use an arrow function when you need to pass arguments.
+- Handlers receive an event object; `e.target.value` reads an input, `e.preventDefault()` stops a form reload.

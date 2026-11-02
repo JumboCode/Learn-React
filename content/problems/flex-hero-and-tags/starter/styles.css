@@ -1,0 +1,31 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 16px;
+}
+
+.hero {
+  background-color: #eef;
+  /* TODO: a centered column, at least 300px tall */
+}
+
+.search {
+  margin: 16px 0;
+  /* TODO: a row with an 8px gap */
+}
+
+.search input {
+  padding: 8px;
+  /* TODO: grow to fill the leftover space */
+}
+
+.tags {
+  /* TODO: a wrapping row with an 8px gap */
+}
+
+.tag {
+  padding: 4px 12px;
+  background-color: steelblue;
+  color: white;
+  border-radius: 12px;
+}

@@ -1,0 +1,91 @@
+By default, block elements stack top to bottom. To put things side by side, like a row of buttons or a navigation bar, you need a layout tool. **Flexbox** is the one you will use most. It lays items out in a single line, either a row or a column, and controls how they are spaced and aligned.
+
+## Turning it on
+
+Flexbox has two roles. The **container** gets `display: flex`, and its direct children become **flex items** that line up in a row:
+
+```css
+.toolbar {
+  display: flex;
+}
+```
+
+Only the direct children are affected. Grandchildren keep their normal layout unless their own parent is also a flex container.
+
+## The main controls
+
+All of these go on the container:
+
+| Property | Common values | What it does |
+| --- | --- | --- |
+| `flex-direction` | `row` (default), `column` | Which way items line up. This is the **main axis**. |
+| `justify-content` | `flex-start`, `center`, `space-between`, `flex-end` | Spacing along the main axis. |
+| `align-items` | `stretch` (default), `center`, `flex-start`, `flex-end` | Alignment across the other axis. |
+| `gap` | `8px`, `1rem` | Space between items. |
+| `flex-wrap` | `nowrap` (default), `wrap` | Whether items may move to a new line when they run out of room. |
+
+The trick to remembering it: `justify-content` works along the direction items flow, and `align-items` works across it. If you switch to `flex-direction: column`, the two swap visually.
+
+On an item, `flex: 1` means "grow to fill the leftover space." Give it to a search box in a toolbar and it stretches while the buttons stay their natural size.
+
+## Try it
+
+```html-live
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body { font-family: sans-serif; }
+      .toolbar {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        padding: 8px;
+        height: 120px;
+        background-color: #eef;
+      }
+      .item {
+        padding: 8px 12px;
+        background-color: steelblue;
+        color: white;
+        border-radius: 6px;
+      }
+      .tall { padding: 24px 12px; }
+      /* Try justify-content: center, then flex-direction: column. Try align-items: flex-start. */
+    </style>
+  </head>
+  <body>
+    <div class="toolbar">
+      <div class="item">Home</div>
+      <div class="item tall">Lessons</div>
+      <div class="item">Profile</div>
+    </div>
+  </body>
+</html>
+```
+
+## Centering anything
+
+The classic CSS puzzle, centering a box both ways, takes three lines with flexbox:
+
+```css
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+```
+
+<Note>
+Flexbox is everywhere in React apps. Nav bars, card footers, form rows, and button groups are almost always a container with `display: flex`, a `gap`, and some alignment. Once you are comfortable with this lesson, most component layouts will feel familiar.
+</Note>
+
+## Recap
+
+- `display: flex` on a container lines up its direct children in a row.
+- `flex-direction` sets the main axis; `justify-content` spaces items along it and `align-items` aligns them across it.
+- `gap` adds space between items, and `flex-wrap: wrap` lets them wrap onto new lines.
+- `flex: 1` on an item makes it fill the leftover space.

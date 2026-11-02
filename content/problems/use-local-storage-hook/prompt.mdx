@@ -1,0 +1,18 @@
+Write a `useLocalStorage` hook that works just like `useState`, except the value is saved in the browser's `localStorage` and comes back after a page refresh. Then use it in a small app.
+
+## Requirements
+
+- Export a function named `useLocalStorage` (`export function useLocalStorage(key, initialValue)`):
+  - It returns `[value, setValue]`, just like `useState`.
+  - On the first render, if `localStorage` already has an item for `key`, the value starts as that item **parsed from JSON**. Otherwise it starts as `initialValue`.
+  - Whenever the value changes, save it to `localStorage` under `key` **as JSON** (use `JSON.stringify`), so numbers, strings, arrays, and objects all work.
+  - Different keys are stored separately.
+- The default export `App` uses the hook twice:
+  - A text input labeled **Note**, stored under the key `"note"` (starting as `""`).
+  - The text `Count: <n>` and an **Add one** button, stored under the key `"count"` (starting as `0`).
+
+## Hints
+
+- Pass a function to `useState` so `localStorage` is only read on the first render: `useState(() => ...)`.
+- `localStorage.getItem(key)` returns `null` when nothing is saved.
+- Save in a `useEffect` with `[key, value]` as its dependencies.

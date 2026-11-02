@@ -1,0 +1,15 @@
+Build a short-message box that counts characters as you type, like a social media post form.
+
+## Requirements
+
+- A `<textarea>` labelled `Message`.
+- A paragraph that shows the current length out of 50, updating on every keystroke: `0 / 50 characters` at first, then `5 / 50 characters` after typing `hello`, and so on.
+- When the message is longer than 50 characters, also show a paragraph `Too long by N characters` (for example `Too long by 3 characters` at 53). Hide it again once the message is 50 or shorter.
+- A **Post** button that is **disabled** when the message is empty or longer than 50 characters, and enabled otherwise.
+- Clicking **Post** shows a paragraph `Posted: ` followed by the message, for example `Posted: hello`.
+
+## Hints
+
+- Use `onChange` on the textarea and read `e.target.value` in the handler.
+- Keep the text in state; the length, the warning, and `disabled` can all be computed from it during render.
+- Pass the handler to `onClick`, do not call it: `onClick={handlePost}`, not `onClick={handlePost()}`.

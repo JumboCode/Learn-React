@@ -1,0 +1,16 @@
+Show one user's details, and fetch a new user whenever the selection changes. Requests can finish out of order, so make sure an old response never replaces a newer one.
+
+## Requirements
+
+- Three buttons, **User 1**, **User 2**, and **User 3**, choose which user is selected. User 1 is selected when the page loads.
+- Whenever the selected id changes (including on the first render), fetch `https://jsonplaceholder.typicode.com/users/<id>`, for example `https://jsonplaceholder.typicode.com/users/2`. Fetch once per selection.
+- While that user is loading, show `Loading user <id>...` (for example `Loading user 2...`) and **do not** show the previously selected user.
+- When it loads, show the user's name as a heading (any level, such as `<h2>`) and their email as the text `Email: <email>`.
+- If the request fails (`fetch` throws or the response is not ok, such as a 404), show a message starting with `Error`. Selecting another user should clear the error and load that user.
+- **Ignore stale responses.** If the user clicks User 2 and then User 3 before User 2 has loaded, the late User 2 response must never be shown.
+
+## Hints
+
+- Keep `userId`, `user`, and `error` in state, and put `userId` in the effect's dependency array.
+- At the start of the effect, reset `user` and `error` to `null`, so the loading message shows.
+- Use the `let ignore = false;` pattern from the lesson: only call `setUser` or `setError` when `ignore` is still false, and set `ignore = true` in the cleanup function.

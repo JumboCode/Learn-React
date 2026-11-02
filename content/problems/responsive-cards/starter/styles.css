@@ -1,0 +1,23 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 16px;
+}
+
+/* TODO: make this mobile first. This row layout and big heading should only apply at 768px and wider. */
+h1 {
+  font-size: 36px;
+}
+
+.cards {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.card {
+  flex: 1;
+  padding: 12px;
+  background-color: lavender;
+  border-radius: 6px;
+}

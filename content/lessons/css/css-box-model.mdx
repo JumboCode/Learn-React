@@ -1,0 +1,96 @@
+To the browser, every element is a rectangle. Understanding how big that rectangle is, and how much space it takes up, is the key to fixing most "why is this the wrong size?" problems in CSS.
+
+## Four layers
+
+Each box is built from four layers, from the inside out:
+
+| Layer | What it is | Property |
+| --- | --- | --- |
+| Content | The text or image itself. | `width`, `height` |
+| Padding | Space *inside* the border, around the content. Shows the background color. | `padding` |
+| Border | A line around the padding. | `border` |
+| Margin | Space *outside* the border, pushing other boxes away. Always transparent. | `margin` |
+
+Think of a framed photo: the photo is the content, the matting is the padding, the frame is the border, and the gap between it and the next picture on the wall is the margin.
+
+## Writing the shorthand
+
+`padding` and `margin` accept one to four values:
+
+```css
+padding: 16px;                 /* all four sides */
+padding: 8px 16px;             /* top and bottom 8px, left and right 16px */
+padding: 4px 8px 12px 16px;    /* top, right, bottom, left (clockwise) */
+margin-top: 24px;              /* just one side */
+margin: 0 auto;                /* center a box that has a width */
+
+border: 2px solid black;       /* width, style, color */
+border-radius: 8px;            /* rounded corners */
+```
+
+## The size surprise
+
+By default, `width` sets only the **content** width. Padding and border are added on top. So this box is actually 200 + 20 + 20 + 5 + 5 = 250px wide:
+
+```css
+.box {
+  width: 200px;
+  padding: 20px;
+  border: 5px solid;
+}
+```
+
+That makes layouts hard to reason about. The fix is `box-sizing: border-box`, which tells the browser that `width` includes padding and border. With it, the box above is exactly 200px wide and the content shrinks to fit. Almost every modern project turns it on for every element:
+
+```css
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+```
+
+Compare the two boxes below. Both say `width: 200px`:
+
+```html-live
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body { font-family: sans-serif; }
+      .box {
+        width: 200px;
+        padding: 20px;
+        border: 5px solid steelblue;
+        margin-bottom: 16px;
+        background-color: lightblue;
+      }
+      .border-box {
+        box-sizing: border-box;
+      }
+      .ruler {
+        width: 200px;
+        height: 8px;
+        background-color: tomato;
+      }
+      /* Try changing padding to 40px: which box changes its total size? */
+    </style>
+  </head>
+  <body>
+    <div class="ruler"></div>
+    <div class="box">Default: wider than 200px</div>
+    <div class="box border-box">border-box: exactly 200px</div>
+  </body>
+</html>
+```
+
+The red bar is exactly 200px wide. Only the `border-box` version lines up with it.
+
+<Note>
+Right-click any element in your browser and choose **Inspect**. Developer tools show a diagram of its content, padding, border, and margin with real numbers. It is the fastest way to debug spacing.
+</Note>
+
+## Recap
+
+- Every element is a box: content, then padding, then border, then margin.
+- Padding is inside the border and shows the background; margin is outside and transparent.
+- Shorthands take one to four values, going clockwise from the top.
+- By default, `width` excludes padding and border; `box-sizing: border-box` makes it include them, so sizes are predictable.

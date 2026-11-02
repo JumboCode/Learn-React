@@ -1,0 +1,114 @@
+A component's job is to turn props and state into JSX. But sometimes you need to reach **outside** React: change the browser tab's title, start a timer, or listen for the window being resized. That kind of work is called a **side effect**, and React gives you a hook for it: `useEffect`.
+
+## Effects run after render
+
+You pass `useEffect` a function. React renders your component, updates the screen, and **then** runs that function.
+
+```jsx-live
+import { useState, useEffect } from "react";
+
+export default function App() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    document.title = `Clicked ${count} times`;
+  }, [count]);
+
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <p>Clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
+      {/* Try adding console.log("effect ran") inside the effect and watch the console. */}
+    </div>
+  );
+}
+```
+
+`document.title` is not part of the JSX, so React cannot manage it for you. The effect keeps it in sync with `count` after each render. (In the preview, the title belongs to the preview frame, so check the console log if you cannot see it.)
+
+## The dependency array
+
+The second argument to `useEffect` tells React **when** to run the effect again:
+
+| You write | The effect runs |
+| --- | --- |
+| no array | after every render |
+| `[]` | once, after the first render |
+| `[count]` | after the first render, and again whenever `count` changes |
+
+List every prop or state value the effect reads. If you leave one out, the effect will use an old value. Most of the time you want the third form.
+
+## Cleaning up
+
+Some effects start something that keeps going: a timer, or an event listener. If the component disappears, that thing should stop. To clean up, **return a function** from your effect. React calls it before running the effect again and when the component is removed from the screen.
+
+```jsx-live
+import { useState, useEffect } from "react";
+
+function Stopwatch() {
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setSeconds((s) => s + 1);
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  return <p>Running for {seconds} seconds</p>;
+}
+
+export default function App() {
+  const [show, setShow] = useState(true);
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <button onClick={() => setShow(!show)}>{show ? "Hide" : "Show"} stopwatch</button>
+      {show && <Stopwatch />}
+      {/* Try deleting the return line, then hide and show a few times. What breaks? */}
+    </div>
+  );
+}
+```
+
+Two details matter here. The cleanup `() => clearInterval(id)` stops the timer when `Stopwatch` is hidden; without it, old timers keep running in the background. And we use the updater form `setSeconds((s) => s + 1)` because the effect only runs once, so a plain `seconds` inside it would be stuck at `0` forever.
+
+The same pattern works for window events:
+
+```jsx
+useEffect(() => {
+  function handleResize() {
+    setWidth(window.innerWidth);
+  }
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+```
+
+## You might not need an effect
+
+Effects are for syncing with things outside React. They are **not** for calculating values from props or state. A common mistake:
+
+```jsx
+// Unnecessary: an extra state and an extra render
+const [fullName, setFullName] = useState("");
+useEffect(() => {
+  setFullName(first + " " + last);
+}, [first, last]);
+```
+
+Just compute it while rendering:
+
+```jsx
+const fullName = first + " " + last;
+```
+
+<Note>
+In development, React runs each effect, cleans it up, and runs it again once when a component first appears. This is on purpose: it helps you notice missing cleanup. If something breaks when that happens, you probably need a cleanup function.
+</Note>
+
+## Recap
+
+- `useEffect` runs code after React updates the screen, for syncing with the outside world.
+- The dependency array controls when it re-runs: none, `[]`, or `[value]`.
+- Return a cleanup function to stop timers and remove listeners.
+- If you can compute a value during render, do that instead of using an effect.

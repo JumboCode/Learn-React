@@ -1,0 +1,36 @@
+This project is split into **two files**. `math.js` holds small helpers, and `index.js` imports them to total up a shopping cart. Use the file tabs to switch between them.
+
+## Requirements
+
+In `math.js`:
+
+- A **named** export `add(a, b)` that returns `a + b` (already written for you).
+- A **named** export `multiply(a, b)` that returns `a * b`.
+- A **default** export `formatMoney(amount)` that returns the amount as dollars with exactly two decimals: `formatMoney(4.5)` returns `"$4.50"`.
+
+In `index.js`, **import** those three helpers from `"./math.js"` and use them to write:
+
+- `lineTotal(item)`: each item looks like `{ name: "Pen", price: 1.5, quantity: 4 }`. Return `price` times `quantity`, using `multiply`.
+- `cartTotal(items)`: return the sum of every item's line total, using `lineTotal` and `add`. An empty cart totals `0`.
+- `receipt(items)`: return `"Total: "` followed by the cart total formatted with `formatMoney`, like `"Total: $12.50"`.
+
+Export all three functions from `index.js` as named exports.
+
+## Examples
+
+```js
+const cart = [
+  { name: "Pen", price: 1.5, quantity: 4 },
+  { name: "Notebook", price: 6.5, quantity: 1 },
+];
+
+lineTotal(cart[0]); // 6
+cartTotal(cart); // 12.5
+receipt(cart); // "Total: $12.50"
+receipt([]); // "Total: $0.00"
+```
+
+## Hints
+
+- Named imports go in curly braces; a default import does not. You can combine them: `import formatMoney, { add, multiply } from "./math.js";`.
+- `(4.5).toFixed(2)` gives the string `"4.50"`.

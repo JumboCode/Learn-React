@@ -1,0 +1,125 @@
+Changing the page when it loads is nice, but interactive pages change when the *user* does something: clicks a button, types in a box, submits a form. Each of those actions fires an **event**, and you respond by giving the browser a callback to run when it happens.
+
+## addEventListener
+
+Find an element, then call `addEventListener` with the event's name and a callback:
+
+```js
+const button = document.querySelector("button");
+
+button.addEventListener("click", () => {
+  console.log("Clicked!");
+});
+```
+
+This is the callback pattern from earlier: you are not running the function now, you are handing it to the browser to call later, every time the event happens.
+
+Common event names:
+
+| Event | Fires when |
+| --- | --- |
+| `click` | the element is clicked |
+| `input` | the value of a text box changes, on every keystroke |
+| `submit` | a form is submitted |
+| `keydown` | a key is pressed |
+| `mouseover` | the pointer moves onto the element |
+
+## A click counter
+
+```html-live
+<!DOCTYPE html>
+<html>
+  <body style="font-family: sans-serif; padding: 16px;">
+    <p>Clicked <span id="count">0</span> times</p>
+    <button id="add">Click me</button>
+
+    <script>
+      let count = 0;
+      const countEl = document.querySelector("#count");
+      const button = document.querySelector("#add");
+
+      button.addEventListener("click", () => {
+        count = count + 1;
+        countEl.textContent = count;
+      });
+
+      // Try adding a Reset button that sets count back to 0.
+    </script>
+  </body>
+</html>
+```
+
+Notice that two things happen on every click: we update the variable, *and* we manually update the page. Forget the second step and the screen falls out of sync.
+
+## The event object and event.target
+
+The browser passes your callback an **event object** describing what happened. Its `target` property is the element the event happened on. For text inputs, `event.target.value` is the current text:
+
+```html-live
+<!DOCTYPE html>
+<html>
+  <body style="font-family: sans-serif; padding: 16px;">
+    <label>Your name: <input id="name" /></label>
+    <p id="greeting">Hello, stranger!</p>
+
+    <script>
+      const input = document.querySelector("#name");
+      const greeting = document.querySelector("#greeting");
+
+      input.addEventListener("input", (event) => {
+        const name = event.target.value;
+        greeting.textContent = name ? `Hello, ${name}!` : "Hello, stranger!";
+      });
+
+      // Try showing the number of characters typed as well.
+    </script>
+  </body>
+</html>
+```
+
+## Forms and preventDefault
+
+Some events have a built-in **default action**. Submitting a form normally reloads the page, which wipes out whatever your script was doing. Call `event.preventDefault()` to stop that and handle the data yourself:
+
+```html-live
+<!DOCTYPE html>
+<html>
+  <body style="font-family: sans-serif; padding: 16px;">
+    <form id="todo-form">
+      <input id="todo-input" placeholder="New to-do" required />
+      <button type="submit">Add</button>
+    </form>
+    <ul id="todos"></ul>
+
+    <script>
+      const form = document.querySelector("#todo-form");
+      const input = document.querySelector("#todo-input");
+      const list = document.querySelector("#todos");
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault(); // stop the page from reloading
+
+        const li = document.createElement("li");
+        li.textContent = input.value;
+        list.append(li);
+        input.value = "";
+      });
+
+      // Try deleting the preventDefault line and submitting. What happens?
+    </script>
+  </body>
+</html>
+```
+
+Listen for `submit` on the form rather than `click` on the button. That way pressing Enter in the input works too.
+
+<Note>
+React handles events with the same ideas but different syntax. Instead of `addEventListener`, you pass a callback as a prop: `onClick={handleClick}`, `onChange={(e) => setName(e.target.value)}`, `onSubmit`. The event object, `event.target.value`, and `event.preventDefault()` all work just as they do here.
+</Note>
+
+## Recap
+
+- `element.addEventListener("click", callback)` runs the callback each time the event fires.
+- The callback receives an event object; `event.target` is the element involved.
+- For text inputs, read the current text with `event.target.value` on the `input` event.
+- Call `event.preventDefault()` in a `submit` handler to stop the page from reloading.

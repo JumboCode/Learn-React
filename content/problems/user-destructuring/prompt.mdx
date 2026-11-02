@@ -1,0 +1,23 @@
+Use **destructuring** to pull values out of objects and arrays. Destructure in the parameter list where you can, the way React components receive their props.
+
+## Requirements
+
+- `formatUser(user)` receives an object with `name`, `age`, and optionally `city`. It returns `"NAME (AGE) from CITY"`. If `city` is missing, use `"Unknown"`. Destructure the parameter, with a default value for `city`.
+- `toPoint(pair)` receives a two-item array `[x, y]` and returns the object `{ x: x, y: y }`. Use array destructuring.
+- `swap(pair)` receives a two-item array and returns a **new** array with the two items in the opposite order. The original array must not change.
+- `fullTitle(movie)` receives an object with `title` and `year` and returns `"TITLE (YEAR)"`. Destructure `title` but **rename** it to `name` while you do (the `title: name` syntax), then use `name`.
+
+## Examples
+
+| Call | Returns |
+| --- | --- |
+| `formatUser({ name: "Ada", age: 36, city: "London" })` | `"Ada (36) from London"` |
+| `formatUser({ name: "Bo", age: 20 })` | `"Bo (20) from Unknown"` |
+| `toPoint([3, 4])` | `{ x: 3, y: 4 }` |
+| `swap(["a", "b"])` | `["b", "a"]` |
+| `fullTitle({ title: "Up", year: 2009 })` | `"Up (2009)"` |
+
+## Hints
+
+- Parameter destructuring with a default looks like `function f({ a, b = 1 })`.
+- Array destructuring uses square brackets: `const [first, second] = pair;`.

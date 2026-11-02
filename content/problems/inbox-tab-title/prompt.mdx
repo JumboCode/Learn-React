@@ -1,0 +1,15 @@
+Many sites show the number of unread messages in the browser tab, like `(3) Inbox`. The starter code already counts unread messages. Use an **effect** to keep `document.title` in sync with that count.
+
+## Requirements
+
+- Show the text `Unread: 0` when the page loads (the starter already does this).
+- A **New message** button adds 1 to the unread count, and a **Mark all read** button sets it back to 0 (the starter already does this too).
+- Keep the browser tab title, `document.title`, in sync with the count:
+  - When the count is 0, the title is exactly `Inbox`.
+  - Otherwise, it is the count in parentheses, a space, then `Inbox`. For example `(3) Inbox`.
+
+## Hints
+
+- `document.title` is outside React, so set it inside `useEffect`, not directly in the JSX.
+- Put the count in the dependency array so the effect runs again whenever it changes.
+- A template string makes the title easy to build: `` `(${unread}) Inbox` ``.

@@ -1,0 +1,14 @@
+Build a counter with three buttons.
+
+## Requirements
+
+- Show the current count as `Count: 0` when the page first loads.
+- An **Increment** button adds 1.
+- A **Decrement** button subtracts 1, but the count must **never go below 0**.
+- A **Reset** button sets the count back to 0.
+
+## Hints
+
+- Keep the count in state with `useState`.
+- Use the button text exactly as written above; the tests find buttons by their text.
+- To stop at zero, you can use `Math.max(0, count - 1)`, or skip the update with an `if`.

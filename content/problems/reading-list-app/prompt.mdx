@@ -1,0 +1,35 @@
+Build the complete **Reading List** app from the capstone lessons. The starter is the static skeleton: everything is on the screen, but nothing works yet.
+
+## Requirements
+
+**Starting data.** The list starts with the three `SAMPLE_BOOKS` from the starter code. *Dune* is already read.
+
+**Adding books.**
+
+- Two inputs labeled **Title** and **Author**, and an **Add** submit button, inside a `<form>`.
+- Submitting adds the book to the **end** of the list as unread, then clears both inputs. Pressing Enter in an input submits too.
+- Trim spaces from both values. If either one is blank after trimming, do not add anything.
+- Each new book needs a unique `id` to use as its key.
+
+**Each book** is a list item (`<li>`) that contains:
+
+- the text `<title> by <author>`, like `Dune by Frank Herbert`,
+- a checkbox labeled `Mark <title> as read` (for example `Mark Dune as read`) that is checked when the book is read; clicking it toggles the book between read and unread,
+- a **Remove** button that removes that book only.
+
+**Filtering and counts.**
+
+- Buttons **All**, **Unread**, and **Read** choose which books are listed. The list starts on **All**.
+- Show the summary `<total> books, <read> read`, like `3 books, 1 read`. Use `book` when there is exactly one: `1 book, 0 read`. The summary always counts **all** books, whatever the filter.
+
+**Empty states.** When no books are listed, show a message instead of the list:
+
+- `Your reading list is empty. Add a book above!` when there are no books at all,
+- `No books match this filter.` when there are books, but none match the current filter.
+
+## Hints
+
+- Follow the plan from the lessons: `books` and `filter` live in `App`, and the draft title and author live in `AddBookForm`.
+- Update `books` without mutating it: spread to add, `map` to toggle, and `filter` to remove.
+- The visible books and the counts are derived values. Compute them during render; do not store them in state.
+- Remember `e.preventDefault()` in the form's submit handler.

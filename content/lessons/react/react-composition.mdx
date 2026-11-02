@@ -1,0 +1,114 @@
+As components get reused, there is a temptation to keep adding options: a `showIcon` prop, then `isLarge`, then `hasBorder`, then `isWarning`... Soon one component has a dozen boolean props and nobody remembers which combinations work. React offers a better habit called **composition**: build flexible components by fitting smaller pieces together, like LEGO bricks.
+
+## children is the first slot
+
+You already know `children`: whatever you put between a component's opening and closing tags. A component that renders `children` does not need to know what it is wrapping. That makes it a general-purpose container.
+
+```jsx
+function Box({ children }) {
+  return <div style={{ border: "1px solid #ccc", padding: 12 }}>{children}</div>;
+}
+```
+
+## More slots: JSX as props
+
+Props can hold **any** value, including JSX. So a component can have several named "slots," each filled by the parent. Here a `Card` has a `title`, a `footer`, and its `children`:
+
+```jsx-live
+function Card({ title, footer, children }) {
+  return (
+    <div style={{ border: "1px solid #ccc", borderRadius: 8, maxWidth: 280, marginBottom: 12 }}>
+      <div style={{ padding: 12, borderBottom: "1px solid #eee", fontWeight: "bold" }}>{title}</div>
+      <div style={{ padding: 12 }}>{children}</div>
+      {footer && <div style={{ padding: 12, background: "#f6f6f6" }}>{footer}</div>}
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <Card title="Welcome" footer={<button>Get started</button>}>
+        <p>Thanks for joining the club.</p>
+      </Card>
+      <Card title={<span>New message <em>(1)</em></span>}>
+        <p>Your order has shipped.</p>
+      </Card>
+      {/* Try giving the second card a footer with two buttons inside a fragment: <>...</> */}
+    </div>
+  );
+}
+```
+
+`Card` decides the **layout** (where the title, body, and footer go). The parent decides the **content**. Card does not need a `footerButtonText` prop or a `showFooterButton` prop; you just pass whatever footer you want. If there is no footer, `footer && ...` renders nothing.
+
+## Specialized components wrap general ones
+
+When you find yourself writing the same kind of card over and over, do not add more options to `Card`. Instead, write a new, more specific component that **uses** `Card`:
+
+```jsx-live
+function Card({ title, footer, children }) {
+  return (
+    <div style={{ border: "1px solid #ccc", borderRadius: 8, maxWidth: 280, marginBottom: 12 }}>
+      <div style={{ padding: 12, fontWeight: "bold" }}>{title}</div>
+      <div style={{ padding: "0 12px 12px" }}>{children}</div>
+      {footer && <div style={{ padding: 12, background: "#f6f6f6" }}>{footer}</div>}
+    </div>
+  );
+}
+
+function WarningCard({ children }) {
+  return (
+    <Card title={<span style={{ color: "darkorange" }}>Warning</span>}>
+      {children}
+    </Card>
+  );
+}
+
+function ProfileCard({ name, role }) {
+  return (
+    <Card title={name} footer={<a href="#">View profile</a>}>
+      <p>{role}</p>
+    </Card>
+  );
+}
+
+export default function App() {
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <WarningCard>Your session will expire in 5 minutes.</WarningCard>
+      <ProfileCard name="Ada Lovelace" role="Mathematician" />
+      {/* Try writing a SuccessCard the same way. */}
+    </div>
+  );
+}
+```
+
+`WarningCard` and `ProfileCard` are tiny. They fill in `Card`'s slots in a particular way. `Card` itself stays simple and never changes.
+
+## Composition instead of boolean props
+
+Compare two ways of building the same thing:
+
+```jsx
+// Option explosion: hard to read, hard to extend
+<Card title="Alert" isWarning showCloseButton hasFooter footerText="Dismiss" />
+
+// Composition: each piece is visible right where it is used
+<WarningCard>
+  Disk almost full.
+</WarningCard>
+```
+
+With composition, adding something new usually means writing a small new component, not editing a big shared one and hoping you did not break the other ten places that use it.
+
+<Note>
+A few props that change appearance (like `size="small"`) are perfectly fine. The warning sign is when props start controlling **what content appears** or interact in confusing ways. That is when slots and wrapper components are clearer.
+</Note>
+
+## Recap
+
+- `children` lets a component wrap content it knows nothing about.
+- Props can hold JSX, so a component can expose several named slots like `title` and `footer`.
+- Build specialized components (like `WarningCard`) by wrapping general ones (like `Card`).
+- Prefer composing small pieces over piling boolean options onto one component.

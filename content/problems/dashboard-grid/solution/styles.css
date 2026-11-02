@@ -1,0 +1,29 @@
+body {
+  font-family: sans-serif;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 16px 24px;
+}
+
+.header,
+.footer {
+  padding: 12px;
+  background-color: #222;
+  color: white;
+  grid-column: span 2;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.stat {
+  padding: 12px;
+  background-color: lavender;
+  border-radius: 6px;
+}

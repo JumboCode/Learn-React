@@ -1,0 +1,16 @@
+body {
+  font-family: sans-serif;
+}
+
+.card {
+  box-sizing: border-box;
+  width: 300px;
+  padding: 24px;
+  border: 2px solid steelblue;
+  border-radius: 8px;
+  margin: 32px auto 0;
+}
+
+.card h2 {
+  margin-top: 0;
+}

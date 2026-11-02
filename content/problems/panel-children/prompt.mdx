@@ -1,0 +1,16 @@
+Build a `Panel` container component: it draws a titled box, and whatever you nest between `<Panel>` and `</Panel>` appears inside the box.
+
+## Requirements
+
+- Export a component named `Panel`: `export function Panel({ title, children })`.
+- `Panel` renders a `<section>` that contains:
+  - a level-2 heading with the `title`,
+  - then the `children`, inside that same `<section>`.
+- The default export `App` renders two panels:
+  - a panel titled `About me` containing a paragraph of your choice,
+  - a panel titled `Hobbies` containing a list (`<ul>`) with at least two `<li>` items.
+
+## Hints
+
+- Content between a component's opening and closing tags arrives as the `children` prop. Put `{children}` where it should appear.
+- The tests nest their own content inside `Panel`, so `Panel` must not care what its children are.

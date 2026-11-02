@@ -1,0 +1,16 @@
+Build a tiny shop with a cart. The cart is an array in state, and every change must create a **new** array (no `push`, no changing objects in place).
+
+## Requirements
+
+- For each product in the starter's `products` array, show a button named `Add ` plus the product name: **Add Apple**, **Add Bread**, **Add Cheese**.
+- Show the cart as a `<ul>` with `aria-label="Cart"`. It has one `<li>` per product in the cart, in the order they were first added. Each `<li>` contains the text `Apple x 2` (name, ` x `, quantity) and a button named `Remove ` plus the name, like **Remove Apple**.
+- Clicking **Add Apple** again increases Apple's quantity instead of adding a second Apple row.
+- Clicking **Remove Apple** lowers Apple's quantity by 1; when it reaches 0, Apple's row disappears.
+- When the cart has no rows, show a paragraph `Your cart is empty.`
+- A paragraph shows the total price with two decimals: `Total: $0.00` when empty, `Total: $3.25` for 2 Apples and 1 Bread.
+
+## Hints
+
+- Store cart rows like `{ id: 1, name: "Apple", price: 0.5, quantity: 2 }`.
+- Add a new row with `[...cart, { ...product, quantity: 1 }]`; change an existing one with `map` and `{ ...item, quantity: item.quantity + 1 }`; drop rows with `filter`.
+- `total.toFixed(2)` formats a number with two decimals.

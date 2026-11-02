@@ -1,0 +1,9 @@
+body {
+  font-family: sans-serif;
+}
+
+.gallery {
+  /* TODO: a grid with three equal columns and a 16px gap */
+}
+
+/* TODO: make .featured span two columns, and make every image fill its cell */

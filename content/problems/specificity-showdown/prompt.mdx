@@ -1,0 +1,23 @@
+This page loads your `styles.css` first, and then a `<style>` block in `index.html` that you are **not allowed to change**. Because that block comes later, it wins every tie. Your job is to write rules in `styles.css` that win anyway, by being more **specific**.
+
+Here is the read-only `<style>` block you are up against:
+
+```css
+#title { color: gray; }
+.message { color: gray; }
+.todo-list li { color: gray; }
+```
+
+## Requirements
+
+- The heading with id `title` and class `headline`: `color` is `purple`.
+- The paragraph with classes `message alert`: `color` is `red`. The other `.message` paragraph (without `alert`) must **stay** `gray`.
+- List items with the class `done` inside the `.todo-list`: `color` is `green`. Items without `done` must **stay** `gray`.
+
+Writing `.alert { color: red; }` is not enough: it ties with `.message`, and the later rule wins.
+
+## Hints
+
+- Specificity counts ids first, then classes, then type selectors. `#title` beats any number of classes.
+- Combine selectors to add specificity: `.a.b` (both classes on one element), `h1#title`, or `.parent .child`.
+- Avoid `!important`. It works, but it makes CSS hard to maintain.

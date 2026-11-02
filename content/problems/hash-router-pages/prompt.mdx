@@ -1,0 +1,30 @@
+Build a small site with a hash router: the part of the URL after `#` decides which page is shown.
+
+## Requirements
+
+- A navigation bar with three links (plain `<a>` tags):
+
+  | Link text | `href` |
+  | --- | --- |
+  | **Home** | `#/` |
+  | **About** | `#/about` |
+  | **Contact** | `#/contact` |
+
+- Show exactly one page below the navigation, chosen from `window.location.hash`:
+
+  | Hash | Page shows a heading with the text |
+  | --- | --- |
+  | `#/` or empty (no hash) | **Home** |
+  | `#/about` | **About us** |
+  | `#/contact` | **Contact** |
+  | `#/posts/<id>`, like `#/posts/3` | **Post 3** (using the id from the URL) |
+  | anything else | **Page not found**, plus a **Go home** link with `href` `#/` |
+
+- Use the hash that is already in the URL when the app first loads, and switch pages whenever the hash changes afterwards (the browser fires a `hashchange` event on `window`), without reloading.
+
+## Hints
+
+- Keep the current hash in state, starting from `window.location.hash`.
+- In an effect, add a `hashchange` listener with `window.addEventListener`, and remove it in the cleanup function.
+- For posts, check `route.startsWith("#/posts/")`, then get the id with `route.slice("#/posts/".length)`.
+- Pages can be tiny components, like `function About() { ... }`.

@@ -1,0 +1,91 @@
+In the Functions lesson you saw that a function is a value, like a string or a number. That means you can hand a function to *another* function, which can then call it whenever it decides to. A function passed in this way is called a **callback**. This one idea powers timers, array methods, and every event handler in React.
+
+## Passing a function as an argument
+
+```js-live
+function runTwice(action) {
+  action();
+  action();
+}
+
+function sayHi() {
+  console.log("Hi!");
+}
+
+runTwice(sayHi);
+
+// You can also write the callback inline as an arrow function:
+runTwice(() => console.log("Bye!"));
+
+// Try writing a callback that logs your own name.
+```
+
+Look closely at `runTwice(sayHi)`. There are no parentheses after `sayHi`. We are passing the function *itself*, not calling it. If you wrote `runTwice(sayHi())`, `sayHi` would run once right away and `runTwice` would receive its return value, `undefined`.
+
+| You write | What happens |
+| --- | --- |
+| `runTwice(sayHi)` | Passes the function. `runTwice` decides when to call it. |
+| `runTwice(sayHi())` | Calls `sayHi` now and passes whatever it returns. |
+
+## Callbacks can receive values
+
+The function that calls your callback can pass it arguments. This is how a callback gets information back:
+
+```js-live
+function calculate(a, b, operation) {
+  return operation(a, b);
+}
+
+console.log(calculate(6, 3, (x, y) => x + y)); // 9
+console.log(calculate(6, 3, (x, y) => x * y)); // 18
+
+// Try passing a callback that subtracts.
+```
+
+`calculate` does not know or care what the operation is. The caller decides by choosing which callback to pass.
+
+## Calling back later: setTimeout
+
+`setTimeout` is built into JavaScript. It takes a callback and a delay in milliseconds, and calls the callback after that much time:
+
+```js-live
+console.log("Start");
+
+setTimeout(() => {
+  console.log("One second later");
+}, 1000);
+
+console.log("End");
+
+// Notice "End" prints before "One second later".
+// Try changing 1000 to 0. Does the order change?
+```
+
+`setTimeout` does not pause your program. It schedules the callback and returns right away, so the rest of the code keeps running. You will build on this in the Promises lesson.
+
+## forEach: a callback for every item
+
+Arrays have a `forEach` method that calls your callback once per item, passing the item (and its index) each time:
+
+```js-live
+const pets = ["cat", "dog", "fish"];
+
+pets.forEach((pet, index) => {
+  console.log(`${index + 1}. ${pet}`);
+});
+
+// Try logging each pet in uppercase instead.
+```
+
+This does the same thing as a `for...of` loop, but it is written as "here is what to do with each item". The next lesson's `map` and `filter` follow the same pattern.
+
+<Note>
+React is built on callbacks. When you write `onClick={handleClick}`, you are passing a callback that React calls later, when the user clicks. The same mistake from above applies: `onClick={handleClick()}` calls the function immediately during rendering instead of on click.
+</Note>
+
+## Recap
+
+- A callback is a function passed to another function to be called later.
+- Pass the function itself (`sayHi`), not the result of calling it (`sayHi()`).
+- `setTimeout(callback, ms)` calls the callback after a delay without pausing your code.
+- `array.forEach(callback)` calls the callback once for every item.

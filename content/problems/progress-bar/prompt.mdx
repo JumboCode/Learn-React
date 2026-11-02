@@ -1,0 +1,17 @@
+Build a `ProgressBar` whose fill width and color come from a prop, using the `style` prop.
+
+## Requirements
+
+- Export a component named `ProgressBar`: `export function ProgressBar({ percent })`. `percent` is a number from 0 to 100.
+- It renders an outer track `div` containing an inner fill `div`. Give the fill `data-testid="progress-fill"`.
+- The fill's inline style sets:
+  - `width` to the percent as a CSS percentage, e.g. `"40%"` for `percent={40}`,
+  - `backgroundColor` to `"#3b82f6"` (blue) while `percent` is below 100, and `"#22c55e"` (green) when it is 100.
+- Below the track, a paragraph shows the text `40% complete` (with the actual percent).
+- The default export `App` renders three bars: 25, 60, and 100 percent.
+
+## Hints
+
+- Style objects use camelCase names: `backgroundColor`, not `background-color`.
+- A plain number would mean pixels, so build a string for percentages: `` `${percent}%` ``.
+- Pick the color with a ternary, then put it in the style object.

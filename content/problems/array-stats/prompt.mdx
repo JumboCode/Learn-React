@@ -1,0 +1,26 @@
+Write four small functions that work with arrays. Use `for...of` loops, `includes`, and `push`.
+
+## Requirements
+
+- `sum(numbers)` returns the total of all the numbers. An empty array sums to `0`.
+- `countOccurrences(list, value)` returns how many items in `list` are equal (`===`) to `value`.
+- `largest(numbers)` returns the biggest number. For an empty array, return `null`.
+- `addIfMissing(list, item)` adds `item` to the end of `list` with `push`, but **only** if it is not already in the list. Either way, return `list` (the same array).
+
+`sum`, `countOccurrences`, and `largest` must not change the array they are given.
+
+## Examples
+
+| Call | Returns |
+| --- | --- |
+| `sum([1, 2, 3])` | `6` |
+| `countOccurrences(["a", "b", "a"], "a")` | `2` |
+| `largest([3, 9, 4])` | `9` |
+| `largest([])` | `null` |
+| `addIfMissing(["eggs"], "milk")` | `["eggs", "milk"]` |
+| `addIfMissing(["eggs"], "eggs")` | `["eggs"]` |
+
+## Hints
+
+- Keep a running total in a `let` variable and update it inside the loop.
+- For `largest`, start with the first item (`numbers[0]`) and replace it whenever you find something bigger. All the numbers might be negative, so starting at `0` will not work.

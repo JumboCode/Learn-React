@@ -1,0 +1,78 @@
+React components describe the screen using **JSX**: a syntax that looks like HTML but lives inside JavaScript. It is not a string and it is not real HTML. A build tool turns each JSX tag into an ordinary JavaScript function call that creates an element. Because it is JavaScript underneath, a few rules differ from the HTML you already know.
+
+## HTML inside JavaScript
+
+Here is JSX stored in a variable and returned from a function:
+
+```jsx-live
+export default function App() {
+  const name = "Ada";
+  const heading = <h1>Hello, {name}!</h1>;
+
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      {heading}
+      <p>2 + 2 = {2 + 2}</p>
+      <p>Your name has {name.length} letters.</p>
+      {/* Try changing name, or putting name.toUpperCase() inside the braces. */}
+    </div>
+  );
+}
+```
+
+Curly braces are the key idea. Inside JSX, `{` and `}` switch you back into JavaScript, so you can drop in any **expression**: a variable, some math, a function call, or a template literal. It works a lot like `${ }` inside a template literal from the JavaScript module.
+
+Braces hold *expressions* (things that produce a value), not *statements*. You can write `{age >= 18 ? "adult" : "minor"}`, but you cannot put an `if` statement or a `for` loop inside braces. The conditional rendering and lists lessons show how to handle those cases.
+
+Since JSX is just a value, you can store it in a variable (like `heading` above), pass it to a function, or return it.
+
+## The rules that differ from HTML
+
+| HTML | JSX | Why |
+| --- | --- | --- |
+| `class="box"` | `className="box"` | `class` is a reserved word in JavaScript. |
+| `for="email"` | `htmlFor="email"` | `for` is reserved too (think `for` loops). |
+| `<img src="a.png">` | `<img src="a.png" />` | Every tag must be closed, even empty ones. |
+| `onclick="..."` | `onClick=...` | Attribute names are camelCase. |
+| `style="color: red"` | `style=` an object | Covered in the styling lesson. |
+
+## One parent element
+
+A component must return **one** top-level element. This is an error, because it tries to return two siblings:
+
+```jsx
+return (
+  <h1>Title</h1>
+  <p>Text</p>
+);
+```
+
+Wrap them in a `<div>`, or, if you do not want an extra element on the page, in an empty **fragment**, written `<>` and `</>`:
+
+```jsx-live
+export default function App() {
+  return (
+    <>
+      <h1 style={{ fontFamily: "sans-serif" }}>Title</h1>
+      <p>The fragment groups these without adding a div.</p>
+      <label htmlFor="email">Email </label>
+      <input id="email" type="email" />
+      <br />
+      {/* Try removing the fragment tags at the top and bottom, then read the error. */}
+    </>
+  );
+}
+```
+
+Notice the parentheses around the returned JSX. They let you spread JSX across many lines without JavaScript's automatic semicolon insertion cutting the `return` short.
+
+<Note>
+JSX comments look odd: `{/* like this */}`. Since braces switch to JavaScript, a normal `/* */` comment goes inside them. An HTML-style `<!-- -->` comment does not work in JSX.
+</Note>
+
+## Recap
+
+- JSX is HTML-like syntax that compiles to plain JavaScript.
+- Curly braces drop a JavaScript expression into JSX.
+- Use `className`, `htmlFor`, camelCase attributes, and close every tag.
+- Return one parent element; use a fragment `<>...</>` to avoid an extra `div`.

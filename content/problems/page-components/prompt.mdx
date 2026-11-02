@@ -1,0 +1,17 @@
+This study-tips page is one big `App` function. Split it into small components, then build the page out of them.
+
+## Requirements
+
+Write three components in `App.js` and **export each one by name** (for example `export function Header() { ... }`), so the tests can render them on their own:
+
+- `Header` renders a `<header>` containing a level-1 heading with the text `Study Tips`.
+- `Tip` renders a paragraph with the text `Take a short break every hour.`
+- `Footer` renders a `<footer>` containing the text `Made with React`.
+
+Then make the default export `App` render, in order: one `Header`, the `Tip` component **three times**, and one `Footer`.
+
+## Hints
+
+- Component names must start with a capital letter, and you use them like tags: `<Tip />`.
+- Each component is just a function that returns JSX. Keep `export default` on `App`; the other three use plain `export`.
+- Reusing `<Tip />` three times is the whole point: write the paragraph once, use it many times.

@@ -1,0 +1,89 @@
+A selector is the part of a CSS rule that says *which* elements to style. Choosing good selectors is a big part of writing CSS: too broad and you style things by accident, too narrow and you repeat yourself.
+
+## The basic selectors
+
+| Selector | Example | Matches |
+| --- | --- | --- |
+| Type | `p` | Every `<p>` element. |
+| Class | `.warning` | Every element with `class="warning"`. |
+| Id | `#logo` | The one element with `id="logo"`. |
+| Universal | `*` | Every element. |
+
+Classes are the workhorse. Many elements can share a class, and one element can have several classes separated by spaces, like `class="card featured"`. An id should be unique on the page, so it is much less reusable.
+
+## Combining selectors
+
+You can combine selectors to be more precise:
+
+```css
+/* A comma means "and also": style both h1 and h2 */
+h1, h2 { color: navy; }
+
+/* A space means "inside": only links inside a nav */
+nav a { text-decoration: none; }
+
+/* No space means "both at once": a p that has class intro */
+p.intro { font-size: 20px; }
+```
+
+## Position and state
+
+Some selectors match an element's position or state. These are called **pseudo-classes** and start with a colon:
+
+```css
+li:first-child { font-weight: bold; }   /* first item in its list */
+li:last-child { color: gray; }          /* last item in its list */
+li:nth-child(2) { color: red; }         /* the second item */
+a:hover { color: orange; }              /* while the mouse is over it */
+```
+
+## Which rule wins?
+
+When two rules set the same property on the same element, CSS picks a winner using **specificity**. A simple version:
+
+1. An id selector beats a class selector.
+2. A class selector beats a type selector.
+3. If two rules are equally specific, the one that comes **later** in the CSS wins.
+
+So `#title` beats `.big`, which beats `h1`. Inline styles beat all three, which is one reason to use them sparingly.
+
+```html-live
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body { font-family: sans-serif; }
+      h1 { color: gray; }
+      .big { color: green; font-size: 36px; }
+      #title { color: purple; }
+
+      li:first-child { font-weight: bold; }
+      li:hover { background-color: lightyellow; }
+
+      p { color: blue; }
+      p { color: red; }
+      /* Try deleting the #title rule: which color wins now? Then delete .big. */
+    </style>
+  </head>
+  <body>
+    <h1 id="title" class="big">Which color am I?</h1>
+    <ul>
+      <li>The first item is bold</li>
+      <li>Hover over me</li>
+      <li>Third item</li>
+    </ul>
+    <p>Two p rules tie, so the later one wins.</p>
+  </body>
+</html>
+```
+
+<Note>
+Most real-world CSS, including in React projects, styles things with classes rather than ids or type selectors. Classes keep specificity low and even, so "later wins" is easy to predict, and they can be reused on as many elements as you like.
+</Note>
+
+## Recap
+
+- Type selectors match tags, `.class` matches classes, and `#id` matches one element.
+- Commas group selectors, spaces mean "inside," and pseudo-classes like `:hover` and `:first-child` match state or position.
+- Specificity: id beats class, class beats type, and on a tie the later rule wins.
+- Prefer classes for everyday styling.

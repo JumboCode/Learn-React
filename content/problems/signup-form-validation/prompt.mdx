@@ -1,0 +1,22 @@
+Build a sign-up form that checks what the user types **as they type**, and only lets them submit once everything is valid.
+
+## Requirements
+
+- Three controlled text inputs with these labels: **Username**, **Email**, and **Password**. (A `<label>` around each input, or an `aria-label`, both work.)
+- While a field is **empty**, show no error for it. Once it has text, show its error message whenever the value is invalid:
+
+  | Field | Rule | Error message (exact text) |
+  | --- | --- | --- |
+  | Username | at least 3 characters | `Username must be at least 3 characters` |
+  | Email | contains an `@` | `Email must contain @` |
+  | Password | at least 8 characters | `Password must be at least 8 characters` |
+
+- A **Sign up** submit button that is **disabled** until all three fields are filled in and valid.
+- When the form is submitted, call `e.preventDefault()` and replace the form with the message `Welcome, <username>!`, for example `Welcome, ada!`.
+
+## Hints
+
+- Keep each field in state (or one object holding all three), with `value` and `onChange` on every input.
+- You do not need extra state for the errors. Compute them during render from the current values, for example `const usernameError = username !== "" && username.length < 3;`.
+- The button can use `disabled={...}` with the same checks.
+- Use a piece of state like `submitted` and an early `return` to show the welcome message.

@@ -1,0 +1,162 @@
+You now know every piece needed to build a real, small React app. Over the next two lessons you will build a **Reading List**. This lesson is all about planning, which is the part beginners most often skip. A few minutes with a plan saves an hour of moving state around later.
+
+## What the app does
+
+Write the features down as plain sentences first:
+
+- Add a book by typing a **title** and an **author**.
+- Mark a book as **read** or **unread**.
+- **Remove** a book.
+- **Filter** the list: All, Unread, or Read.
+- Show **counts**, like "3 books, 1 read."
+- When the list is empty, show a friendly message instead of a blank space.
+
+## Step 1: Break the UI into components
+
+Sketch the screen and draw boxes around the parts. Each box that has one clear job becomes a component. Here is the tree:
+
+```text
+App
+├── AddBookForm      (title + author inputs, Add button)
+├── FilterBar        (All / Unread / Read buttons, counts)
+└── BookList         (the list, or an empty message)
+    └── BookItem     (one book: checkbox, title, author, Remove)
+```
+
+`BookItem` is separate from `BookList` because we render one per book, and a small component for a single row keeps each piece easy to read.
+
+## Step 2: Decide what the data looks like
+
+A book needs a title, an author, whether it has been read, and a stable `id` to use as its key:
+
+```js
+{ id: 1, title: "Dune", author: "Frank Herbert", read: false }
+```
+
+The whole list is an array of these. The current filter is a string: `"all"`, `"unread"`, or `"read"`.
+
+## Step 3: Find the minimal state
+
+List every piece of data the app shows, then ask of each one: **can I compute it from something else?** If yes, it is not state.
+
+| Data | State? | Why |
+| --- | --- | --- |
+| The array of books | Yes | It changes when the user adds, toggles, or removes |
+| The current filter | Yes | It changes when the user clicks a filter |
+| What is typed in the form | Yes | Controlled inputs need state |
+| The visible (filtered) books | No | Compute it from books + filter |
+| The counts | No | Compute them from books |
+
+Storing visible books or counts in state would mean keeping two copies in sync, which is exactly the bug that "single source of truth" avoids. Instead, compute them during render:
+
+```js
+const visibleBooks = books.filter((b) =>
+  filter === "all" ? true : filter === "read" ? b.read : !b.read
+);
+const readCount = books.filter((b) => b.read).length;
+```
+
+## Step 4: Decide where each piece of state lives
+
+For each piece of state, find every component that uses it, then put it in their **closest common parent**.
+
+- **books**: `BookList` displays them, `AddBookForm` adds to them, and `FilterBar` counts them. Their common parent is `App`, so books live in `App`.
+- **filter**: `FilterBar` changes it and `BookList` needs the filtered result. Both are children of `App`, so filter lives in `App`.
+- **form draft** (title and author being typed): only `AddBookForm` cares, so it stays inside `AddBookForm`. `App` does not need to know about half-typed text.
+
+## Step 5: Plan the callbacks
+
+Children cannot change `App`'s state directly, so `App` passes down functions:
+
+| Component | Receives |
+| --- | --- |
+| `AddBookForm` | `onAdd(title, author)` |
+| `FilterBar` | `filter`, `onFilterChange(newFilter)`, counts |
+| `BookList` | `books` (already filtered), `onToggle(id)`, `onRemove(id)` |
+| `BookItem` | one `book`, `onToggle`, `onRemove` |
+
+## Step 6: Build a static version first
+
+Before adding any state, build the components with hard-coded sample data and no interactivity. This lets you get the structure and props right on their own. Here is that skeleton:
+
+```jsx-live
+const SAMPLE_BOOKS = [
+  { id: 1, title: "Dune", author: "Frank Herbert", read: true },
+  { id: 2, title: "Kindred", author: "Octavia E. Butler", read: false },
+  { id: 3, title: "The Hobbit", author: "J.R.R. Tolkien", read: false },
+];
+
+function AddBookForm() {
+  return (
+    <form style={{ display: "flex", gap: 6, marginBottom: 12 }}>
+      <input aria-label="Title" placeholder="Title" />
+      <input aria-label="Author" placeholder="Author" />
+      <button type="button">Add</button>
+    </form>
+  );
+}
+
+function FilterBar({ total, readCount }) {
+  return (
+    <div style={{ display: "flex", gap: 6, alignItems: "center", marginBottom: 12 }}>
+      <button>All</button>
+      <button>Unread</button>
+      <button>Read</button>
+      <span style={{ marginLeft: 8, color: "#666" }}>
+        {total} books, {readCount} read
+      </span>
+    </div>
+  );
+}
+
+function BookItem({ book }) {
+  return (
+    <li style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 6 }}>
+      <input type="checkbox" aria-label={`Mark ${book.title} as read`} checked={book.read} readOnly />
+      <span style={{ textDecoration: book.read ? "line-through" : "none" }}>
+        <strong>{book.title}</strong> by {book.author}
+      </span>
+      <button>Remove</button>
+    </li>
+  );
+}
+
+function BookList({ books }) {
+  return (
+    <ul style={{ listStyle: "none", padding: 0 }}>
+      {books.map((book) => (
+        <BookItem key={book.id} book={book} />
+      ))}
+    </ul>
+  );
+}
+
+export default function App() {
+  const books = SAMPLE_BOOKS;
+  const readCount = books.filter((b) => b.read).length;
+
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <h2 style={{ marginTop: 0 }}>Reading List</h2>
+      <AddBookForm />
+      <FilterBar total={books.length} readCount={readCount} />
+      <BookList books={books} />
+      {/* Try adding a fourth sample book, and check that the count updates. */}
+    </div>
+  );
+}
+```
+
+Nothing responds to clicks yet, and that is fine. The props already flow the way the plan says, and the counts are already computed, not stored. In the next lesson you will add state step by step.
+
+<Note>
+The question to ask for every piece of data is: "Could I calculate this from state I already have?" If so, calculate it during render. Fewer pieces of state means fewer ways for the screen to get out of sync.
+</Note>
+
+## Recap
+
+- Plan before coding: list features, then break the UI into a component tree.
+- Find the minimal state; anything you can compute (filtered lists, counts) is derived, not stored.
+- Put each piece of state in the closest common parent of the components that use it.
+- Children change parent state through callback props like `onAdd` and `onToggle`.
+- Build a static version with sample data first, then add interactivity.

@@ -1,0 +1,71 @@
+Tags tell the browser *what* an element is. **Attributes** add extra information about it: where a link goes, which image to show, or a name you can use to find the element later.
+
+## The syntax
+
+Attributes always go inside the **opening** tag, after the element name:
+
+```html
+<p id="intro" class="highlight">Welcome to my page.</p>
+```
+
+Each attribute is a `name="value"` pair. You can add as many as you like, separated by spaces. Always put the value in double quotes. The closing tag never gets attributes.
+
+## id and class: names for elements
+
+Two attributes work on every element and exist mostly so that CSS and JavaScript can find things:
+
+| Attribute | Rule | Typical use |
+| --- | --- | --- |
+| `id` | Must be **unique** on the page. One element, one id. | Pointing at one specific element, like `id="signup-form"`. |
+| `class` | Can be reused on many elements, and one element can have several, separated by spaces. | Grouping elements that should look or behave alike, like `class="card"`. |
+
+On their own, `id` and `class` change nothing you can see. They are labels. In the CSS module you will write rules like "make everything with the class `warning` red," and in the JavaScript module you will look up elements by their `id`.
+
+## href and src: pointing somewhere
+
+Some elements need an address to do their job:
+
+- `href` ("hypertext reference") tells a link where to go: `<a href="https://example.com">`.
+- `src` ("source") tells an image which file to load: `<img src="cat.jpg">`.
+
+You will use both properly in the Links and Images lesson. For now, just notice that they are ordinary attributes.
+
+## alt: describing an image
+
+`alt` ("alternative text") belongs on every image. It is a short description that screen readers read aloud, and that the browser shows if the image fails to load:
+
+```html
+<img src="cat.jpg" alt="An orange cat asleep on a keyboard">
+```
+
+## Try it
+
+```html-live
+<style>
+  .highlight { background: #fff3a0; }
+  #title { color: #2563eb; }
+</style>
+
+<h1 id="title">Attributes in action</h1>
+<p class="highlight">This paragraph has the class "highlight".</p>
+<p>This one has no class, so it looks plain.</p>
+<p class="highlight">This one shares the same class.</p>
+
+<img src="https://picsum.photos/id/237/200/150" alt="A black puppy looking up at the camera">
+
+<!-- Try adding class="highlight" to the plain paragraph. -->
+<!-- Then change the image src to "broken.jpg" and look at what appears instead. -->
+```
+
+The `<style>` block is CSS, which you will learn in the next module. All you need to see here is that it finds elements by their `class` and `id`.
+
+<Note>
+In React, a few attribute names change because they clash with JavaScript keywords. The most common one: `class` becomes `className`. You will write `<p className="highlight">` in React, and it still turns into a plain `class` attribute in the final HTML.
+</Note>
+
+## Recap
+
+- Attributes are `name="value"` pairs inside the opening tag.
+- `id` names one unique element; `class` labels a group of elements.
+- `href` and `src` point to other pages and files.
+- Every image needs `alt` text describing it.

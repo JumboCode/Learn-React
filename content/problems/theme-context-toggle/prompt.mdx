@@ -1,0 +1,21 @@
+The starter app passes `theme` and `toggleTheme` as props through `Layout` and `Sidebar`, which never use them. That is prop drilling. Refactor it to use **context**, so the components that need the theme read it directly.
+
+## Requirements
+
+- Export the context as `ThemeContext`, created with this default value:
+
+  ```js
+  createContext({ theme: "light", toggleTheme: () => {} })
+  ```
+
+- `App` keeps the theme (`"light"` or `"dark"`, starting as `"light"`) in state and provides `{ theme, toggleTheme }` to the whole tree with `<ThemeContext.Provider value=...>`. Calling `toggleTheme()` switches between light and dark.
+- Export a `ThemeLabel` component that takes **no props** and reads the theme from `ThemeContext`. It shows the text `Current theme: light` or `Current theme: dark`.
+- Export a `ThemeToggleButton` component that takes **no props**, reads `theme` and `toggleTheme` from `ThemeContext`, and renders a button:
+  - its text is **Switch to dark mode** when the theme is light, and **Switch to light mode** when it is dark;
+  - clicking it calls `toggleTheme`.
+- `Layout` and `Sidebar` should no longer receive or pass along any theme props.
+
+## Hints
+
+- `useContext(ThemeContext)` returns the `value` of the nearest provider above the component, or the default value if there is none.
+- Because the value is an object, read both parts with destructuring: `const { theme, toggleTheme } = useContext(ThemeContext);`.

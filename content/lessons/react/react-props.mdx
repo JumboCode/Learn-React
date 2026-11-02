@@ -1,0 +1,79 @@
+In the last lesson, every `RecipeCard` said "Pancakes." That is like a function with no parameters: it always does the same thing. **Props** are a component's parameters. They let the parent pass data in, so one component can show many different things.
+
+## Passing props
+
+You pass props the same way you write attributes in HTML. The component receives them all bundled together in one object:
+
+```jsx-live
+function RecipeCard(props) {
+  return (
+    <article style={{ border: "1px solid #ddd", borderRadius: 8, padding: 12, marginBottom: 12 }}>
+      <h3>{props.title}</h3>
+      <p>Takes {props.minutes} minutes.</p>
+    </article>
+  );
+}
+
+export default function App() {
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <RecipeCard title="Pancakes" minutes={20} />
+      <RecipeCard title="Omelette" minutes={10} />
+      {/* Try adding a third card for your favorite food. */}
+    </div>
+  );
+}
+```
+
+When React sees `<RecipeCard title="Pancakes" minutes={20} />`, it calls `RecipeCard` with the object `{ title: "Pancakes", minutes: 20 }`. That object is `props`.
+
+Notice the two styles of values:
+
+- Strings can use quotes: `title="Pancakes"`.
+- Anything else (numbers, booleans, arrays, objects, functions) goes in curly braces: `minutes={20}`, `vegan={true}`, `tags={["sweet", "breakfast"]}`.
+
+Writing `minutes="20"` would pass the *string* `"20"`, not the number.
+
+## Destructuring props
+
+Remember object destructuring from the JavaScript module? Most React code destructures props right in the parameter list. It is shorter and makes it obvious which props a component expects:
+
+```jsx-live
+function Profile({ name, role = "Member" }) {
+  return (
+    <div style={{ padding: 8, borderBottom: "1px solid #eee" }}>
+      <strong>{name}</strong>
+      <div style={{ color: "gray" }}>{role}</div>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <Profile name="Ada Lovelace" role="Programmer" />
+      <Profile name="Grace Hopper" />
+      {/* Grace has no role prop, so the default "Member" is used. Try giving her one. */}
+    </div>
+  );
+}
+```
+
+`role = "Member"` is a **default value**, just like a default function parameter. If the parent leaves that prop out, the component uses the default instead of `undefined`.
+
+## Props are read-only
+
+A component should never change its own props. Treat them like the arguments a function was called with: use them to decide what to show, but do not reassign them. If something on the screen needs to change over time, that is **state**, which comes a few lessons from now.
+
+This one-way flow is a core React idea: data passes *down* from parent to child through props. A child cannot reach up and edit its parent's data.
+
+<Note>
+Props can be any JavaScript value, including objects. For example, you could write `<RecipeCard recipe={pancakes} />` and then read `recipe.title` inside. The double braces you see in `style={{ padding: 8 }}` are the same idea: the outer braces mean "JavaScript here," and the inner braces are an object literal.
+</Note>
+
+## Recap
+
+- Props are a component's inputs, passed like HTML attributes.
+- Strings can use quotes; every other value goes in curly braces.
+- Destructure props in the parameter list, with defaults if you like.
+- Props flow down from parent to child and are read-only.

@@ -1,0 +1,28 @@
+This storefront was only designed for laptops. Make it work on every screen by combining **flexbox**, **grid**, and **media queries**. Only edit `styles.css`. There are three breakpoints, so plan before you write: small phones (under 600px), tablets (600px and up), and laptops (1024px and up). A fourth change happens at 768px.
+
+## Requirements
+
+**Container**
+
+- `.container`: `max-width` is `1200px`, `margin-left` and `margin-right` are `auto`, and `padding` is `16px` on all sides. At **1024px and wider**, the padding becomes `32px` on all sides.
+
+**Header** (always `display: flex`)
+
+- Under **768px**: `.site-header` has `flex-direction: column` and `align-items: center`.
+- At **768px and wider**: `.site-header` has `flex-direction: row`, `justify-content: space-between`, and `align-items: center`.
+
+**Product grid** (always `display: grid` with a `gap` of `16px`)
+
+- Under **600px**: `.products` has a single column (`grid-template-columns: 1fr`).
+- From **600px**: two equal columns (`repeat(2, 1fr)`).
+- From **1024px**: four equal columns (`repeat(4, 1fr)`).
+
+**Promo banner**
+
+- Under **600px**: `.promo` is hidden with `display: none`.
+- At **600px and wider**: `.promo` has `display: block`.
+
+## Hints
+
+- Write the phone styles first, then add `@media (min-width: 600px)`, `@media (min-width: 768px)`, and `@media (min-width: 1024px)` blocks, in that order, so the wider screen's rules come last and win.
+- You only need to repeat the properties that change inside each media query.

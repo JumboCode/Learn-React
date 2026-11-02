@@ -1,0 +1,21 @@
+Build a to-do list where you can add, check off, and delete tasks. The input is already wired up; your job is the list state. Every update must create a new array.
+
+## Requirements
+
+- The form has an input labelled `New todo` and an **Add** button. Submitting the form (clicking **Add** or pressing Enter):
+  - adds a todo with the typed text (with spaces trimmed from both ends) to the **end** of the list,
+  - then clears the input,
+  - and does nothing if the text is empty or only spaces.
+- Each todo is an `<li>` containing:
+  - a checkbox labelled with the todo's text (wrap both in a `<label>`, as in the starter), checked when the todo is done,
+  - a **Delete** button.
+- Clicking a checkbox toggles only that todo between done and not done. A done todo's `<li>` has the class `done`.
+- **Delete** removes only that todo, even if another todo has the same text.
+- A paragraph shows how many todos are not done yet: `Items left: 2`.
+- When the list is empty, show a paragraph `Nothing to do!`
+
+## Hints
+
+- Give each todo a unique `id` (a counter variable outside the component works) and use it as the `key` and to find the todo to change.
+- Add with `[...todos, newTodo]`, toggle with `map` and `{ ...todo, done: !todo.done }`, delete with `filter`.
+- Count the items left with `filter(...).length`.

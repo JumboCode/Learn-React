@@ -1,0 +1,90 @@
+So far your pages only talk *to* the visitor. **Forms** let the visitor talk back: search boxes, sign-up pages, and checkout screens are all forms. This lesson covers the pieces you will use most.
+
+## The form element
+
+A `<form>` wraps a group of inputs that get submitted together:
+
+```html
+<form>
+  <!-- labels, inputs, and a button go here -->
+</form>
+```
+
+When the visitor submits, a plain HTML form sends its data somewhere and loads a new page. Later, JavaScript (and then React) will let you handle the submission yourself instead. For now, focus on building the form.
+
+## Text inputs and labels
+
+An `<input>` is an empty element, like `<img>`. Its `type` attribute decides what kind of field it is. `type="text"` is a one-line text box; `type="email"` and `type="password"` are text boxes with extra behavior.
+
+Every input needs a **label** so people know what to type. Connect them by giving the input an `id` and the label a matching `for`:
+
+```html
+<label for="name">Your name</label>
+<input type="text" id="name" name="name">
+```
+
+That connection matters. Screen readers announce "Your name" when the field is focused, and clicking the label text puts the cursor in the box, which gives everyone a bigger target. A bit of gray text next to a box is not the same thing.
+
+The `name` attribute is the key the data is sent under, like `name=Ada`. A `placeholder` attribute shows hint text inside an empty box, but it disappears once you type, so it is never a replacement for a label.
+
+## Checkboxes
+
+`type="checkbox"` is a box the visitor can tick on or off. Here the label usually comes **after** the input, and the `for`/`id` connection works the same way:
+
+```html
+<input type="checkbox" id="news" name="news">
+<label for="news">Email me the newsletter</label>
+```
+
+Add the `checked` attribute to start a box already ticked. It has no value; just writing `checked` is enough.
+
+## Buttons
+
+A `<button>` inside a form submits it by default. Give it clear text that says what will happen:
+
+```html
+<button type="submit">Create account</button>
+```
+
+Unlike `<input>`, a `<button>` has content and a closing tag.
+
+## Try it
+
+```html-live
+<h1>Join the Club</h1>
+
+<form>
+  <p>
+    <label for="name">Your name</label><br>
+    <input type="text" id="name" name="name" placeholder="Ada Lovelace">
+  </p>
+
+  <p>
+    <label for="email">Email</label><br>
+    <input type="email" id="email" name="email">
+  </p>
+
+  <p>
+    <input type="checkbox" id="news" name="news" checked>
+    <label for="news">Send me the monthly newsletter</label>
+  </p>
+
+  <button type="submit">Sign up</button>
+</form>
+
+<!-- Try clicking the words "Send me the monthly newsletter" instead of the box itself. -->
+<!-- Then add a password field with its own label (type="password"). -->
+```
+
+Click a label and notice that its input gets focus or toggles. Type something that is not an email address into the email box and press the button: the browser checks it for you.
+
+<Note>
+`for` is another attribute that React renames, because `for` is a JavaScript keyword. In React you will write `<label htmlFor="name">`. The connection to the input's `id` works exactly the same way.
+</Note>
+
+## Recap
+
+- A `<form>` groups inputs that are submitted together.
+- `<input>` is empty; its `type` picks the kind of field, such as `text`, `email`, or `checkbox`.
+- Connect every `<label>` to its input with matching `for` and `id` values.
+- A `<button>` inside a form submits it; give it text that says what it does.

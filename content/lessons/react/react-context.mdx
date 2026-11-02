@@ -1,0 +1,115 @@
+Props are how data flows down the tree. Usually that is perfect. But some data is needed almost everywhere: the current color theme, the logged-in user, the chosen language. Passing it through every component, even the ones in the middle that do not use it, is tedious. This is called **prop drilling**, and **context** is React's way around it.
+
+## The problem: prop drilling
+
+Imagine `App` holds a `theme`, and a `Button` four levels down needs it:
+
+```jsx
+<App theme={theme}>
+  <Page theme={theme}>
+    <Sidebar theme={theme}>
+      <Button theme={theme} />
+```
+
+`Page` and `Sidebar` do not care about the theme. They only pass it along. Every new component in the middle has to remember to forward it.
+
+## Context in three steps
+
+1. **Create** a context with `createContext`, giving it a default value.
+2. **Provide** a value by wrapping part of the tree in `<ThemeContext.Provider value=...>`.
+3. **Read** it in any component below with `useContext(ThemeContext)`.
+
+```jsx-live
+import { createContext, useContext, useState } from "react";
+
+const ThemeContext = createContext("light");
+
+function Button({ children }) {
+  const theme = useContext(ThemeContext);
+  const dark = theme === "dark";
+  return (
+    <button
+      style={{
+        background: dark ? "#333" : "#eee",
+        color: dark ? "#fff" : "#000",
+        border: "1px solid #888",
+        padding: "6px 12px",
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+function Toolbar() {
+  // Toolbar does not mention the theme at all.
+  return (
+    <div style={{ display: "flex", gap: 8 }}>
+      <Button>Save</Button>
+      <Button>Share</Button>
+    </div>
+  );
+}
+
+export default function App() {
+  const [theme, setTheme] = useState("light");
+
+  return (
+    <ThemeContext.Provider value={theme}>
+      <div style={{ fontFamily: "sans-serif", padding: 16, background: theme === "dark" ? "#111" : "#fff" }}>
+        <label style={{ color: theme === "dark" ? "#fff" : "#000" }}>
+          <input
+            type="checkbox"
+            checked={theme === "dark"}
+            onChange={(e) => setTheme(e.target.checked ? "dark" : "light")}
+          />{" "}
+          Dark mode
+        </label>
+        <Toolbar />
+      </div>
+      {/* Try wrapping one Button in its own <ThemeContext.Provider value="dark">. */}
+    </ThemeContext.Provider>
+  );
+}
+```
+
+`Toolbar` passes nothing to `Button`, yet `Button` knows the theme. When `App` updates the theme state, every component that reads the context re-renders with the new value.
+
+`useContext` finds the **nearest** provider above the component. If there is none, it gets the default value you passed to `createContext`.
+
+## Changing context from below
+
+Context passes values down, but a value can be anything, including a function. To let a deep component change the theme, provide both the value and the setter in an object:
+
+```jsx
+<ThemeContext.Provider value={{ theme, setTheme }}>
+  ...
+</ThemeContext.Provider>
+
+// somewhere deep inside:
+const { theme, setTheme } = useContext(ThemeContext);
+```
+
+This is still lifting state up. The state lives in `App`; context just delivers it without threading props through every layer.
+
+## Context or props?
+
+| Use props when... | Use context when... |
+| --- | --- |
+| Only a child or grandchild needs the data | Many components at many depths need it |
+| You want it obvious where data comes from | The data is app-wide, like theme, user, or language |
+| The data is specific to one part of the page | Drilling would touch lots of components that do not care |
+
+Start with props. They are explicit: you can look at a component's props and know exactly what it depends on. Reach for context only when the same data is needed widely.
+
+<Note>
+Context is not a replacement for all state. If you find yourself putting everything into one big context, components get harder to reuse and every change re-renders every reader. Keep context for a few widely needed values, and use composition (passing JSX as `children`) to avoid drilling in other cases.
+</Note>
+
+## Recap
+
+- Prop drilling means passing data through components that do not use it.
+- `createContext` makes a context, `<ThemeContext.Provider value=...>` supplies a value, and `useContext` reads it.
+- Components read the value from the nearest provider above them.
+- Provide a setter alongside the value to let deep components change it.
+- Prefer props by default; use context for widely needed data.

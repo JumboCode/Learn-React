@@ -1,0 +1,97 @@
+Imagine writing the same three lines every time you want to greet someone. A **function** lets you write those lines once, give them a name, and run them whenever you need. Functions are the most important idea in this module, because in React every component *is* a function.
+
+## Declaring and calling
+
+```js
+function greet() {
+  console.log("Hello!");
+}
+
+greet(); // Hello!
+greet(); // Hello!
+```
+
+The first part **declares** the function: it describes what to do but does not do it yet. Writing `greet()` with parentheses **calls** the function, which runs the code inside its curly braces.
+
+## Parameters: inputs
+
+A function becomes much more useful when it takes inputs. The names inside the parentheses are **parameters**, and the values you pass in are **arguments**:
+
+```js
+function greet(name) {
+  console.log("Hello, " + name + "!");
+}
+
+greet("Ada");   // Hello, Ada!
+greet("Grace"); // Hello, Grace!
+```
+
+Inside the function, `name` is a variable holding whatever was passed in. A function can take several parameters, separated by commas.
+
+## return: outputs
+
+`console.log` only *shows* a value. To hand a value back to the code that called the function, use `return`:
+
+```js-live
+function add(a, b) {
+  return a + b;
+}
+
+function area(width, height) {
+  return width * height;
+}
+
+const total = add(2, 3);
+console.log(total);          // 5
+console.log(add(total, 10)); // 15
+console.log(area(4, 5));     // 20
+
+// Try writing a function called double that returns its input times 2.
+```
+
+Two things to know about `return`:
+
+- It ends the function immediately. Any lines after it do not run.
+- A function without `return` gives back `undefined`.
+
+## Scope: variables stay inside
+
+Variables created inside a function exist only inside that function. This is called **scope**, and it keeps functions from accidentally interfering with each other.
+
+```js-live
+function makeMessage(name) {
+  const message = "Welcome, " + name;
+  return message;
+}
+
+console.log(makeMessage("Ada"));
+
+// message only exists inside makeMessage, so this line would crash:
+// console.log(message);
+// Try uncommenting it to see the error.
+```
+
+## Functions are values
+
+A function can also be stored in a variable, just like a string or a number:
+
+```js
+const sayHi = function (name) {
+  return "Hi, " + name;
+};
+
+sayHi("Ada"); // "Hi, Ada"
+```
+
+This looks like a small detail, but it is the foundation for the next few lessons: arrow functions, callbacks, and event handlers all depend on treating functions as values you can pass around.
+
+<Note>
+A React component is a function that returns what should appear on screen. In `function Welcome(props)`, the parameter `props` holds the component's inputs, and the `return` value is the UI. Everything in this lesson carries straight over.
+</Note>
+
+## Recap
+
+- A function packages code under a name; calling it with `()` runs that code.
+- Parameters are the function's inputs; `return` sends a value back out.
+- Variables declared inside a function stay inside it.
+- Functions are values, so they can be stored in variables and passed around.

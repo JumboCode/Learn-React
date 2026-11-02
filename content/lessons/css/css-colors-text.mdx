@@ -1,0 +1,87 @@
+Much of what makes a page feel designed comes down to color, type, and size. This lesson covers the ways to write colors, how to choose fonts, and which units to use for sizes.
+
+## Color formats
+
+CSS accepts colors in several formats. They all describe the same thing, so pick whichever is convenient:
+
+| Format | Example | Notes |
+| --- | --- | --- |
+| Named | `tomato` | About 140 names. Handy for quick experiments. |
+| Hex | `#ff6347` | Red, green, and blue as two hex digits each. Common in design tools. |
+| RGB | `rgb(255 99 71)` | Red, green, and blue from 0 to 255. |
+| RGB with alpha | `rgb(255 99 71 / 0.5)` | The last number is opacity, from 0 (invisible) to 1 (solid). |
+| HSL | `hsl(9 100% 64%)` | Hue (0 to 360 around a color wheel), saturation, and lightness. Easy to tweak by hand. |
+
+Use `color` for text and `background-color` for the area behind it.
+
+## Fonts and text
+
+```css
+body {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  line-height: 1.5;
+}
+h1 {
+  font-weight: bold;
+  text-align: center;
+}
+```
+
+`font-family` takes a list. The browser uses the first font it has, so always end with a generic family like `serif`, `sans-serif`, or `monospace` as a fallback. A `line-height` without a unit means "1.5 times the font size," which keeps paragraphs readable. Other handy properties are `font-weight`, `font-style`, `text-align`, and `text-decoration`.
+
+## Units: px, rem, and %
+
+| Unit | Relative to | Good for |
+| --- | --- | --- |
+| `px` | Nothing: a fixed size | Borders and small details. |
+| `rem` | The root `<html>` font size, usually 16px | Font sizes and spacing. `2rem` is usually 32px. |
+| `em` | The current element's font size | Spacing that should grow with its own text. |
+| `%` | The parent element | Widths, like "half of my container." |
+
+Why prefer `rem` for text? Some people set a larger default font size in their browser so they can read more easily. Sizes in `rem` grow with that setting; sizes in `px` ignore it.
+
+```html-live
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        line-height: 1.5;
+      }
+      h1 {
+        font-size: 2rem;
+        color: hsl(220 70% 40%);
+      }
+      .tag {
+        background-color: #ffe08a;
+        color: rgb(90 60 0);
+        font-size: 0.875rem;
+        font-weight: bold;
+      }
+      .half {
+        width: 50%;
+        background-color: rgb(255 99 71 / 0.3);
+      }
+      /* Try changing the hue in hsl(220 ...) to 0 or 120, or the 0.3 opacity to 0.9. */
+    </style>
+  </head>
+  <body>
+    <h1>Colors and units</h1>
+    <p>This paragraph has a <span class="tag">highlighted tag</span> inside it.</p>
+    <p class="half">I am 50% as wide as my parent.</p>
+  </body>
+</html>
+```
+
+<Note>
+Make sure text has enough contrast with its background. Light gray on white may look stylish, but many people cannot read it. Browser developer tools can show a contrast score when you inspect a color.
+</Note>
+
+## Recap
+
+- Colors can be named, hex, `rgb()`, or `hsl()`; an extra value after a slash adds transparency.
+- `font-family` takes a list of fonts ending with a generic fallback.
+- `px` is fixed, `rem` follows the root font size, and `%` follows the parent.
+- Use `rem` for text so it respects the reader's font size settings.

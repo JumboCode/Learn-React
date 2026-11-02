@@ -1,0 +1,17 @@
+Build a small todo list with plain JavaScript: a form adds todos, and clicking a todo marks it done. The HTML is in `index.html` (read-only); write your code in `index.js`.
+
+## Requirements
+
+- When the form with id `todo-form` is submitted (clicking **Add** or pressing Enter in the input), call `event.preventDefault()` so the page does not reload.
+- Read the text from the input labeled **New todo** (id `todo-input`) and remove spaces from both ends with `.trim()`.
+  - If the trimmed text is empty, do nothing else: no todo is added.
+  - Otherwise, add an `li` with that text to the end of the list with id `todo-list`, and clear the input.
+- Keep the paragraph with id `count` in sync with how many todos there are: `1 todo` for exactly one, otherwise the number and `todos` (`0 todos`, `2 todos`, ...). It starts as `0 todos`.
+- Clicking a todo's `li` toggles the class `done` on it: the first click adds it, the next click removes it.
+
+## Hints
+
+- Listen for `submit` on the form, not `click` on the button, so that pressing Enter works too.
+- Add the click listener to each `li` right after you create it.
+- `"  hi  ".trim()` is `"hi"`.
+- A ternary picks the right word: `count === 1 ? "todo" : "todos"`.

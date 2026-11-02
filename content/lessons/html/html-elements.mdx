@@ -1,0 +1,67 @@
+In the last lesson you wrote a small page with a heading and a paragraph. Each of those pieces is called an **element**. A web page is just a collection of elements, so this lesson looks closely at how one is built.
+
+## Anatomy of an element
+
+Most elements have three parts:
+
+```html
+<p>This is a paragraph.</p>
+```
+
+| Part | Example | What it does |
+| --- | --- | --- |
+| Opening tag | `<p>` | Marks where the element starts. The word inside the angle brackets is the element's name. |
+| Content | `This is a paragraph.` | What the element holds: text, or other elements. |
+| Closing tag | `</p>` | Marks where it ends. Same name, with a forward slash. |
+
+The tags are instructions for the browser; they never appear on the page. Only the content does.
+
+Forgetting a closing tag is the most common beginner mistake. Browsers try to guess what you meant, so the page might look fine, or a whole block of text might suddenly turn into a giant heading. Close every tag you open.
+
+## Headings
+
+HTML has six heading levels, from `<h1>` (most important) down to `<h6>` (least important). Think of them like an outline: a page usually has one `<h1>` for its main title, `<h2>` for sections, and `<h3>` for sub-sections inside those.
+
+Choose a heading level for its **place in the outline**, not for its size. Screen readers let people jump between headings to skim a page, so skipping from `<h1>` straight to `<h4>` is confusing. If you want a heading to look bigger or smaller, you will change that with CSS soon.
+
+## Paragraphs and line breaks
+
+Wrap each block of text in a `<p>`. The browser adds space between paragraphs for you.
+
+One surprise: the browser **collapses whitespace**. Pressing Enter five times in your HTML does not create five blank lines; runs of spaces and newlines all shrink down to a single space. If you need a new line inside a paragraph (like in an address or a poem), use `<br>`.
+
+`<br>` is an **empty element**: it has no content, so it has no closing tag. You will meet a few more of these, such as images.
+
+## Try it
+
+```html-live
+<h1>My Favorite Foods</h1>
+<p>I like a lot of foods, but these are my top picks.</p>
+
+<h2>Breakfast</h2>
+<p>Pancakes,      with
+   lots     of     syrup.</p>
+
+<h2>Dinner</h2>
+<p>Roses are red,<br>pasta is great,<br>I always have seconds<br>and clean off my plate.</p>
+
+<!-- Try removing the </p> at the end of the "Breakfast" paragraph and see what changes. -->
+<!-- Then add an <h3> under "Dinner" for "Dessert". -->
+```
+
+Notice that the extra spaces in the breakfast paragraph disappear in the preview, while each `<br>` starts a new line.
+
+## Comments
+
+You have already seen `<!-- ... -->` in the examples. Anything between those markers is a **comment**: a note for humans that the browser ignores. Use comments to explain your code or to temporarily switch something off.
+
+<Note>
+React uses the same element names you are learning here. In a React component you will write `<h1>` and `<p>` almost exactly as you do in HTML. One difference: React is stricter. Empty elements must close themselves with a slash, like `<br />`, and a missing closing tag is an error instead of a guess.
+</Note>
+
+## Recap
+
+- An element is an opening tag, some content, and a matching closing tag.
+- Use `<h1>` through `<h6>` to build an outline of the page, choosing levels by importance, not size.
+- Wrap blocks of text in `<p>`; the browser collapses extra whitespace.
+- Empty elements like `<br>` have no content and no closing tag.

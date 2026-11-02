@@ -1,0 +1,16 @@
+Someone pasted HTML into a React component and it is almost right. The page renders, but the variables are never used and a few attributes are written the HTML way instead of the JSX way. Fix the JSX so the business card shows the real data.
+
+## Requirements
+
+- A level-1 heading shows the person's name, `Ada Lovelace`, read from the `name` variable.
+- An image uses `photoUrl` as its `src` and has the alt text `Photo of Ada Lovelace` (build it from `name`).
+- A paragraph shows `Programmer from London` (from `job` and `city`) and has the CSS class `job`.
+- The `Email` label is connected to the email input, so the input can be found by the label text `Email`.
+- No "Invalid DOM property" warnings: use the JSX names for attributes that differ from HTML.
+
+## Hints
+
+- Text inside JSX is literal. To show a variable, wrap it in curly braces: `{name}`.
+- An attribute can be any JavaScript expression too: `alt={"Photo of " + name}` or a template literal.
+- In JSX, `class` is spelled `className` and `for` is spelled `htmlFor`.
+- Do not change the variables at the top of the file; the tests check the values they hold.

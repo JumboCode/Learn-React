@@ -1,0 +1,17 @@
+Build a reusable `ProfileCard` component that shows whatever person you pass to it through props.
+
+## Requirements
+
+- Export a component named `ProfileCard`: `export function ProfileCard({ name, role, location })`.
+- It renders:
+  - a level-2 heading with the `name`,
+  - a paragraph with the `role`,
+  - a paragraph that reads `Based in ` followed by the `location`, for example `Based in London`.
+- The default export `App` renders two cards:
+  - `Ada Lovelace`, role `Mathematician`, location `London`
+  - `Grace Hopper`, role `Computer Scientist`, location `New York`
+
+## Hints
+
+- Props arrive as one object. Destructuring it in the parameter list, `({ name, role, location })`, gives you three variables.
+- The tests render `ProfileCard` with people who are not in your `App`, so nothing inside `ProfileCard` may be hard-coded.

@@ -1,0 +1,94 @@
+Flexbox handles one line at a time. When you want rows *and* columns at once, like a photo gallery, a dashboard, or a page with a sidebar, use **CSS Grid**. You describe the columns on the container, and the children fill the cells in order.
+
+## Defining columns
+
+Put `display: grid` on the container, then list the column sizes with `grid-template-columns`:
+
+```css
+.gallery {
+  display: grid;
+  grid-template-columns: 200px 200px 200px; /* three fixed columns */
+  gap: 16px;
+}
+```
+
+Children fill the grid left to right, starting a new row whenever the columns run out. You do not have to write any rows: the browser adds as many as it needs.
+
+## The fr unit and repeat()
+
+Fixed pixel columns do not adapt to the screen. The `fr` unit means "a fraction of the leftover space":
+
+| Value | Result |
+| --- | --- |
+| `1fr 1fr 1fr` | Three equal columns. |
+| `2fr 1fr` | Two columns; the first is twice as wide. |
+| `200px 1fr` | A fixed 200px sidebar and a main area that takes the rest. |
+| `repeat(4, 1fr)` | Shorthand for `1fr 1fr 1fr 1fr`. |
+
+`repeat(count, size)` saves typing when columns are the same. `gap` sets the space between both rows and columns; use `row-gap` or `column-gap` to set just one.
+
+## Spanning cells
+
+An item can stretch across several columns or rows:
+
+```css
+.featured {
+  grid-column: span 2; /* take up two columns */
+}
+.tall {
+  grid-row: span 2;    /* take up two rows */
+}
+```
+
+## Try it
+
+```html-live
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body { font-family: sans-serif; }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+      .cell {
+        padding: 16px;
+        background-color: mediumseagreen;
+        color: white;
+        border-radius: 6px;
+        text-align: center;
+      }
+      .wide { grid-column: span 2; background-color: seagreen; }
+      .tall { grid-row: span 2; background-color: darkgreen; }
+      /* Try grid-template-columns: 2fr 1fr 1fr; or repeat(4, 1fr); or change gap to 20px. */
+    </style>
+  </head>
+  <body>
+    <div class="grid">
+      <div class="cell wide">Wide</div>
+      <div class="cell tall">Tall</div>
+      <div class="cell">3</div>
+      <div class="cell">4</div>
+      <div class="cell">5</div>
+      <div class="cell">6</div>
+    </div>
+  </body>
+</html>
+```
+
+## Grid or flexbox?
+
+A rough rule: use **flexbox** for a single row or column of things, like a toolbar, and **grid** when items need to line up in both directions, like cards in a gallery or the overall page layout. They work well together; a grid cell can be a flex container, and vice versa.
+
+<Note>
+A common pattern for card lists, including ones rendered by React components, is `grid-template-columns: repeat(auto-fill, minmax(150px, 1fr))`. It fits as many columns as the space allows, each at least 150px wide, with no media queries needed.
+</Note>
+
+## Recap
+
+- `display: grid` plus `grid-template-columns` defines the columns; rows are created as needed.
+- `fr` divides leftover space, and `repeat(3, 1fr)` is shorthand for three equal columns.
+- `gap` sets spacing between rows and columns.
+- `grid-column: span 2` and `grid-row: span 2` let an item cover several cells.

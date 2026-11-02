@@ -1,0 +1,88 @@
+HTML describes what is on a page and CSS describes how it looks. **JavaScript** is the part that *does* things: it remembers values, makes decisions, and reacts to the user. React is written in JavaScript, so this module covers the pieces of the language React leans on most. We start with the most basic one: storing a value so you can use it later.
+
+## Naming a value
+
+A **variable** is a name that points at a value. You create one with `const` or `let`:
+
+```js
+const name = "Ada";
+let score = 0;
+```
+
+Read the first line as "make a name called `name` and point it at the text `"Ada"`." The `=` sign means *assign*, not "is equal to".
+
+## const vs let
+
+| Keyword | Can you reassign it later? | When to use it |
+| --- | --- | --- |
+| `const` | No | Almost always. Most values never need to change. |
+| `let` | Yes | When the value really does change, like a running total. |
+
+```js
+let score = 0;
+score = score + 10; // fine: let can be reassigned
+
+const name = "Ada";
+name = "Grace"; // TypeError: Assignment to constant variable.
+```
+
+Start with `const`. Switch to `let` only when the code needs to reassign. You may see an older keyword, `var`, in tutorials online; it has confusing rules, so skip it.
+
+## The basic types
+
+Every value has a **type**. The three you will use constantly:
+
+- **Strings** are text, written in quotes: `"hello"` or `'hello'`.
+- **Numbers** are any number, whole or decimal: `42`, `3.14`, `-7`.
+- **Booleans** are exactly `true` or `false`. They answer yes/no questions.
+
+The `typeof` operator tells you a value's type:
+
+```js-live
+const name = "Ada";
+const age = 36;
+const isStudent = false;
+
+console.log(name, typeof name);
+console.log(age, typeof age);
+console.log(isStudent, typeof isStudent);
+
+// Numbers do math; strings join together with +
+console.log(age + 1);
+console.log("Hello, " + name);
+
+// Try changing age to "36" (with quotes). What does age + 1 print now?
+```
+
+`console.log` prints values to the console panel. You will use it constantly to check what your code is doing.
+
+## Nothing: null and undefined
+
+Two special values mean "no value here":
+
+- `undefined` is what you get when something has not been given a value yet, like `let x;`.
+- `null` is a value you set on purpose to say "empty", like `let selectedUser = null;`.
+
+```js-live
+let notSetYet;
+const selectedUser = null;
+
+console.log(notSetYet);    // undefined
+console.log(selectedUser); // null
+console.log(typeof notSetYet);
+
+// Try giving notSetYet a value with: notSetYet = "now I'm set";
+```
+
+You do not need to master the difference now. Just recognize both when they show up, often in an error message saying something "is undefined".
+
+<Note>
+React code uses `const` nearly everywhere, even for values that change on screen. That sounds strange, but in React a changing value is not reassigned. Instead, React runs your component again and creates a *fresh* `const` each time. You will see this in lines like `const [count, setCount] = useState(0);`.
+</Note>
+
+## Recap
+
+- `const` creates a variable you cannot reassign; `let` creates one you can. Prefer `const`.
+- Strings are text, numbers are numbers, booleans are `true` or `false`.
+- `typeof` reports a value's type, and `console.log` prints values so you can see them.
+- `undefined` means "not set yet"; `null` means "deliberately empty".

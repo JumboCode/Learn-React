@@ -1,0 +1,32 @@
+The browser turns HTML into a tree. This time, go the other way: you are given the tree, and your job is to write the HTML that produces it.
+
+```text
+body
+├── header
+│   └── h1  "City Zoo"
+└── main
+    ├── section  id="mammals"
+    │   ├── h2  "Mammals"
+    │   └── ul
+    │       ├── li  "Lion"
+    │       └── li  "Elephant"
+    └── section  id="birds"
+        ├── h2  "Birds"
+        └── ul
+            ├── li  "Penguin"
+            ├── li  "Parrot"
+            └── li  "Flamingo"
+```
+
+## Requirements
+
+- Every element in the diagram is a child of the element it hangs from, in the order shown.
+- `body` has exactly two child elements: `header` and `main`.
+- `main` has exactly two child elements: the two `section` elements, with the `id` values shown.
+- Each `section` has exactly two child elements: an `h2` and then a `ul`.
+- The text in quotes is the text inside that element.
+
+## Hints
+
+- Write the outer elements first, then fill in their children. Indent each child two spaces deeper than its parent so the shape of your code matches the diagram.
+- Siblings (elements that share a parent) appear one after another, inside the same parent.

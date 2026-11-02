@@ -1,0 +1,90 @@
+Two array methods do most of the list work in React: `map` turns every item into something else, and `filter` keeps only the items you want. Both take a callback, and both hand you a **brand-new array** while leaving the original untouched.
+
+## map: transform every item
+
+`map` calls your callback on each item and collects whatever the callback returns into a new array of the same length:
+
+```js-live
+const prices = [10, 25, 40];
+const withTax = prices.map((price) => price * 1.1);
+
+console.log(withTax); // [11, 27.5, 44] (roughly)
+console.log(prices);  // [10, 25, 40]: the original is unchanged
+
+const names = ["ada", "grace", "linus"];
+const shouted = names.map((name) => name.toUpperCase());
+console.log(shouted);
+
+// Try mapping names into greetings like "Hello, ada!".
+```
+
+Think of `map` as a factory line: one item goes in, one transformed item comes out, for every item.
+
+## filter: keep some items
+
+`filter` calls your callback on each item. If the callback returns something truthy, the item is kept; otherwise it is dropped:
+
+```js-live
+const scores = [92, 45, 78, 30, 88];
+const passing = scores.filter((score) => score >= 60);
+
+console.log(passing); // [92, 78, 88]
+console.log(scores);  // unchanged
+
+const words = ["apple", "kiwi", "banana", "fig"];
+const shortWords = words.filter((word) => word.length <= 4);
+console.log(shortWords);
+
+// Try filtering for scores below 50 instead.
+```
+
+The new array can be shorter than the original, or even empty, but the items in it are the same items, not changed ones.
+
+## Chaining them together
+
+Because each method returns an array, you can call another method right on the result:
+
+```js-live
+const temps = [12, 25, 31, 8, 22];
+
+const warmLabels = temps
+  .filter((t) => t > 20)
+  .map((t) => `${t} degrees`);
+
+console.log(warmLabels);
+
+// Try adding a third step: .map((label) => label + "!")
+```
+
+Read it top to bottom: "take the temps, keep the warm ones, turn each into a label."
+
+## find: the first match
+
+When you want one item instead of a list, `find` returns the first item where the callback returns truthy, or `undefined` if nothing matches:
+
+```js
+const nums = [3, 8, 12, 5];
+nums.find((n) => n > 6); // 8
+nums.find((n) => n > 100); // undefined
+```
+
+## Comparing the three
+
+| Method | Returns | Length |
+| --- | --- | --- |
+| `map` | new array of transformed items | same as the original |
+| `filter` | new array of the kept items | same or shorter |
+| `find` | a single item, or `undefined` | not an array |
+
+A common mistake with `map` is forgetting to return. If your callback uses curly braces, you need `return` inside, or you get an array full of `undefined`.
+
+<Note>
+This is exactly how React renders lists. You `map` an array of data into an array of elements, such as `todos.map((todo) => <li>{todo.text}</li>)`, and `filter` first if you only want some of them, like the unfinished to-dos. Since neither method changes the original array, they are safe to use on React state.
+</Note>
+
+## Recap
+
+- `map` returns a new array with every item transformed by your callback.
+- `filter` returns a new array with only the items whose callback returned truthy.
+- Neither changes the original array, and both can be chained.
+- `find` returns the first matching item, or `undefined`.

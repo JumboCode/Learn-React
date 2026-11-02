@@ -1,0 +1,84 @@
+A to-do list, a list of search results, a list of messages: most interfaces show *lists* of things. In JavaScript, a list of values is an **array**. Once you are comfortable with arrays, rendering lists in React will feel familiar.
+
+## Making an array
+
+Write an array with square brackets, separating the items with commas:
+
+```js
+const fruits = ["apple", "banana", "cherry"];
+const scores = [90, 85, 72];
+const empty = [];
+```
+
+An array can hold any type of value, even a mix, but in practice most arrays hold one kind of thing.
+
+## Indexes start at 0
+
+Each item has a numbered position called its **index**. Counting starts at `0`, not `1`, so the first item is at index `0`:
+
+| Index | 0 | 1 | 2 |
+| --- | --- | --- | --- |
+| Value | `"apple"` | `"banana"` | `"cherry"` |
+
+Read an item with square brackets after the array's name. `length` tells you how many items there are, which means the last index is always `length - 1`:
+
+```js-live
+const fruits = ["apple", "banana", "cherry"];
+
+console.log(fruits[0]);                 // apple
+console.log(fruits[2]);                 // cherry
+console.log(fruits.length);             // 3
+console.log(fruits[fruits.length - 1]); // the last item
+console.log(fruits[10]);                // undefined: nothing there
+
+// Try printing "banana" using its index.
+```
+
+Asking for an index that does not exist does not crash. You just get `undefined`.
+
+## Adding and checking items
+
+`push` adds an item to the end. `includes` answers "is this value in the array?" with `true` or `false`:
+
+```js-live
+const cart = ["milk", "eggs"];
+
+cart.push("bread");
+console.log(cart);        // ["milk", "eggs", "bread"]
+console.log(cart.length); // 3
+
+console.log(cart.includes("eggs"));   // true
+console.log(cart.includes("cheese")); // false
+
+// Try using pop() to remove the last item: cart.pop();
+// Then print cart again.
+```
+
+Notice that `cart` is a `const`, yet we could still add to it. `const` only stops you from pointing the name at a *different* array. The array itself can still change. Changing a value in place like this is called **mutating** it.
+
+## Looping over an array
+
+To do something with every item, a `for...of` loop walks through the array in order:
+
+```js-live
+const names = ["Ada", "Grace", "Linus"];
+
+for (const name of names) {
+  console.log(`Hello, ${name}!`);
+}
+
+// Try adding a fourth name to the array.
+```
+
+Loops work, but in the next two lessons you will learn `forEach`, `map`, and `filter`, which are what React code uses almost all of the time.
+
+<Note>
+`push` mutates the array it is called on. That is fine in plain JavaScript, but React notices changes by checking whether you gave it a *new* array, so mutating state arrays with `push` causes bugs where the screen does not update. The Spread and Rest lesson shows the React-friendly way to add items.
+</Note>
+
+## Recap
+
+- An array is an ordered list written with square brackets.
+- Indexes start at `0`; `array[i]` reads the item at index `i`.
+- `length` is the number of items; the last index is `length - 1`.
+- `push` adds to the end (mutating the array); `includes` checks whether a value is present.

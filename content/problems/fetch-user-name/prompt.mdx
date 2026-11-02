@@ -1,0 +1,26 @@
+Load data from a real-looking API with `fetch`, `async`, and `await`. The API returns users like this from `https://jsonplaceholder.typicode.com/users/1`:
+
+```js
+{ id: 1, name: "Leanne Graham", username: "Bret", email: "Sincere@april.biz" }
+```
+
+## Requirements
+
+- `getUserName(id)` is an `async` function. It fetches `https://jsonplaceholder.typicode.com/users/ID` (with the given `id` in place of `ID`) and returns the user's `name`.
+- If the response is not OK (`response.ok` is `false`, for example a 404 for a user that doesn't exist), `getUserName` must **throw** an `Error` instead of returning a name.
+- `getUserNames(ids)` is an `async` function that takes an array of ids and returns an array of their names, **in the same order** as the ids. Use `getUserName` for each one. An empty array of ids gives an empty array, without any requests.
+
+## Examples
+
+```js
+await getUserName(1); // "Leanne Graham"
+await getUserName(999); // throws an Error
+await getUserNames([2, 1]); // ["Ervin Howell", "Leanne Graham"]
+```
+
+## Hints
+
+- Build the URL with a template literal.
+- `await response.json()` turns the response body into an object.
+- `throw new Error("User not found")` stops the function and rejects its promise.
+- In `getUserNames`, a `for...of` loop with `await` inside fetches the users one at a time, keeping the order.

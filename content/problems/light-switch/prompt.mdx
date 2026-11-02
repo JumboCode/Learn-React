@@ -1,0 +1,13 @@
+Build a light switch: one button that flips a light on and off.
+
+## Requirements
+
+- When the page loads, a paragraph says `The light is off.` and the button's text is **Turn on**.
+- Clicking **Turn on** changes the paragraph to `The light is on.` and the button's text to **Turn off**.
+- Clicking **Turn off** switches back. It keeps flipping on every click.
+
+## Hints
+
+- Store a boolean in state: `const [isOn, setIsOn] = useState(false);`
+- `!isOn` is the opposite of `isOn`.
+- Use ternaries to choose the paragraph text and the button text from `isOn`.

@@ -1,0 +1,23 @@
+body {
+  font-family: sans-serif;
+}
+
+h2 {
+  color: darkgreen;
+}
+
+.price {
+  font-weight: bold;
+}
+
+#special {
+  background-color: gold;
+}
+
+nav a {
+  text-decoration: none;
+}
+
+li:first-child {
+  font-style: italic;
+}

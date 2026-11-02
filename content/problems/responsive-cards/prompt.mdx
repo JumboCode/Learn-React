@@ -1,0 +1,13 @@
+These cards always sit in a row, which squashes them on a phone. Make the page **mobile first**: stack the cards in a column on small screens and switch to a row on wider screens with a media query. Only edit `styles.css`.
+
+## Requirements
+
+- `.cards` is always a flex container (`display: flex`) with a `gap` of `16px`.
+- On screens **narrower than 768px**, `.cards` has `flex-direction: column`.
+- On screens **768px and wider**, `.cards` has `flex-direction: row`.
+- The `h1` has `font-size: 24px` on screens narrower than 768px, and `font-size: 36px` on screens 768px and wider.
+
+## Hints
+
+- Mobile first: write the small-screen styles as your normal rules, then override them inside `@media (min-width: 768px)`.
+- The media query goes **after** the normal rules so its rules win the tie.

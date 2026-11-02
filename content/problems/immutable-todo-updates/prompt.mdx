@@ -1,0 +1,39 @@
+React state must never be changed in place: to update it, you build a **new** array or object. Practice that here with a list of todos. Each todo looks like this:
+
+```js
+{ id: 1, text: "Buy milk", done: false }
+```
+
+## Requirements
+
+Every function returns a **new array** and must **not** change the array or any todo object it was given. No `push`, no `splice`, and no assigning to a property of an existing todo.
+
+- `addTodo(todos, todo)` returns a new array with `todo` added at the end.
+- `removeTodo(todos, id)` returns a new array without the todo whose `id` matches.
+- `toggleTodo(todos, id)` returns a new array where the todo with that `id` is replaced by a **copy** with `done` flipped (`true` becomes `false` and the other way around). Every other todo stays the same.
+- `renameTodo(todos, id, text)` returns a new array where the todo with that `id` is replaced by a copy with the new `text`.
+
+If no todo has the given `id`, `removeTodo`, `toggleTodo`, and `renameTodo` return a new array with the same todos.
+
+## Examples
+
+```js
+const todos = [
+  { id: 1, text: "Buy milk", done: false },
+  { id: 2, text: "Walk dog", done: true },
+];
+
+toggleTodo(todos, 1);
+// [{ id: 1, text: "Buy milk", done: true }, { id: 2, text: "Walk dog", done: true }]
+
+renameTodo(todos, 2, "Walk the dog");
+// [{ id: 1, text: "Buy milk", done: false }, { id: 2, text: "Walk the dog", done: true }]
+
+todos; // unchanged!
+```
+
+## Hints
+
+- Spread copies an array: `[...todos, todo]`.
+- `filter` already returns a new array.
+- To change one item, `map` over the list: return `{ ...todo, done: !todo.done }` for the matching todo, and the todo itself for the others.

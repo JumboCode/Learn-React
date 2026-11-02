@@ -1,0 +1,32 @@
+Turn numeric scores into letter grades using `if`/`else`, then build a short message with a template literal.
+
+## Requirements
+
+- `letterGrade(score)` returns a one-letter string:
+
+  | Score | Grade |
+  | --- | --- |
+  | 90 or more | `"A"` |
+  | 80 up to (not including) 90 | `"B"` |
+  | 70 up to 80 | `"C"` |
+  | 60 up to 70 | `"D"` |
+  | below 60 | `"F"` |
+
+- `isPassing(score)` returns `true` when the score is 60 or more, and `false` otherwise.
+- `gradeMessage(name, score)` returns the name, a colon, the letter grade, and `(pass)` or `(fail)`, for example `"Ada: A (pass)"`. Reuse your other two functions.
+
+## Examples
+
+| Call | Returns |
+| --- | --- |
+| `letterGrade(95)` | `"A"` |
+| `letterGrade(80)` | `"B"` |
+| `letterGrade(59.5)` | `"F"` |
+| `isPassing(60)` | `true` |
+| `gradeMessage("Ada", 91)` | `"Ada: A (pass)"` |
+| `gradeMessage("Bo", 42)` | `"Bo: F (fail)"` |
+
+## Hints
+
+- Check the highest grade first: once a score is not 90 or more, you know it is below 90.
+- A ternary such as `passed ? "pass" : "fail"` fits nicely inside `${...}` in a template literal.

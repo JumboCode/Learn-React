@@ -1,0 +1,114 @@
+Each component has its own state, which is usually what you want. But sometimes two components need to **share** the same data: a search box and the list it filters, or a temperature input in Celsius and another in Fahrenheit. This lesson shows the standard React answer: move the state up to their closest common parent.
+
+## The problem: two separate memories
+
+Here are two panels that should behave like an accordion, where opening one closes the other. Each panel has its own `isOpen` state:
+
+```jsx
+function Panel({ title, children }) {
+  const [isOpen, setIsOpen] = useState(false);
+  // ...
+}
+```
+
+Because each `Panel` remembers its own value, neither one knows what the other is doing. Opening the second panel cannot close the first. There is no way for siblings to reach into each other's state.
+
+## The fix: lift state to the parent
+
+Instead, put the state in the parent, `App`, and have it decide which panel is open. The panels become simpler: they receive whether they are open as a prop, and a function to call when clicked.
+
+```jsx-live
+import { useState } from "react";
+
+function Panel({ title, isOpen, onShow, children }) {
+  return (
+    <section style={{ border: "1px solid #ccc", borderRadius: 8, padding: 12, marginBottom: 8 }}>
+      <h3 style={{ margin: 0 }}>{title}</h3>
+      {isOpen ? <p>{children}</p> : <button onClick={onShow}>Show</button>}
+    </section>
+  );
+}
+
+export default function App() {
+  const [openIndex, setOpenIndex] = useState(0);
+
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <Panel title="About" isOpen={openIndex === 0} onShow={() => setOpenIndex(0)}>
+        We are a small club that meets on Tuesdays.
+      </Panel>
+      <Panel title="Location" isOpen={openIndex === 1} onShow={() => setOpenIndex(1)}>
+        Room 104, next to the library.
+      </Panel>
+      {/* Try adding a third Panel with index 2. */}
+    </div>
+  );
+}
+```
+
+Lifting state follows three steps:
+
+1. **Remove** the state from the children.
+2. **Add** it to the closest parent that contains every component that needs it.
+3. **Pass it down**: the value as a prop, plus a callback prop (like `onShow`) so children can ask the parent to change it.
+
+The children never call a setter they do not own. They call `onShow`, and the parent decides what that means. Naming callback props `onSomething` matches built-in props like `onClick`.
+
+## Single source of truth
+
+After lifting, `openIndex` lives in exactly one place. That is what people mean by a **single source of truth**: for each piece of data, one component owns it and everyone else receives it through props. You never have to keep two copies in sync, because there is only one copy.
+
+Here is a common real case: an input and a list that both need the search text.
+
+```jsx-live
+import { useState } from "react";
+
+const FRUITS = ["Apple", "Banana", "Cherry", "Grape", "Mango", "Pear"];
+
+function SearchBox({ query, onQueryChange }) {
+  return (
+    <input
+      aria-label="Search fruit"
+      value={query}
+      onChange={(e) => onQueryChange(e.target.value)}
+      placeholder="Search fruit"
+    />
+  );
+}
+
+function FruitList({ query }) {
+  const matches = FRUITS.filter((f) => f.toLowerCase().includes(query.toLowerCase()));
+  return (
+    <ul>
+      {matches.map((f) => (
+        <li key={f}>{f}</li>
+      ))}
+    </ul>
+  );
+}
+
+export default function App() {
+  const [query, setQuery] = useState("");
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <SearchBox query={query} onQueryChange={setQuery} />
+      <FruitList query={query} />
+      <p>Searching for: "{query}"</p>
+      {/* Try adding a third sibling that shows how many fruits match. */}
+    </div>
+  );
+}
+```
+
+`SearchBox` and `FruitList` are siblings. Neither owns `query`; `App` does, and both stay in sync automatically.
+
+<Note>
+Do not lift state higher than you need to. Keep it in the **closest** common parent. State that only one component uses should stay in that component.
+</Note>
+
+## Recap
+
+- Siblings cannot read each other's state, so shared data must live in a common parent.
+- Lift state by moving it up, then passing the value and a callback prop down.
+- Callback props like `onShow` let children request changes without owning the state.
+- Each piece of data should have a single source of truth.

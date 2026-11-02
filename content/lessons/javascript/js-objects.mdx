@@ -1,0 +1,110 @@
+An array is good for a list of similar things. But a user has a name, an email, and an age: different facts about one thing. To group related values under names, JavaScript uses **objects**.
+
+## Making an object
+
+Write an object with curly braces. Inside, list **key: value** pairs separated by commas:
+
+```js
+const user = {
+  name: "Ada",
+  age: 36,
+  isAdmin: true,
+};
+```
+
+The keys (`name`, `age`, `isAdmin`) are labels. The values can be anything: strings, numbers, booleans, arrays, even other objects or functions.
+
+## Reading and changing values
+
+Use a dot followed by the key to read a value. This is called **dot notation**:
+
+```js-live
+const user = {
+  name: "Ada",
+  age: 36,
+  isAdmin: true,
+};
+
+console.log(user.name); // Ada
+console.log(user.age);  // 36
+console.log(user.email); // undefined: no such key
+
+user.age = 37;            // change a value
+user.email = "ada@example.com"; // add a new key
+console.log(user);
+
+// Try adding a key called city and printing it.
+```
+
+Like arrays, a `const` object can still have its contents changed. `const` only stops you from replacing the whole object.
+
+## Bracket notation
+
+Sometimes the key is stored in a variable, or it contains characters a dot cannot handle. Then use square brackets with the key as a string:
+
+```js-live
+const scores = { math: 90, art: 85, "computer science": 99 };
+
+console.log(scores["math"]);
+console.log(scores["computer science"]);
+
+const subject = "art";
+console.log(scores[subject]); // looks up the key stored in subject
+console.log(scores.subject);  // undefined: looks for a key literally named "subject"
+
+// Try changing subject to "math".
+```
+
+## Nesting
+
+Objects can contain arrays and other objects. Chain dots and brackets to reach inside:
+
+```js-live
+const student = {
+  name: "Grace",
+  address: {
+    city: "Boston",
+    zip: "02155",
+  },
+  courses: ["CS 11", "CS 15"],
+};
+
+console.log(student.address.city); // Boston
+console.log(student.courses[1]);   // CS 15
+console.log(student.courses.length);
+
+// Try printing the zip code.
+```
+
+## Arrays of objects
+
+Combine the two and you get the most common shape of data in web apps: a list of records, each with the same keys.
+
+```js-live
+const todos = [
+  { id: 1, text: "Learn arrays", done: true },
+  { id: 2, text: "Learn objects", done: false },
+  { id: 3, text: "Learn React", done: false },
+];
+
+console.log(todos[0].text);
+
+const remaining = todos.filter((todo) => !todo.done);
+console.log(remaining.map((todo) => todo.text));
+
+// Try marking the second todo done with: todos[1].done = true;
+// Then check what remaining prints.
+```
+
+Data from servers almost always arrives in this shape, and you will `map` over arrays like this to render lists in React.
+
+<Note>
+React passes information to components as an object called `props`. If you render a component with `name="Ada"` and `age={36}`, the component receives an object like `{ name: "Ada", age: 36 }` and reads `props.name`. Objects are how React components talk to each other.
+</Note>
+
+## Recap
+
+- Objects group related values under named keys, written with curly braces.
+- Read values with `obj.key`, or `obj["key"]` when the key is in a variable or has spaces.
+- Objects and arrays nest; chain dots and brackets to reach inside.
+- Arrays of objects are the standard shape for lists of data.

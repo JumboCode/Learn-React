@@ -1,0 +1,21 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+}
+
+.navbar {
+  background-color: #222;
+  color: white;
+  /* TODO: make this a flex row with the logo and links at opposite ends */
+}
+
+.nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  /* TODO: put the links in a row with space between them */
+}
+
+.nav-links a {
+  color: white;
+}

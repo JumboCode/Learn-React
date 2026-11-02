@@ -1,0 +1,15 @@
+Load a list of users from a server and show it, handling the three situations every request can be in: **loading**, **error**, and **data**.
+
+## Requirements
+
+- When the component first appears, fetch `https://jsonplaceholder.typicode.com/users` **once**. The response is a JSON array of users like `{ id: 1, name: "Leanne Graham", email: "Sincere@april.biz" }`.
+- While the request is in progress, show the text `Loading...`.
+- When it succeeds, hide `Loading...` and show each user's **name** in its own list item (`<li>`), using the user's `id` as the key.
+- If the request fails, either because `fetch` throws or because the response is not ok (for example a 500 status), hide `Loading...` and show a message that starts with `Error`, such as `Error: Request failed: 500`.
+
+## Hints
+
+- Fetch inside `useEffect` with an empty dependency array `[]`, so it only runs once.
+- The effect function cannot be `async` itself. Define an `async function load()` inside the effect and call it.
+- `fetch` does not throw for a 500 response. Check `response.ok` and `throw` an error yourself.
+- Use `try` / `catch` / `finally`, and turn loading off in `finally`.

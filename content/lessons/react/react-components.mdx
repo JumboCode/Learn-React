@@ -1,0 +1,103 @@
+A **component** is a JavaScript function that returns JSX. That is the whole definition. Components let you split a page into named, reusable pieces, the same way you split a long program into small functions in the JavaScript module.
+
+## Your first component
+
+```jsx-live
+function Greeting() {
+  return <h2>Hello from a component!</h2>;
+}
+
+export default function App() {
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <Greeting />
+      <Greeting />
+      <Greeting />
+      {/* Try writing a Farewell component and using it here. */}
+    </div>
+  );
+}
+```
+
+`Greeting` is defined once and used three times. To use a component, you write it like an HTML tag: `<Greeting />`. React sees that tag, calls your `Greeting` function, and puts whatever it returns on the page.
+
+`App` is a component too. In these live examples, `App` is the **root**: the component React starts from. Everything else is placed somewhere inside it.
+
+## Capital letters matter
+
+Component names must start with a capital letter. React uses this to tell two kinds of tags apart:
+
+- `<button />` (lowercase) means "a built-in HTML element."
+- `<Button />` (capitalized) means "call my `Button` function."
+
+If you name a component `greeting` and write `<greeting />`, React will try to create an HTML element called `greeting`, and none of your code will run.
+
+## Building a page from pieces
+
+Real pages are trees of components. Each component handles one part, and parents combine them:
+
+```jsx-live
+function Header() {
+  return (
+    <header style={{ borderBottom: "1px solid #ccc", paddingBottom: 8 }}>
+      <h1>My Recipes</h1>
+    </header>
+  );
+}
+
+function RecipeCard() {
+  return (
+    <article style={{ border: "1px solid #ddd", borderRadius: 8, padding: 12, marginTop: 12 }}>
+      <h3>Pancakes</h3>
+      <p>Flour, eggs, milk. Mix and fry.</p>
+    </article>
+  );
+}
+
+function Footer() {
+  return <footer style={{ marginTop: 16, color: "gray" }}>Made with React</footer>;
+}
+
+export default function App() {
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <Header />
+      <RecipeCard />
+      <RecipeCard />
+      <Footer />
+      {/* Try adding a second Header, or moving Footer to the top. */}
+    </div>
+  );
+}
+```
+
+Reading `App` now tells you the structure of the page at a glance. If the footer needs changing, you know exactly which function to open.
+
+You might notice both recipe cards say "Pancakes." A component that always shows the same thing is not very reusable. The next lesson, on props, fixes that.
+
+## Components in separate files
+
+In a real project, each component usually lives in its own file and is shared with `export` and `import`, exactly like the modules from the JavaScript module:
+
+```jsx
+// RecipeCard.js
+export default function RecipeCard() {
+  return <article>...</article>;
+}
+
+// App.js
+import RecipeCard from "./RecipeCard";
+```
+
+The live editors on this site use a single file, so we define every component above `App`.
+
+<Note>
+Define components at the **top level** of a file, never inside another component's function body. A component defined inside another one is recreated on every render, which leads to slow and confusing bugs later on.
+</Note>
+
+## Recap
+
+- A component is a function that returns JSX.
+- Use it like a tag, for example `<Header />`. Names must start with a capital letter.
+- Pages are trees of components, with `App` at the root.
+- Components can be exported and imported between files like any other function.

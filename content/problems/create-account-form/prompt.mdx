@@ -1,0 +1,21 @@
+Build the sign-up form for a club website. Each field needs the right input type, a connected label, and a `name` so its data can be sent.
+
+## Requirements
+
+All of these go inside a single `<form>`:
+
+| Label text | Input type | `name` attribute |
+| --- | --- | --- |
+| `Username` | `text` | `username` |
+| `Email` | `email` | `email` |
+| `Password` | `password` | `password` |
+| `I agree to the club rules` | `checkbox` | `agree` |
+
+- The checkbox should start **unchecked**.
+- A submit button with the text `Create account`, after all of the fields.
+
+## Hints
+
+- Every input gets an `id`, and its `<label>` gets a matching `for`. The `id` and `name` can be the same word.
+- `name` is the key the data is sent under, so `name="username"` sends something like `username=ada`.
+- A `placeholder` is optional, but it is never a replacement for a label.

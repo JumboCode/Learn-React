@@ -1,0 +1,15 @@
+Lay out a photo gallery with **CSS Grid**: three equal columns, even gaps, and one featured photo that takes up two columns. Only edit `styles.css`.
+
+## Requirements
+
+- `.gallery`:
+  - `display` is `grid`.
+  - Three **equal** columns: `grid-template-columns` is `repeat(3, 1fr)` (writing `1fr 1fr 1fr` also works).
+  - `gap` is `16px`.
+- `.featured` (one of the photos): spans **two columns**, with `grid-column` set to `span 2`.
+- `.gallery img`: `width` is `100%`, so each photo fills its cell.
+
+## Hints
+
+- `fr` means "a fraction of the leftover space", so `1fr 1fr 1fr` makes three equal columns.
+- You never need to define the rows: the grid adds them as the photos fill the columns.

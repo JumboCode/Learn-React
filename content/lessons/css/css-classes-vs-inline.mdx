@@ -1,0 +1,98 @@
+You have now seen two ways to style an element: give it a class and write a rule for that class, or write the styles right on the element with a `style` attribute. Both are useful, and React uses both, so it is worth knowing when to reach for each.
+
+## Classes: reusable styles
+
+A class is a name you define once and apply anywhere:
+
+```html
+<style>
+  .button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    background-color: steelblue;
+    color: white;
+  }
+  .button-danger {
+    background-color: crimson;
+  }
+</style>
+
+<button class="button">Save</button>
+<button class="button">Edit</button>
+<button class="button button-danger">Delete</button>
+```
+
+Change the `.button` rule and every button updates. You can also combine classes: the Delete button gets all the base styles plus the red override. Classes can use everything CSS offers, including `:hover`, media queries, and other selectors.
+
+## Inline styles: one-off tweaks
+
+An inline style lives in the element's `style` attribute:
+
+```html
+<p style="color: gray; margin-top: 0;">A one-off note.</p>
+```
+
+Inline styles are quick, but they have real downsides:
+
+| | Classes | Inline styles |
+| --- | --- | --- |
+| Reusable | Yes, on any number of elements | No, copied onto every element |
+| `:hover` and media queries | Yes | No |
+| Easy to override | Yes, with another class | Hard: they beat class and id rules |
+| Best for | Almost everything | A single value that is truly unique or computed |
+
+Try both approaches here:
+
+```html-live
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body { font-family: sans-serif; }
+      .button {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 6px;
+        background-color: steelblue;
+        color: white;
+      }
+      .button:hover { background-color: navy; }
+      .button-danger { background-color: crimson; }
+      /* Try changing border-radius on .button: all three class-styled buttons update. */
+    </style>
+  </head>
+  <body>
+    <button class="button">Save</button>
+    <button class="button">Edit</button>
+    <button class="button button-danger">Delete</button>
+    <p>
+      <button style="padding: 8px 16px; background-color: orange;">Inline</button>
+      <!-- Try hovering: the inline button has no hover effect. -->
+    </p>
+  </body>
+</html>
+```
+
+## How React does it
+
+React components produce HTML, so they use the same two tools with slightly different spelling. You will learn the details later, but here is a preview:
+
+```jsx
+<button className="button button-danger">Delete</button>
+
+<div style={{ backgroundColor: "orange", marginTop: 8 }}>Inline</div>
+```
+
+- `class` becomes **`className`**, because `class` is a reserved word in JavaScript.
+- `style` takes a JavaScript **object** instead of a string. Property names are written in camelCase, so `background-color` becomes `backgroundColor`, and plain numbers like `8` mean pixels.
+
+<Note>
+In React, inline styles are most useful when a value is calculated while the app runs, like the width of a progress bar. For everything else, use classes, just like in plain HTML.
+</Note>
+
+## Recap
+
+- Classes are defined once and reused; they support `:hover`, media queries, and easy overrides.
+- Inline styles affect one element and beat stylesheet rules, so use them sparingly.
+- Combine classes like `class="button button-danger"` to build variations.
+- In React, `class` is written `className`, and `style` takes an object with camelCase property names.

@@ -1,0 +1,17 @@
+Practice the planning step of the Reading List: find the **minimal state**, and compute everything else during render. `App` receives the books as a prop and only needs one piece of state of its own.
+
+## Requirements
+
+- `App` takes a `books` prop: an array of `{ id, title, author, read }` objects. When no prop is passed, it uses the `SAMPLE_BOOKS` array from the starter code (`function App({ books = SAMPLE_BOOKS })`).
+- Show a summary like `5 books, 2 read`: the total number of books and how many are read. Use `book` instead of `books` when there is exactly one, like `1 book, 0 read`.
+- Three filter buttons: **All**, **Unread**, and **Read**. The list starts on **All**.
+- Show the visible books in a list, one `<li>` per book with the text `<title> by <author>`, like `Dune by Frank Herbert`. Use each book's `id` as its key.
+- Show `Showing <visible> of <total>`, like `Showing 3 of 5`.
+- When no books are visible, show `No books match this filter.` instead of the list.
+- The current filter is the **only** state. The visible books and the counts must be computed from `books` and the filter on every render, so they update right away if `App` receives a different `books` prop.
+
+## Hints
+
+- `books.filter((b) => b.read).length` counts the read books.
+- Compute the visible books with one `filter` call that checks the current filter.
+- If you copied `books` into state with `useState(books)`, the list would not update when the prop changes. That is why derived values do not belong in state.

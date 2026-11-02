@@ -1,0 +1,16 @@
+body {
+  font-family: sans-serif;
+}
+
+/* These rules lose to the <style> block in index.html. Make their selectors more specific! */
+.headline {
+  color: purple;
+}
+
+.alert {
+  color: red;
+}
+
+.done {
+  color: green;
+}

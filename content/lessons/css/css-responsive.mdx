@@ -1,0 +1,93 @@
+People will open your site on phones, tablets, laptops, and giant monitors. A **responsive** page adapts its layout to the screen it is on, instead of building separate sites for each device. It takes three ingredients: a viewport tag, flexible units, and media queries.
+
+## Step 1: the viewport tag
+
+Phone browsers pretend to be about 980px wide unless you tell them otherwise, which makes your page tiny. Always include this in the `<head>`:
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+```
+
+It says "use the device's real width." Without it, nothing else in this lesson works properly on phones.
+
+## Step 2: flexible units
+
+Fixed widths like `width: 900px` overflow a 375px phone screen. Prefer sizes that adapt:
+
+| Instead of | Try | Why |
+| --- | --- | --- |
+| `width: 900px` | `width: 100%; max-width: 900px` | Full width on small screens, capped on large ones. |
+| `font-size: 16px` | `font-size: 1rem` | Respects the reader's font settings. |
+| `height: 800px` | `min-height: 100vh` | `vh` is 1% of the screen height; `vw` is 1% of its width. |
+
+Images especially need `max-width: 100%` so they shrink to fit their container.
+
+## Step 3: media queries
+
+A **media query** wraps rules that only apply when a condition is true, usually about the screen width:
+
+```css
+/* Applies only when the screen is at least 600px wide */
+@media (min-width: 600px) {
+  .cards { flex-direction: row; }
+}
+
+/* Applies only when the screen is at most 599px wide */
+@media (max-width: 599px) {
+  .sidebar { display: none; }
+}
+```
+
+The width where the layout changes is called a **breakpoint**. Pick breakpoints where your design starts to look cramped, not for specific devices.
+
+## Mobile first
+
+A common approach is **mobile first**: write the base styles for small screens, then use `min-width` queries to add columns as space grows. Small-screen layouts are usually simpler (everything stacked), so you start simple and add complexity.
+
+The preview below is narrow. The cards stack in a column, and a `min-width` query switches them to a row on wider screens:
+
+```html-live
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body { font-family: sans-serif; margin: 0; padding: 8px; }
+      .cards {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .card {
+        flex: 1;
+        padding: 12px;
+        background-color: lavender;
+        border-radius: 6px;
+      }
+      @media (min-width: 600px) {
+        .cards { flex-direction: row; }
+        .card { background-color: lightgreen; }
+      }
+      /* Try changing 600px to 250px: the preview is wider than that, so the cards switch to a green row. */
+    </style>
+  </head>
+  <body>
+    <div class="cards">
+      <div class="card">One</div>
+      <div class="card">Two</div>
+      <div class="card">Three</div>
+    </div>
+  </body>
+</html>
+```
+
+<Note>
+React does not change how responsive design works. Components get class names, and the media queries live in your CSS. A component that stacks on phones and sits in a row on laptops is exactly the flexbox and media query pattern above.
+</Note>
+
+## Recap
+
+- Always include the viewport `<meta>` tag so phones use their real width.
+- Use flexible sizes like `%`, `rem`, `vw`, and `max-width` instead of large fixed pixel widths.
+- `@media (min-width: ...)` and `@media (max-width: ...)` apply rules only at certain screen widths.
+- Mobile first: style the small screen, then add `min-width` queries for bigger ones.

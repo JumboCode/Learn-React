@@ -1,0 +1,80 @@
+You have been writing HTML as text. But the browser does not keep your page as text. It reads the HTML once and builds a **tree of objects** called the **DOM** (Document Object Model). Everything you see on screen is drawn from that tree, and it is the same tree React will update for you later.
+
+## From text to tree
+
+Take this small page:
+
+```html
+<body>
+  <h1>Pets</h1>
+  <ul>
+    <li>Cat</li>
+    <li>Dog</li>
+  </ul>
+</body>
+```
+
+The browser turns it into this tree:
+
+```text
+body
+├── h1
+│   └── "Pets"
+└── ul
+    ├── li
+    │   └── "Cat"
+    └── li
+        └── "Dog"
+```
+
+Each element becomes a **node**, and the text inside an element becomes its own **text node**. The family words from the nesting lesson apply directly: `<ul>` is the **parent** of both `<li>` nodes, the two `<li>` nodes are **siblings**, and everything hangs from one **root**. For a full page, the root is the `document`, with `<html>` just below it.
+
+This is why proper nesting matters. Overlapping tags cannot be drawn as a tree, so the browser has to guess at a fix, and its guess may not match what you meant.
+
+## Nodes are objects
+
+A DOM node is not text anymore. It is an object in memory with **properties**, such as its tag name, its attributes, its text, and a list of its children. The browser keeps the tree and the screen in sync: change a node, and the page redraws to match.
+
+That is what makes pages interactive. The HTML file never changes after it loads; JavaScript changes the **tree**.
+
+## Watch the tree change
+
+The example below includes a tiny bit of JavaScript. You do not need to understand it yet; you will learn it in the JavaScript module. Just notice what it does: it creates a new `<li>` node and attaches it to the list. No HTML text is edited.
+
+```html-live
+<h1>Pets</h1>
+<ul id="pets">
+  <li>Cat</li>
+  <li>Dog</li>
+</ul>
+<button id="add">Add a pet</button>
+
+<script>
+  const list = document.getElementById("pets");
+  document.getElementById("add").addEventListener("click", () => {
+    const item = document.createElement("li");
+    item.textContent = "Hamster";
+    list.appendChild(item);
+  });
+</script>
+
+<!-- Try clicking the button a few times: each click adds a new node to the tree. -->
+<!-- Then change "Hamster" to a different pet name and click again. -->
+```
+
+Each click adds a new child to the `<ul>` node, and the screen follows along.
+
+## You can look at the tree
+
+Every browser has developer tools. Right-click any page and choose **Inspect**: the **Elements** panel shows the live DOM tree, not your original file. Try it on this page. If JavaScript has changed something, you will see the change there.
+
+<Note>
+Updating the DOM by hand, node by node, gets messy fast in a big app. React's job is to do it for you. You describe what the page *should* look like, and React works out which nodes to add, change, or remove in this same tree. When you hear "React renders," this tree is what it is updating.
+</Note>
+
+## Recap
+
+- The browser turns your HTML text into a tree of objects called the DOM.
+- Elements become nodes; text inside them becomes text nodes; nesting becomes parent and child.
+- The screen is drawn from the tree, and changing the tree changes the page.
+- React updates this same tree for you; Inspect in your browser shows it live.

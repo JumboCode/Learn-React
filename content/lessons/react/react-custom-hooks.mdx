@@ -1,0 +1,109 @@
+You have used React's built-in hooks, `useState` and `useEffect`. Once you write a few components, you start seeing the same hook code repeated: a boolean that flips on click, a value saved in local storage, a listener on the window. Just like you pull repeated JSX into a component, you can pull repeated hook logic into your own function. That function is a **custom hook**.
+
+## Your first custom hook: useToggle
+
+A custom hook is just a JavaScript function whose name starts with `use` and that calls other hooks inside. Here is one for an on/off value:
+
+```jsx-live
+import { useState } from "react";
+
+function useToggle(initial = false) {
+  const [on, setOn] = useState(initial);
+  const toggle = () => setOn((v) => !v);
+  return [on, toggle];
+}
+
+export default function App() {
+  const [showDetails, toggleDetails] = useToggle();
+  const [darkMode, toggleDarkMode] = useToggle(true);
+
+  return (
+    <div
+      style={{
+        fontFamily: "sans-serif",
+        padding: 16,
+        background: darkMode ? "#222" : "#fff",
+        color: darkMode ? "#eee" : "#222",
+      }}
+    >
+      <button onClick={toggleDarkMode}>Toggle theme</button>{" "}
+      <button onClick={toggleDetails}>{showDetails ? "Hide" : "Show"} details</button>
+      {showDetails && <p>Here are the details you asked for.</p>}
+      {/* Try returning a third item from useToggle: a function that sets it back to false. */}
+    </div>
+  );
+}
+```
+
+`useToggle` returns an array, like `useState` does, so callers can name the values anything they like.
+
+## Each call gets its own state
+
+Notice that `showDetails` and `darkMode` change independently, even though both came from `useToggle`. That is the key idea: **hooks share logic, not state**. Every time a component calls a custom hook, it gets a fresh copy of all the state inside it, exactly as if you had written the `useState` line directly in the component. If you want two components to share the *same* value, you still need to lift state up (or use context, coming next).
+
+## The "use" name matters
+
+Starting the name with `use` is not just a style choice. It tells React (and its linter) that this function calls hooks, so the rules of hooks apply: call it only at the top level of a component or of another hook, never inside an `if` or a loop. A plain helper function that does not call any hooks should **not** start with `use`.
+
+## Hooks with effects: useWindowWidth and useLocalStorage
+
+Custom hooks can wrap effects too, which hides the setup and cleanup details from your components.
+
+```jsx-live
+import { useState, useEffect } from "react";
+
+function useWindowWidth() {
+  const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    function handleResize() {
+      setWidth(window.innerWidth);
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  return width;
+}
+
+function useLocalStorage(key, initialValue) {
+  const [value, setValue] = useState(() => {
+    const saved = localStorage.getItem(key);
+    return saved !== null ? JSON.parse(saved) : initialValue;
+  });
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+  return [value, setValue];
+}
+
+export default function App() {
+  const width = useWindowWidth();
+  const [name, setName] = useLocalStorage("name", "");
+
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <p>The preview is {width}px wide ({width < 400 ? "narrow" : "wide"}).</p>
+      <input aria-label="Your name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" />
+      <p>Type a name, then refresh the preview. It is still there.</p>
+      {/* Try using useLocalStorage for a counter: const [count, setCount] = useLocalStorage("count", 0); */}
+    </div>
+  );
+}
+```
+
+A few things to notice:
+
+- `useLocalStorage` has the same shape as `useState`, so swapping one for the other is a one-line change.
+- `useState(() => ...)` with a function only reads local storage on the first render, not every render.
+- `JSON.stringify` and `JSON.parse` let it store numbers, arrays, and objects, not just strings.
+- The component using `useWindowWidth` never sees `addEventListener`. It just gets a number.
+
+<Note>
+Extract a custom hook when the same stateful logic appears in more than one place, or when a component's hook code is long enough to deserve a name. You do not need a custom hook for every single `useState`.
+</Note>
+
+## Recap
+
+- A custom hook is a function named `useSomething` that calls other hooks.
+- It lets components reuse stateful logic, including effects and cleanup.
+- Hooks share logic, not state: each call gets its own independent state.
+- The rules of hooks apply to custom hooks too.

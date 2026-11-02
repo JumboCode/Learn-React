@@ -1,0 +1,88 @@
+You will often want several values out of an object or array at once. Writing `const name = user.name;` and `const age = user.age;` line after line gets repetitive. **Destructuring** pulls values out into variables in a single line, and React code uses it constantly.
+
+## Object destructuring
+
+Put curly braces on the *left* of the `=`, listing the keys you want. Each key becomes a variable with the same name:
+
+```js-live
+const user = { name: "Ada", age: 36, city: "London" };
+
+// The long way
+const name1 = user.name;
+const age1 = user.age;
+
+// With destructuring
+const { name, age } = user;
+
+console.log(name, age);
+console.log(name1, age1);
+
+// Try also pulling out city in the same line.
+```
+
+The order of the keys does not matter, because they are matched by name. Keys you do not list are simply ignored.
+
+## Renaming and defaults
+
+If you want a different variable name, write `key: newName`. If a key might be missing, give a fallback with `=`:
+
+```js-live
+const settings = { theme: "dark" };
+
+const { theme: currentTheme, fontSize = 16 } = settings;
+
+console.log(currentTheme); // dark
+console.log(fontSize);     // 16: settings had no fontSize, so the default is used
+
+// Try adding fontSize: 20 to settings. Which value wins?
+```
+
+The default is only used when the value is `undefined`.
+
+## Array destructuring
+
+For arrays, use square brackets on the left. Values are matched by **position**, not name, so you choose any names you like:
+
+```js-live
+const rgb = [255, 128, 0];
+const [red, green, blue] = rgb;
+console.log(red, green, blue);
+
+// Skip an item by leaving a gap
+const [first, , third] = ["gold", "silver", "bronze"];
+console.log(first, third);
+
+// Defaults work here too
+const [a, b = "none"] = ["only one"];
+console.log(a, b);
+
+// Try swapping the order of red and blue in the brackets.
+```
+
+## In function parameters
+
+You can destructure right in a function's parameter list. The function still receives one object, but you get its pieces as variables:
+
+```js-live
+function describe({ name, age, role = "student" }) {
+  return `${name} is ${age} and is a ${role}.`;
+}
+
+console.log(describe({ name: "Ada", age: 36 }));
+console.log(describe({ name: "Grace", age: 45, role: "teacher" }));
+
+// Try calling describe with a different role.
+```
+
+Compare that with writing `person.name`, `person.age`, and `person.role` inside the body. Destructuring also documents, right at the top, which keys the function expects.
+
+<Note>
+You will see both forms in nearly every React component. Components destructure their props in the parameter list, as in `function Card({ title, children })`. And `useState` returns a two-item array that you unpack by position: `const [count, setCount] = useState(0);`. Because it is array destructuring, you pick the names.
+</Note>
+
+## Recap
+
+- `const { a, b } = obj;` pulls keys out of an object by name.
+- `const [x, y] = arr;` pulls items out of an array by position.
+- Rename with `key: newName` and add fallbacks with `= defaultValue`.
+- You can destructure directly in a function's parameters, which is how React components read props.

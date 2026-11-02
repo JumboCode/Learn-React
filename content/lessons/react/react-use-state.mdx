@@ -1,0 +1,80 @@
+So far our components have shown the same thing every time. Real interfaces change: a counter goes up, a menu opens, a form fills in. For that, a component needs **memory**. In React, a component's memory is called **state**.
+
+## Why a normal variable is not enough
+
+Here is a counter that does not work:
+
+```jsx
+export default function Counter() {
+  let count = 0;
+  return <button onClick={() => { count = count + 1; }}>Clicked {count} times</button>;
+}
+```
+
+Two things go wrong. Changing `count` does not tell React to redraw the screen, and even if React did redraw, the function would run again from the top and set `count` back to `0`. Local variables do not survive between renders.
+
+## useState
+
+`useState` fixes both problems. It gives you the current value **and** a function that updates it and asks React to render again:
+
+```jsx-live
+import { useState } from "react";
+
+export default function App() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <p>Clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
+      {/* Try adding a "Reset" button that calls setCount(0). */}
+    </div>
+  );
+}
+```
+
+Reading the line `const [count, setCount] = useState(0);` piece by piece:
+
+- `useState(0)`: "give this component a piece of state that starts at `0`."
+- It returns an array of two things, which we unpack with array destructuring.
+- `count` is the value **for this render**.
+- `setCount` replaces the value and schedules a re-render.
+
+When you click, `setCount(count + 1)` stores the new number, React calls `App` again, and this time `useState` hands back the stored value instead of `0`.
+
+## Each component gets its own state
+
+State belongs to a specific spot on the screen. Render the same component twice and each copy remembers its own value:
+
+```jsx-live
+import { useState } from "react";
+
+function Counter({ label }) {
+  const [count, setCount] = useState(0);
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      {label}: {count}
+    </button>
+  );
+}
+
+export default function App() {
+  return (
+    <div style={{ display: "flex", gap: 8, padding: 16 }}>
+      <Counter label="Apples" />
+      <Counter label="Oranges" />
+    </div>
+  );
+}
+```
+
+<Note>
+**Rules of hooks.** Functions whose names start with `use` are called *hooks*. Call them only at the top level of a component: never inside an `if`, a loop, or a nested function. React matches each `useState` call to its stored value by the order the calls happen, so that order must be the same on every render.
+</Note>
+
+## Recap
+
+- State is a component's memory between renders.
+- `const [value, setValue] = useState(initial)` gives you the current value and a setter.
+- Calling the setter stores the new value and makes React render the component again.
+- Each rendered copy of a component has its own state.

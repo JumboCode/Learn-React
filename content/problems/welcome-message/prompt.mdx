@@ -1,0 +1,18 @@
+Build a `Greeting` component that shows different things depending on who (if anyone) is signed in.
+
+## Requirements
+
+- Export a component named `Greeting`: `export function Greeting({ user })`.
+- If `user` is `null`, show only a paragraph with the text `Please sign in.`
+- Otherwise `user` is an object like `{ name: "Sam", unread: 3 }`. Show:
+  - a paragraph `Welcome back, Sam!` (using the user's `name`),
+  - and, **only if** `unread` is greater than 0, a paragraph `You have 3 new messages.`
+  - Use the singular when there is exactly one: `You have 1 new message.`
+- When `unread` is 0, show nothing about messages at all. Not even a stray `0`.
+- The default export `App` renders a `Greeting` for a signed-in user of your choice.
+
+## Hints
+
+- An early `if (user === null) return ...;` handles the signed-out case before anything reads `user.name`.
+- `&&` is handy for "show this or nothing", but `0 && <p>...</p>` renders the number `0`. Compare instead: `user.unread > 0 && ...`.
+- A ternary can pick `"message"` or `"messages"`.

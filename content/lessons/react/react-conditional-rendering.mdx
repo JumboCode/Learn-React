@@ -1,0 +1,82 @@
+Often a component should show different things depending on its data: a "Log in" button for visitors and a greeting for members, or a "Sold out" badge only when stock is zero. React has no special syntax for this. You use the same tools from the JavaScript module: `if`, the ternary operator, and `&&`.
+
+## if with an early return
+
+Since a component is just a function, you can use a normal `if` statement before the `return`:
+
+```jsx-live
+function Greeting({ isLoggedIn, name }) {
+  if (!isLoggedIn) {
+    return <button>Log in</button>;
+  }
+  return <p>Welcome back, {name}!</p>;
+}
+
+export default function App() {
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <Greeting isLoggedIn={true} name="Ada" />
+      <Greeting isLoggedIn={false} name="Grace" />
+      {/* Try flipping the true and false. */}
+    </div>
+  );
+}
+```
+
+This is the clearest choice when the whole output is different. Remember that you cannot put an `if` statement *inside* JSX braces, because braces only accept expressions.
+
+## The ternary operator inside JSX
+
+When only a small piece changes, use a ternary: `condition ? whenTrue : whenFalse`. It is an expression, so it fits right inside braces:
+
+```jsx-live
+function Product({ name, stock }) {
+  return (
+    <li style={{ marginBottom: 6 }}>
+      {name}:{" "}
+      {stock > 0 ? (
+        <span style={{ color: "green" }}>{stock} left</span>
+      ) : (
+        <span style={{ color: "crimson" }}>Sold out</span>
+      )}
+      {stock > 0 && stock < 3 && <strong> Hurry!</strong>}
+    </li>
+  );
+}
+
+export default function App() {
+  return (
+    <ul style={{ fontFamily: "sans-serif" }}>
+      <Product name="Notebook" stock={12} />
+      <Product name="Pen" stock={2} />
+      <Product name="Stapler" stock={0} />
+      {/* Try changing the stock numbers to see each message appear. */}
+    </ul>
+  );
+}
+```
+
+The `{" "}` adds an explicit space, since JSX trims whitespace at line breaks.
+
+## && for "show this or nothing"
+
+The last line inside `Product` uses `&&`. Recall from the JavaScript module that `a && b` returns `b` when `a` is truthy, and `a` otherwise. React renders nothing for `false`, `null`, and `undefined`, so `{condition && <Thing />}` means "show `Thing` only when the condition is true."
+
+| You want | Use |
+| --- | --- |
+| Completely different output | `if` with an early `return` |
+| One of two things | `condition ? a : b` |
+| Something or nothing | `condition && a` |
+
+You can also return `null` from a component to render nothing at all.
+
+<Note>
+**Watch out for 0 with &&.** `{count && <p>New messages</p>}` shows a literal `0` on the page when `count` is `0`, because `0 && anything` evaluates to `0`, and React renders numbers. Use a real true/false condition instead: `{count > 0 && <p>New messages</p>}`.
+</Note>
+
+## Recap
+
+- Conditional rendering uses plain JavaScript: `if`, ternaries, and `&&`.
+- Use `if` before `return` when the whole output changes.
+- Use a ternary inside JSX to pick between two pieces.
+- Use `&&` to show something or nothing, and make sure the left side is a boolean.

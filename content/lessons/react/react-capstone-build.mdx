@@ -1,0 +1,224 @@
+Time to turn the plan into a working app. You will start from the static skeleton from the last lesson and add one piece of behavior at a time. Each step uses something you learned earlier, and the finished app is at the bottom of the page for you to play with and extend.
+
+## Step 1: Put books and filter in App
+
+Replace the hard-coded `SAMPLE_BOOKS` usage with state, exactly where the plan said:
+
+```jsx
+const [books, setBooks] = useState(SAMPLE_BOOKS);
+const [filter, setFilter] = useState("all");
+```
+
+Nothing looks different yet, but now the list can change.
+
+## Step 2: Make the form controlled
+
+The draft title and author belong to `AddBookForm`, so its state lives there. Both inputs become controlled, and on submit the form calls `onAdd` and clears itself:
+
+```jsx
+function handleSubmit(e) {
+  e.preventDefault();
+  if (!title.trim() || !author.trim()) return;
+  onAdd(title.trim(), author.trim());
+  setTitle("");
+  setAuthor("");
+}
+```
+
+The form does not know how books are stored. It just reports "the user wants to add this book," and `App` decides what that means. That is lifting state in action.
+
+## Step 3: Give each book an id
+
+Keys must be stable and unique, so every new book needs an `id`. Array indexes will not do: when you remove a book, every book after it shifts to a new index, and React would mix up which row is which. Two common options:
+
+- **A counter.** Use a number that goes up each time you add a book. Simple and predictable. Here we compute the next one from the largest existing id, so it never repeats.
+- **`Date.now()` plus `Math.random()`.** `Date.now()` is the current time in milliseconds, and adding a random part makes a collision essentially impossible, even if two books are added in the same millisecond. Real apps often use `crypto.randomUUID()` or let the database create the id.
+
+The final app uses the counter approach:
+
+```jsx
+const nextId = books.length === 0 ? 1 : Math.max(...books.map((b) => b.id)) + 1;
+```
+
+## Step 4: Add, toggle, and remove immutably
+
+Each action makes a **new** array instead of changing the old one, using the patterns from the lesson on updating state:
+
+```jsx
+// add: spread the old array, put the new book at the end
+setBooks((prev) => [...prev, { id: nextId, title, author, read: false }]);
+
+// toggle: map, copying only the book that changed
+setBooks((prev) => prev.map((b) => (b.id === id ? { ...b, read: !b.read } : b)));
+
+// remove: filter it out
+setBooks((prev) => prev.filter((b) => b.id !== id));
+```
+
+`App` passes `handleToggle` and `handleRemove` to `BookList`, which passes them on to each `BookItem`. A `BookItem` calls `onToggle(book.id)` when its checkbox changes and `onRemove(book.id)` when its button is clicked.
+
+## Step 5: Derive the visible list and counts
+
+As planned, these are **not** state. They are recalculated on every render from `books` and `filter`, so they can never be out of date:
+
+```jsx
+const visibleBooks = books.filter((b) =>
+  filter === "all" ? true : filter === "read" ? b.read : !b.read
+);
+const readCount = books.filter((b) => b.read).length;
+```
+
+`FilterBar` gets the current `filter` (to highlight the active button) and `setFilter` as its `onFilterChange`.
+
+## Step 6: Handle the empty state
+
+An empty list should explain itself. `BookList` checks the length and returns a message instead of an empty `<ul>`. The message depends on why it is empty: no books at all, or none matching the filter.
+
+## The finished app
+
+Here is everything together. Read it from the bottom (`App`) up, and match each part to a step above.
+
+```jsx-live
+import { useState } from "react";
+
+const SAMPLE_BOOKS = [
+  { id: 1, title: "Dune", author: "Frank Herbert", read: true },
+  { id: 2, title: "Kindred", author: "Octavia E. Butler", read: false },
+  { id: 3, title: "The Hobbit", author: "J.R.R. Tolkien", read: false },
+];
+
+function AddBookForm({ onAdd }) {
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!title.trim() || !author.trim()) return;
+    onAdd(title.trim(), author.trim());
+    setTitle("");
+    setAuthor("");
+  }
+
+  return (
+    <form onSubmit={handleSubmit} style={{ display: "flex", gap: 6, marginBottom: 12, flexWrap: "wrap" }}>
+      <input aria-label="Title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
+      <input aria-label="Author" value={author} onChange={(e) => setAuthor(e.target.value)} placeholder="Author" />
+      <button type="submit">Add</button>
+    </form>
+  );
+}
+
+function FilterBar({ filter, onFilterChange, total, readCount }) {
+  const options = ["all", "unread", "read"];
+  return (
+    <div style={{ display: "flex", gap: 6, alignItems: "center", marginBottom: 12, flexWrap: "wrap" }}>
+      {options.map((option) => (
+        <button
+          key={option}
+          onClick={() => onFilterChange(option)}
+          style={{ fontWeight: filter === option ? "bold" : "normal" }}
+        >
+          {option[0].toUpperCase() + option.slice(1)}
+        </button>
+      ))}
+      <span style={{ marginLeft: 8, color: "#666" }}>
+        {total} {total === 1 ? "book" : "books"}, {readCount} read
+      </span>
+    </div>
+  );
+}
+
+function BookItem({ book, onToggle, onRemove }) {
+  return (
+    <li style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 6 }}>
+      <input
+        type="checkbox"
+        aria-label={`Mark ${book.title} as read`}
+        checked={book.read}
+        onChange={() => onToggle(book.id)}
+      />
+      <span style={{ flex: 1, textDecoration: book.read ? "line-through" : "none" }}>
+        <strong>{book.title}</strong> by {book.author}
+      </span>
+      <button onClick={() => onRemove(book.id)}>Remove</button>
+    </li>
+  );
+}
+
+function BookList({ books, totalBooks, onToggle, onRemove }) {
+  if (books.length === 0) {
+    return (
+      <p style={{ color: "#666" }}>
+        {totalBooks === 0 ? "Your reading list is empty. Add a book above!" : "No books match this filter."}
+      </p>
+    );
+  }
+  return (
+    <ul style={{ listStyle: "none", padding: 0 }}>
+      {books.map((book) => (
+        <BookItem key={book.id} book={book} onToggle={onToggle} onRemove={onRemove} />
+      ))}
+    </ul>
+  );
+}
+
+export default function App() {
+  const [books, setBooks] = useState(SAMPLE_BOOKS);
+  const [filter, setFilter] = useState("all");
+
+  function handleAdd(title, author) {
+    setBooks((prev) => {
+      const nextId = prev.length === 0 ? 1 : Math.max(...prev.map((b) => b.id)) + 1;
+      return [...prev, { id: nextId, title, author, read: false }];
+    });
+  }
+
+  function handleToggle(id) {
+    setBooks((prev) => prev.map((b) => (b.id === id ? { ...b, read: !b.read } : b)));
+  }
+
+  function handleRemove(id) {
+    setBooks((prev) => prev.filter((b) => b.id !== id));
+  }
+
+  // Derived values: computed during render, never stored in state.
+  const visibleBooks = books.filter((b) =>
+    filter === "all" ? true : filter === "read" ? b.read : !b.read
+  );
+  const readCount = books.filter((b) => b.read).length;
+
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <h2 style={{ marginTop: 0 }}>Reading List</h2>
+      <AddBookForm onAdd={handleAdd} />
+      <FilterBar filter={filter} onFilterChange={setFilter} total={books.length} readCount={readCount} />
+      <BookList books={visibleBooks} totalBooks={books.length} onToggle={handleToggle} onRemove={handleRemove} />
+      {/* Try removing every book to see the empty message, or click "Read" after unchecking everything. */}
+    </div>
+  );
+}
+```
+
+Notice how little each component knows. `BookItem` does not know about filters. `FilterBar` does not know how books are stored. `App` is the single source of truth, and everything else receives exactly the props it needs.
+
+<Note>
+The setters use the updater form, like `setBooks((prev) => ...)`. Because each update is calculated from the latest state, nothing goes wrong if several updates happen quickly in a row.
+</Note>
+
+## Ideas to extend it
+
+Try these on your own, one at a time:
+
+- **Persist the list.** Swap `useState(SAMPLE_BOOKS)` for the `useLocalStorage` hook from the custom hooks lesson, so books survive a page refresh.
+- **Edit a book.** Add an Edit button that turns a row into two inputs. Where should the "which book is being edited" state live?
+- **Sort.** Add a dropdown to sort by title or author. Is the sorted list state, or derived?
+- **Ratings.** Add a 1 to 5 star rating to each book with a `<select>`.
+- **Clear finished.** Add a button that removes all read books with one `filter` call.
+- **Theme.** Add a dark mode toggle using context.
+
+## Recap
+
+- You built a full app by adding behavior to a static skeleton one step at a time.
+- State lives where the plan said: books and filter in `App`, the form draft in `AddBookForm`.
+- Every update makes a new array with spread, `map`, or `filter`, and each book has a stable `id` for its key.
+- Visible books and counts are derived during render, and the empty state is handled with conditional rendering.

@@ -1,0 +1,15 @@
+body {
+  font-family: sans-serif;
+}
+
+h1#title {
+  color: purple;
+}
+
+.message.alert {
+  color: red;
+}
+
+.todo-list .done {
+  color: green;
+}

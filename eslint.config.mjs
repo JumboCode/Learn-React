@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    ".proto/**",
+    // Student starter and reference code; verified by tests/content/problems.test.ts, not app lint rules.
+    "content/**",
+    "src/generated/**",
+    "src/lib/supabase/database.types.ts",
   ]),
 ]);
 

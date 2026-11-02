@@ -1,0 +1,130 @@
+State is not limited to numbers. Very often it holds an array (a list of todos) or an object (a user's profile). These need one extra rule: never change them in place. Instead, make a **new** array or object with the change, and pass that to the setter. Your JavaScript tools for this, spread, `map`, and `filter`, are ones you already know.
+
+## Why mutating does not work
+
+Here is a tempting but broken way to add an item:
+
+```jsx
+function handleAdd() {
+  items.push("New item"); // changes the existing array
+  setItems(items);        // passes the SAME array back
+}
+```
+
+When you call a setter, React compares the new value with the old one. If it is the very same array, React concludes nothing changed and skips the re-render. `push` changed the array's contents, but it is still the same array, so the screen does not update. Mutating state also breaks the idea that each render has its own snapshot of the data.
+
+The fix is to **replace** rather than **change**: create a fresh copy that includes the change.
+
+## Arrays: spread, filter, map
+
+| Goal | Mutating (avoid) | New copy (use) |
+| --- | --- | --- |
+| Add | `push` | `[...items, newItem]` |
+| Remove | `splice` | `items.filter((item) => item.id !== id)` |
+| Change one | `items[i].done = true` | `items.map((item) => item.id === id ? ...)` |
+
+```jsx-live
+import { useState } from "react";
+
+let nextId = 3;
+
+export default function App() {
+  const [todos, setTodos] = useState([
+    { id: 1, text: "Learn JSX", done: true },
+    { id: 2, text: "Learn state", done: false },
+  ]);
+
+  function addTodo() {
+    setTodos([...todos, { id: nextId++, text: "New task", done: false }]);
+  }
+
+  function removeTodo(id) {
+    setTodos(todos.filter((todo) => todo.id !== id));
+  }
+
+  function toggleTodo(id) {
+    setTodos(todos.map((todo) => (todo.id === id ? { ...todo, done: !todo.done } : todo)));
+  }
+
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <button onClick={addTodo}>Add task</button>
+      <ul>
+        {todos.map((todo) => (
+          <li key={todo.id}>
+            <span
+              onClick={() => toggleTodo(todo.id)}
+              style={{ cursor: "pointer", textDecoration: todo.done ? "line-through" : "none" }}
+            >
+              {todo.text}
+            </span>{" "}
+            <button onClick={() => removeTodo(todo.id)}>x</button>
+          </li>
+        ))}
+      </ul>
+      {/* Try changing addTodo to put the new task at the start of the list. */}
+    </div>
+  );
+}
+```
+
+Look closely at `toggleTodo`. `map` builds a new array; for the matching todo it builds a new object with `{ ...todo, done: !todo.done }`, and every other todo is reused as-is. Nothing old is modified.
+
+## Objects: spread and override
+
+Objects follow the same rule. Copy everything with spread, then list the properties you want to change after it, since later properties win:
+
+```jsx
+setUser({ ...user, name: "Grace" });
+```
+
+`user.name = "Grace"` would mutate the existing object, and React would not notice.
+
+## The updater function
+
+There is one more subtlety. A setter does not change the variable immediately; `count` is a snapshot for this render. So this adds only 1, not 3:
+
+```jsx
+function handleClick() {
+  setCount(count + 1); // 0 + 1
+  setCount(count + 1); // still 0 + 1
+  setCount(count + 1); // still 0 + 1
+}
+```
+
+Instead of a value, you can pass the setter a function. React calls it with the **latest** pending value and uses what it returns:
+
+```jsx-live
+import { useState } from "react";
+
+export default function App() {
+  const [count, setCount] = useState(0);
+
+  function addThree() {
+    setCount((c) => c + 1);
+    setCount((c) => c + 1);
+    setCount((c) => c + 1);
+  }
+
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <p>Count: {count}</p>
+      <button onClick={addThree}>+3</button>
+      {/* Try changing the updaters back to setCount(count + 1) and compare. */}
+    </div>
+  );
+}
+```
+
+Use the updater form whenever the new state depends on the old state and there is any chance of several updates in a row. It works for arrays too: `setTodos((prev) => [...prev, newTodo])`.
+
+<Note>
+Methods like `push`, `pop`, `splice`, `sort`, and `reverse` change an array in place. Before using them on state, make a copy first, for example `[...items].sort()`. Methods like `map`, `filter`, `slice`, and `concat` already return new arrays and are safe.
+</Note>
+
+## Recap
+
+- Never mutate state arrays or objects; replace them with new copies.
+- Add with `[...items, x]`, remove with `filter`, change one item with `map`.
+- Update objects with `{ ...obj, key: newValue }`.
+- Use the updater form `setCount((c) => c + 1)` when the next value depends on the previous one.

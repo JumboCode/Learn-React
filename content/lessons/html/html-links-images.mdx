@@ -1,0 +1,78 @@
+The "web" in World Wide Web comes from links: pages pointing to other pages. In this lesson you will put the `href`, `src`, and `alt` attributes you met earlier to work, building links and showing images.
+
+## Links with the anchor element
+
+A link is an `<a>` element (short for "anchor"). The `href` attribute says where it goes, and the content is the clickable text:
+
+```html
+<a href="https://developer.mozilla.org">Read the MDN docs</a>
+```
+
+There are a few kinds of addresses you can put in `href`:
+
+| Kind | Example | Goes to |
+| --- | --- | --- |
+| Absolute URL | `https://example.com/about` | A page on any website. Must include `https://`. |
+| Relative path | `about.html` | A file next to the current page on the same site. |
+| Fragment | `#contact` | The element on this page with `id="contact"`. |
+| Email | `mailto:hi@example.com` | Opens the visitor's email app. |
+
+Write link text that makes sense on its own. "Read the MDN docs" tells a screen-reader user where the link goes; "click here" does not.
+
+To open a link in a new tab, add `target="_blank"`. Use it sparingly, since visitors generally expect links to open in the same tab.
+
+## Images
+
+An image is an `<img>` element. Like `<br>`, it is empty: no content and no closing tag. Everything it needs is in its attributes:
+
+```html
+<img src="dog.jpg" alt="A golden retriever catching a frisbee" width="300">
+```
+
+- `src` is the image file's address, using the same kinds of paths as `href`.
+- `alt` describes the image for people who cannot see it.
+- `width` and `height` (in pixels) are optional. If you set just one, the browser keeps the proportions.
+
+## Writing good alt text
+
+Alt text should say what the image **shows** or **does** in this context, in a short sentence. Leave out "image of"; screen readers already announce that it is an image.
+
+- A photo in an article: describe what matters, like `alt="Students presenting a robot at the science fair"`.
+- An image inside a link: describe where the link goes, since that is the image's job.
+- A purely decorative image (a squiggle, a background flourish): use an empty `alt=""` so screen readers skip it. Do not leave `alt` out entirely, or some screen readers will read the file name instead.
+
+## Try it
+
+```html-live
+<h1 id="top">Animal Gallery</h1>
+
+<p>
+  Learn more about dogs in
+  <a href="https://en.wikipedia.org/wiki/Dog" target="_blank">Wikipedia's dog article</a>.
+</p>
+
+<img src="https://picsum.photos/id/237/300/200" alt="A black puppy lying on a wooden floor, looking up">
+
+<h2>Clickable image</h2>
+<a href="https://en.wikipedia.org/wiki/Mountain" target="_blank">
+  <img src="https://picsum.photos/id/29/300/200" alt="Read about mountains on Wikipedia" width="200">
+</a>
+
+<p><a href="#top">Back to top</a></p>
+
+<!-- Try changing the width of the first image to 150. -->
+<!-- Then break its src (for example, "puppy.jpg") and notice the alt text appear. -->
+```
+
+The second image is nested inside an `<a>`, so the whole picture becomes a link. Notice how its alt text describes the destination, not the scenery.
+
+<Note>
+In React, links and images look almost identical: `<a href="...">` and `<img src="..." alt="..." />`. React's tooling will even warn you when an `<img>` is missing its `alt`, so the habit you build now pays off later.
+</Note>
+
+## Recap
+
+- `<a href="...">` creates a link; its content is the clickable text.
+- `href` can be a full URL, a relative path, a `#` plus an id on the same page, or `mailto:`.
+- `<img>` is empty and needs `src` and `alt`.
+- Good alt text describes what the image shows or does; decorative images get `alt=""`.

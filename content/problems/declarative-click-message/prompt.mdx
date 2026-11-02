@@ -1,0 +1,14 @@
+This counter already keeps `count` in state and adds 1 on every click, but the screen never changes. Describe the screen **declaratively**: write the paragraph and the button label in terms of `count`, and let React keep them up to date.
+
+## Requirements
+
+- A paragraph shows `Clicked 0 times` when the page loads, then `Clicked 1 times`, `Clicked 2 times`, and so on after each click.
+- The button's text is **Click me** while the count is below 5.
+- Once the count reaches 5 (and after that), the button's text is **Wow, that is a lot!**
+- The button keeps counting after its text changes.
+
+## Hints
+
+- Put `count` inside curly braces in the JSX, like `Clicked {count} times`.
+- A ternary picks between two values: `count >= 5 ? "first" : "second"`.
+- You do not need `document.querySelector` or `textContent` anywhere.

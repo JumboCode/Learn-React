@@ -1,0 +1,25 @@
+Model a book as an object: create one, read its properties, change one, and look up a property by a name stored in a variable.
+
+## Requirements
+
+- `createBook(title, author, pages)` returns a new object with four properties: `title`, `author`, `pages`, and `read`, which starts as `false`.
+- `describeBook(book)` returns a string in the form `TITLE by AUTHOR (PAGES pages)`, for example `"Dune by Frank Herbert (412 pages)"`.
+- `markAsRead(book)` sets the book's `read` property to `true` and returns the same book object.
+- `getField(book, field)` returns the value of the property whose name is the string `field`. For example, `getField(book, "author")` returns the author.
+
+## Examples
+
+```js
+const dune = createBook("Dune", "Frank Herbert", 412);
+// { title: "Dune", author: "Frank Herbert", pages: 412, read: false }
+
+describeBook(dune); // "Dune by Frank Herbert (412 pages)"
+getField(dune, "pages"); // 412
+
+markAsRead(dune);
+dune.read; // true
+```
+
+## Hints
+
+- `book.field` looks for a property literally named `field`. When the name is in a variable, use bracket notation.

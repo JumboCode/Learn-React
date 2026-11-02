@@ -1,0 +1,77 @@
+In the JavaScript module you changed pages by hand: find an element with `querySelector`, then set its `textContent`. That works for small pages, but as an interface grows, keeping every element in sync gets painful. React offers a different way to think: instead of writing the **steps** to change the screen, you describe **what the screen should look like** for the current data, and React does the updating for you.
+
+## The imperative way
+
+Here is a tiny counter written with plain DOM code, the way you learned in the JavaScript module:
+
+```html-live
+<!DOCTYPE html>
+<html>
+  <body style="font-family: sans-serif; padding: 16px">
+    <p id="message">Clicked 0 times</p>
+    <button id="btn">Click me</button>
+
+    <script>
+      let count = 0;
+      const message = document.querySelector("#message");
+      const button = document.querySelector("#btn");
+
+      button.addEventListener("click", () => {
+        count = count + 1;
+        message.textContent = "Clicked " + count + " times";
+        // Try: also change the button text when count reaches 5.
+        // Notice that you must remember to update every element yourself.
+      });
+    </script>
+  </body>
+</html>
+```
+
+This style is called **imperative**: you give the browser a list of commands. "Find this element. Change its text." Every time `count` changes, *you* must remember which parts of the page depend on it and update each one. Forget one, and the page shows stale information. With dozens of values and elements, that bookkeeping is where most bugs come from.
+
+## The declarative way
+
+React is **declarative**. You write a function that says "given this data, the page looks like this." When the data changes, React runs the function again and works out which real DOM elements need to change.
+
+```jsx-live
+import { useState } from "react";
+
+export default function App() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <p>Clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        {count >= 5 ? "Wow, that is a lot!" : "Click me"}
+      </button>
+      {/* Try changing the message, or the number 5. */}
+    </div>
+  );
+}
+```
+
+There is no `querySelector` and no `textContent` here. The paragraph and the button label are both written in terms of `count`, so they can never disagree. Adding the "Wow" message took one expression, not another round of manual DOM updates.
+
+Do not worry about understanding every line yet. The HTML-looking syntax is **JSX** (the next lesson), and `useState` is how a component remembers a value; it gets its own lesson later in this module. For now, just notice the shape: data goes in, a description of the screen comes out.
+
+## Directions versus an address
+
+A helpful comparison: imperative code is like giving someone turn-by-turn directions. Declarative code is like giving them the address. You hand React the address (what the screen should be), and React works out the route (which DOM changes to make).
+
+| Imperative (plain DOM) | Declarative (React) |
+| --- | --- |
+| You find elements and change them. | You describe the result for the current data. |
+| You track what depends on what. | React re-runs your function and compares. |
+| Easy to forget an update. | The screen always matches the data. |
+
+<Note>
+React is still JavaScript, and it still produces ordinary HTML in the browser. Everything you learned about functions, arrays, `map`, objects, and modules carries straight over. React just takes over the tedious job of keeping the DOM in sync with your data.
+</Note>
+
+## Recap
+
+- Imperative code tells the browser *how* to change the page, step by step.
+- Declarative code describes *what* the page should look like for the current data.
+- React re-runs your description when data changes and updates the DOM for you.
+- JSX and state look new right now; upcoming lessons cover each one.

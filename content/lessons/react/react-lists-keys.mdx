@@ -1,0 +1,84 @@
+Most real data comes in lists: messages, products, search results. You will not write one JSX tag per item by hand. Instead, you turn an array of data into an array of JSX with a method you already know.
+
+## Rendering an array with map
+
+Remember `map` from the JavaScript module? It takes an array and returns a new array, transforming each item with a callback. In React, that callback returns JSX:
+
+```jsx-live
+const fruits = ["Apple", "Banana", "Cherry"];
+
+export default function App() {
+  return (
+    <ul style={{ fontFamily: "sans-serif" }}>
+      {fruits.map((fruit) => (
+        <li key={fruit}>{fruit}</li>
+      ))}
+      {/* Try adding "Mango" to the array above. */}
+    </ul>
+  );
+}
+```
+
+`fruits.map(...)` produces an array of `<li>` elements, and React renders an array placed in braces as a list of siblings. No loop and no `createElement` calls needed.
+
+## Lists of objects
+
+Usually each item is an object with an `id` from a database. You can combine `map` with `filter`, and pass each item to a component as props:
+
+```jsx-live
+const tasks = [
+  { id: 1, text: "Buy groceries", done: true },
+  { id: 2, text: "Finish homework", done: false },
+  { id: 3, text: "Call a friend", done: false },
+];
+
+function TaskItem({ text, done }) {
+  return <li style={{ textDecoration: done ? "line-through" : "none" }}>{text}</li>;
+}
+
+export default function App() {
+  const remaining = tasks.filter((task) => !task.done);
+
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <ul>
+        {tasks.map((task) => (
+          <TaskItem key={task.id} text={task.text} done={task.done} />
+        ))}
+      </ul>
+      <p>{remaining.length} tasks left.</p>
+      {/* Try removing key={task.id} and open the browser console to see the warning. */}
+    </div>
+  );
+}
+```
+
+## What keys are for
+
+Every item in a rendered list needs a `key` prop. If you leave it out, React logs a warning in the console: *Each child in a list should have a unique "key" prop.*
+
+The key is how React tells items apart between renders. When the list changes, React compares the old keys with the new ones. A key that is still there means "same item, maybe updated." A key that disappeared means "remove that item," and a new key means "add one." Without keys, React can only match items by their position.
+
+A good key is:
+
+- **Unique** among its siblings (two items in the same list cannot share one).
+- **Stable**: the same item gets the same key every render. An `id` from your data is ideal.
+
+Note that `key` is used by React itself. It is not passed into your component, so `TaskItem` cannot read `props.key`. If the component needs the id, pass it again as a separate prop.
+
+## Why the index is a bad key
+
+`map` gives you the index as a second argument, so it is tempting to write `key={index}`. That silences the warning but causes real bugs when the list is reordered, filtered, or has items removed.
+
+Imagine three items with index keys 0, 1, and 2. Delete the first one. The remaining two now get keys 0 and 1. React sees that key 2 is gone and assumes the *last* item was removed, while items 0 and 1 merely changed their text. Anything React remembers per item, such as whether a checkbox is ticked or what someone typed into an input, stays attached to the wrong row.
+
+<Note>
+Use the index as a key only when the list is fixed: never reordered, filtered, or edited. Otherwise, use a stable `id` from the data. Never generate keys with `Math.random()` during render; a new key every render makes React throw away and recreate every item.
+</Note>
+
+## Recap
+
+- Use `map` to turn an array of data into an array of JSX.
+- Every list item needs a `key` that is unique among its siblings and stable.
+- Prefer ids from your data; index keys break when items are reordered or removed.
+- `key` is for React and is not available as a prop inside the component.

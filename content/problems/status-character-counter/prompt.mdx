@@ -1,0 +1,14 @@
+Build a live character counter for a short status message, the kind you see under a post box. The HTML is done; write the JavaScript in `index.js`.
+
+## Requirements
+
+- Every time the user types in the input with id `status` (the `input` event), set the text of the paragraph with id `counter` to the number of characters typed, a slash, and the limit `20`. For example, after typing `hello` it shows `5 / 20`.
+- When there are **more than 20** characters, add the class `too-long` to the counter. When the text is back to 20 or fewer, remove it.
+- Keep the counter correct when characters are deleted, not only when they are added.
+
+The counter starts at `0 / 20`; that text is already in `index.html`.
+
+## Hints
+
+- Inside the listener, `event.target.value` is the input's current text, and `.length` counts its characters.
+- `classList.toggle("too-long", condition)` adds the class when `condition` is true and removes it when false. An `if`/`else` with `add` and `remove` works too.

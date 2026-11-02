@@ -1,0 +1,27 @@
+Use `map`, `filter`, and `find` to transform arrays. Each function should be short: most fit on one line.
+
+## Requirements
+
+- `doubleAll(numbers)` returns a new array with every number doubled.
+- `onlyPositive(numbers)` returns a new array with only the numbers greater than `0`.
+- `shortWords(words, maxLength)` returns the words whose length is `maxLength` or less.
+- `firstOver(numbers, limit)` returns the **first** number greater than `limit`, or `undefined` if there is none.
+- `squaredEvens(numbers)` keeps only the even numbers, then squares each one. Chain `filter` and `map`.
+
+None of these functions may change the array they are given.
+
+## Examples
+
+| Call | Returns |
+| --- | --- |
+| `doubleAll([1, 2, 3])` | `[2, 4, 6]` |
+| `onlyPositive([-1, 0, 5])` | `[5]` |
+| `shortWords(["hi", "hello", "hey"], 3)` | `["hi", "hey"]` |
+| `firstOver([4, 8, 12], 5)` | `8` |
+| `firstOver([1, 2], 10)` | `undefined` |
+| `squaredEvens([1, 2, 3, 4])` | `[4, 16]` |
+
+## Hints
+
+- A number is even when `n % 2 === 0`.
+- A string's length is `word.length`.

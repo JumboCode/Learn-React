@@ -1,0 +1,85 @@
+Elements can contain more than text: they can contain **other elements**. This is called nesting, and it is how every real page is built, from one bold word inside a paragraph to an entire website inside `<body>`.
+
+## Parents and children
+
+When one element sits inside another, the outer one is the **parent** and the inner one is the **child**:
+
+```html
+<p>This is <strong>very</strong> important.</p>
+```
+
+Here `<p>` is the parent, and `<strong>` (which marks text as important and shows it in bold) is its child. Elements that share a parent are **siblings**.
+
+The one rule of nesting: **close the inner element before the outer one.** Tags close in the reverse order they opened, like boxes packed inside boxes.
+
+```html
+<!-- Correct: strong closes before p -->
+<p>This is <strong>very</strong> important.</p>
+
+<!-- Wrong: the tags overlap -->
+<p>This is <strong>very important.</p></strong>
+```
+
+Indenting children a couple of spaces deeper than their parent makes the structure easy to see. The browser ignores the indentation, but you and your teammates will not.
+
+## Unordered lists
+
+Use an **unordered list**, `<ul>`, when the order of items does not matter, like a shopping list. Each item goes in its own `<li>` (list item), and the browser draws a bullet for each one:
+
+```html
+<ul>
+  <li>Milk</li>
+  <li>Eggs</li>
+  <li>Bread</li>
+</ul>
+```
+
+A `<ul>` should only have `<li>` elements as direct children. Text and other elements go *inside* an `<li>`.
+
+## Ordered lists
+
+Use an **ordered list**, `<ol>`, when order matters, like the steps of a recipe. It works the same way, but the browser numbers the items for you. Add or remove an item and the numbers update automatically.
+
+## Lists inside lists
+
+Because an `<li>` can contain anything, it can contain another list. Put the inner list *inside* the `<li>` it belongs to, not between two items.
+
+## Try it
+
+```html-live
+<h1>Weekend Plans</h1>
+
+<h2>Groceries</h2>
+<ul>
+  <li>Apples</li>
+  <li>Peanut butter</li>
+  <li>
+    Snacks
+    <ul>
+      <li>Pretzels</li>
+      <li>Popcorn</li>
+    </ul>
+  </li>
+</ul>
+
+<h2>How to make toast</h2>
+<ol>
+  <li>Put bread in the toaster.</li>
+  <li>Wait until it pops up.</li>
+  <li>Spread on <strong>plenty</strong> of butter.</li>
+</ol>
+
+<!-- Try adding a step in the middle of the <ol> and watch the numbers update. -->
+<!-- Then add a nested list of apple varieties under "Apples". -->
+```
+
+<Note>
+Lists show up constantly in React. When you have an array of data, like a list of messages or tasks, you will turn each item into an `<li>` and React will build the `<ul>` for you. The HTML you write here is exactly what React will produce.
+</Note>
+
+## Recap
+
+- Elements can contain other elements; the outer one is the parent, the inner one the child.
+- Always close the inner element before the outer one.
+- `<ul>` makes a bulleted list, `<ol>` a numbered one, and each item goes in an `<li>`.
+- To nest a list, put it inside an `<li>`.

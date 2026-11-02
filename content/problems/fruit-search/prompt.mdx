@@ -1,0 +1,17 @@
+Build a search box that filters a list of fruits as you type.
+
+## Requirements
+
+- A text input labelled `Search`.
+- Below it, a `<ul>` with one `<li>` per fruit that matches the search, in the original order. With an empty search, all 8 fruits show.
+- A fruit matches when its name **contains** the search text, ignoring upper/lower case. Typing `an` shows `Banana`, `Mango`, and `Orange`; typing `BERRY` shows `Blueberry`.
+- The list updates on every keystroke.
+- A paragraph shows how many fruits are visible: `Showing 3 of 8`.
+- When nothing matches, show a paragraph `No fruits match.` and no list items.
+- Every `<li>` has a `key`, so React never warns about a missing `key`.
+
+## Hints
+
+- Keep only the search text in state. Compute the filtered array during render with `filter`, then `map` it to `<li>` elements.
+- `name.toLowerCase().includes(query.toLowerCase())` compares without case.
+- The fruit names are unique, so each name works as its own key.

@@ -1,0 +1,91 @@
+HTML decides *what* is on the page. **CSS** (Cascading Style Sheets) decides how it *looks*: colors, sizes, spacing, and layout. Every button, card, and menu in a React app is styled with CSS, so this module gives you tools you will use on every component you build.
+
+## Anatomy of a rule
+
+CSS is a list of **rules**. Each rule picks some elements and describes how they should look:
+
+```css
+h1 {
+  color: navy;
+  font-size: 40px;
+}
+```
+
+| Part | Example | Meaning |
+| --- | --- | --- |
+| Selector | `h1` | Which elements this rule applies to. |
+| Declaration block | `{ ... }` | The curly braces holding the styles. |
+| Property | `color` | What you want to change. |
+| Value | `navy` | What you want to change it to. |
+
+Each declaration is written `property: value;`. Do not forget the semicolon at the end: leaving it out can quietly break the next line.
+
+## Three places CSS can live
+
+**1. A `<style>` tag** inside the `<head>`. The rules apply to the whole page:
+
+```html
+<head>
+  <style>
+    p { color: gray; }
+  </style>
+</head>
+```
+
+**2. A separate `.css` file**, connected with a `<link>` tag. This is what real projects usually do, because one stylesheet can be shared by many pages:
+
+```html
+<head>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+```
+
+**3. An inline `style` attribute** on a single element. It only affects that one element:
+
+```html
+<p style="color: red;">Only this paragraph is red.</p>
+```
+
+The editors in these lessons only have one HTML file, so we will put CSS in a `<style>` tag. Everything you learn works exactly the same in a `.css` file.
+
+## Try it
+
+```html-live
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: sans-serif;
+        background-color: lightyellow;
+      }
+      h1 {
+        color: navy;
+        font-size: 40px;
+      }
+      p {
+        color: gray;
+      }
+      /* Try changing navy to tomato, or make every p bold with font-weight: bold; */
+    </style>
+  </head>
+  <body>
+    <h1>Hello, CSS!</h1>
+    <p>This paragraph is styled by the rule for p.</p>
+    <p style="color: green;">This one has an inline style too.</p>
+  </body>
+</html>
+```
+
+Notice that the second paragraph is green even though the `p` rule says gray. Inline styles beat rules in a stylesheet. The next lesson explains exactly how CSS decides between competing rules.
+
+<Note>
+A misspelled property or value does not cause an error. The browser just skips that declaration. If a style "does nothing," check your spelling and semicolons first, then open your browser's developer tools to see which rules were applied.
+</Note>
+
+## Recap
+
+- A CSS rule is a selector plus a block of `property: value;` declarations.
+- CSS can live in a `<style>` tag, a separate `.css` file linked with `<link>`, or an inline `style` attribute.
+- Separate files are the norm in real projects; inline styles affect only one element.
+- Mistakes in CSS are silently ignored, so check spelling when something does not work.

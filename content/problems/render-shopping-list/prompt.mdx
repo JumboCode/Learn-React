@@ -1,0 +1,13 @@
+The page in `index.html` has an empty list. Write JavaScript in `index.js` that fills it in from the `items` array already defined there. You can't edit `index.html`, but open it to see the ids.
+
+## Requirements
+
+- For each item in `items`, in order, create an `li` element whose text is the name, a space, and the quantity in parentheses, for example `Apples (3)`. Add each one to the list with id `shopping-list`.
+- If an item's quantity is exactly `1`, also give its `li` the class `single`.
+- Set the text of the paragraph with id `summary` to the number of items followed by `items`, for example `3 items`. Use the length of the array, so it stays right if the array changes.
+
+## Hints
+
+- Find elements with `document.querySelector("#shopping-list")`.
+- `document.createElement("li")` makes a new element; set its `textContent`, then `append` it to the list.
+- `li.classList.add("single")` adds a class.

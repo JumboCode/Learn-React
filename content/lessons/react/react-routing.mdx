@@ -1,0 +1,125 @@
+So far each app has been a single screen. Real sites have pages: Home, About, a page per product. In a React app, "changing pages" usually does not load a new HTML file. Instead, React looks at the URL and decides which component to show. That is called **routing**, and you can build a simple version from state and effects you already know.
+
+## The URL hash
+
+The part of a URL after `#` is called the **hash**. In `example.com/#/about`, the hash is `#/about`. Changing it does not reload the page, but the browser does two useful things: it updates `window.location.hash`, and it fires a `hashchange` event on `window`. A normal link like `<a href="#/about">` changes the hash when clicked, and the Back button changes it back.
+
+## A tiny router
+
+Here is the plan:
+
+1. Keep the current route in state, starting from `window.location.hash`.
+2. In an effect, listen for `hashchange` and update the state. Clean up the listener.
+3. Pick a page component based on the route.
+
+```jsx-live
+import { useState, useEffect } from "react";
+
+function useHashRoute() {
+  const [route, setRoute] = useState(window.location.hash || "#/");
+
+  useEffect(() => {
+    function handleChange() {
+      setRoute(window.location.hash || "#/");
+    }
+    window.addEventListener("hashchange", handleChange);
+    return () => window.removeEventListener("hashchange", handleChange);
+  }, []);
+
+  return route;
+}
+
+function Home() {
+  return <p>Welcome! Pick a page above.</p>;
+}
+
+function About() {
+  return <p>We build small apps to learn React.</p>;
+}
+
+function Contact() {
+  return <p>Email us at hello@example.com.</p>;
+}
+
+function NotFound() {
+  return <p>Page not found. <a href="#/">Go home</a></p>;
+}
+
+export default function App() {
+  const route = useHashRoute();
+
+  let page;
+  if (route === "#/") page = <Home />;
+  else if (route === "#/about") page = <About />;
+  else if (route === "#/contact") page = <Contact />;
+  else page = <NotFound />;
+
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <nav style={{ display: "flex", gap: 12 }}>
+        <a href="#/">Home</a>
+        <a href="#/about">About</a>
+        <a href="#/contact">Contact</a>
+        <a href="#/oops">Broken link</a>
+      </nav>
+      <hr />
+      {page}
+      {/* Try adding a "#/faq" route with its own FAQ component. */}
+    </div>
+  );
+}
+```
+
+Look at what is going on:
+
+- The links are plain `<a>` tags. Clicking one changes the hash; React does not handle the click at all.
+- The browser fires `hashchange`, our listener calls `setRoute`, and React re-renders with the new page.
+- `useHashRoute` is a custom hook, so any component can find out the current route with one line.
+- Any route we do not recognize falls through to `NotFound`.
+
+That is the whole idea of client-side routing: **the URL is a piece of state**, and rendering picks a component from it.
+
+## What real apps use
+
+Our router is great for learning, but real apps need more: clean URLs without `#`, routes with parameters like `/users/42`, nested layouts, and links that do not reload the page. Instead of building that yourself, you use a library like **React Router**, or a framework like **Next.js** where each file in a folder becomes a route.
+
+Here is what React Router code looks like, so you will recognize it (it will not run in our editor):
+
+```jsx
+import { BrowserRouter, Routes, Route, Link, useParams } from "react-router-dom";
+
+function User() {
+  const { id } = useParams(); // "42" when the URL is /users/42
+  return <p>User {id}</p>;
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <nav>
+        <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
+      </nav>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/users/:id" element={<User />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
+
+The pieces map onto what you built. `<Routes>` and `<Route>` replace our `if`/`else` chain, `<Link>` replaces `<a href="#/...">`, and `useParams` reads parts of the URL, like our `useHashRoute` read the hash.
+
+<Note>
+In a library-based router, use its `<Link>` component instead of a plain `<a>` for pages inside your app. A plain `<a href="/about">` makes the browser load a whole new page, throwing away all your React state.
+</Note>
+
+## Recap
+
+- Routing means choosing which component to show based on the URL.
+- A hash router keeps `window.location.hash` in state and listens for `hashchange` in an effect.
+- Plain `<a href="#/about">` links change the hash without reloading the page.
+- Real apps use React Router or a framework like Next.js, built on the same idea with nicer APIs.

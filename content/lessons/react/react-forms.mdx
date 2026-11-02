@@ -1,0 +1,137 @@
+In the events lesson you read what the user typed with `e.target.value`. Forms push that idea one step further: instead of letting the browser keep track of what is in each box, we keep every value in **state**. An input whose value comes from state is called a **controlled input**, and it is how almost every React form is built.
+
+## A controlled text input
+
+A controlled input needs two things: a `value` that comes from state, and an `onChange` that updates that state.
+
+```jsx-live
+import { useState } from "react";
+
+export default function App() {
+  const [name, setName] = useState("");
+
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <label>
+        Your name:{" "}
+        <input value={name} onChange={(e) => setName(e.target.value)} />
+      </label>
+      <p>Hello, {name || "stranger"}!</p>
+      <button onClick={() => setName("")}>Clear</button>
+      {/* Try showing name.length, or uppercasing it with name.toUpperCase(). */}
+    </div>
+  );
+}
+```
+
+Every keystroke goes in a loop: you type, `onChange` fires, `setName` stores the new text, React re-renders, and the input shows `name`. Because state is the single place the text lives, the Clear button just sets state to `""` and the box empties.
+
+## Checkboxes, selects, and textareas
+
+The other form elements work the same way, with one twist each:
+
+| Element | Value prop | Read it in onChange with |
+| --- | --- | --- |
+| `<input type="text">` | `value` | `e.target.value` |
+| `<input type="checkbox">` | `checked` | `e.target.checked` (true or false) |
+| `<select>` | `value` | `e.target.value` |
+| `<textarea>` | `value` | `e.target.value` |
+
+Note that in React, `<textarea>` and `<select>` take a `value` prop instead of putting text between tags or marking an option `selected`.
+
+## One state object for many fields
+
+A form with several fields can keep them all in one object. Give each input a `name` attribute that matches a key, and one handler can update any field using a **computed key**: `[e.target.name]` means "use the input's name as the key."
+
+```jsx-live
+import { useState } from "react";
+
+export default function App() {
+  const [form, setForm] = useState({
+    title: "",
+    priority: "medium",
+    notes: "",
+    urgent: false,
+  });
+
+  function handleChange(e) {
+    const { name, type, value, checked } = e.target;
+    setForm({ ...form, [name]: type === "checkbox" ? checked : value });
+  }
+
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16, display: "grid", gap: 8, maxWidth: 280 }}>
+      <input aria-label="Title" name="title" value={form.title} onChange={handleChange} placeholder="Title" />
+      <select aria-label="Priority" name="priority" value={form.priority} onChange={handleChange}>
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+      </select>
+      <textarea aria-label="Notes" name="notes" value={form.notes} onChange={handleChange} placeholder="Notes" />
+      <label>
+        <input type="checkbox" name="urgent" checked={form.urgent} onChange={handleChange} /> Urgent
+      </label>
+      <pre>{JSON.stringify(form, null, 2)}</pre>
+      {/* Try adding an "email" field: one new key and one new input, no new handler. */}
+    </div>
+  );
+}
+```
+
+The spread `...form` copies the other fields so we only replace the one that changed, just like the immutable updates from the last lesson.
+
+## Submitting a form
+
+Put the inputs inside a `<form>` and handle `onSubmit`. Remember `e.preventDefault()`, or the browser reloads the page. Here a small form adds to a list and then clears itself:
+
+```jsx-live
+import { useState } from "react";
+
+export default function App() {
+  const [text, setText] = useState("");
+  const [items, setItems] = useState([
+    { id: 1, name: "Milk" },
+    { id: 2, name: "Eggs" },
+  ]);
+  const [nextId, setNextId] = useState(3);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const trimmed = text.trim();
+    if (!trimmed) return;
+    setItems([...items, { id: nextId, name: trimmed }]);
+    setNextId(nextId + 1);
+    setText("");
+  }
+
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <form onSubmit={handleSubmit}>
+        <input aria-label="New item" value={text} onChange={(e) => setText(e.target.value)} placeholder="Add an item" />
+        <button type="submit">Add</button>
+      </form>
+      <ul>
+        {items.map((item) => (
+          <li key={item.id}>{item.name}</li>
+        ))}
+      </ul>
+      {/* Try disabling the button when text is empty: disabled={!text.trim()} */}
+    </div>
+  );
+}
+```
+
+Using a form (rather than a button with `onClick`) means pressing Enter in the input submits too, for free.
+
+<Note>
+If you give an input a `value` but no `onChange`, React makes it read-only and warns in the console: you told it the value always equals state, but nothing ever changes the state. Either add `onChange`, or use `defaultValue` for an uncontrolled input.
+
+Placeholders are not labels. When a design has no room for a visible `<label>`, give the input an `aria-label` so screen readers can still announce what it is for, as the examples here do.
+</Note>
+
+## Recap
+
+- A controlled input gets its `value` (or `checked`) from state and updates state in `onChange`.
+- Checkboxes use `checked` and `e.target.checked`; `<select>` and `<textarea>` use `value`.
+- One object can hold many fields; `[e.target.name]` updates the right key with one handler.
+- Handle `onSubmit` on the `<form>` and call `e.preventDefault()`.

@@ -1,0 +1,18 @@
+This page has three parts that each need a different flexbox trick: a hero section centered on the screen, a row of tags that wraps onto new lines, and a search bar where the input stretches to fill the space. Only edit `styles.css`.
+
+## Requirements
+
+- `.hero` stacks its heading and button in a **column**, centered both ways:
+  - `display` is `flex` and `flex-direction` is `column`.
+  - `justify-content` is `center` and `align-items` is `center`.
+  - `min-height` is `300px`.
+- `.tags` is a row of tags that **wraps** when it runs out of room:
+  - `display` is `flex`, `flex-wrap` is `wrap`, and `gap` is `8px`.
+- `.search` is a row containing an input and a button:
+  - `display` is `flex` and `gap` is `8px`.
+- `.search input` grows to fill the leftover space: `flex` is `1`.
+
+## Hints
+
+- In a column, `justify-content` controls the vertical direction and `align-items` the horizontal one.
+- Put `flex: 1` on the item that should stretch, not on the container.

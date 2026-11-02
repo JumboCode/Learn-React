@@ -1,0 +1,98 @@
+Programs need to make decisions: show a "Log out" button only if someone is logged in, or say "1 item" instead of "1 items". This lesson covers how JavaScript makes choices, plus a handy way to build strings out of values.
+
+## if and else
+
+`if` runs a block of code only when a condition is true. `else` runs when it is not:
+
+```js
+const age = 20;
+
+if (age >= 18) {
+  console.log("You can vote.");
+} else {
+  console.log("Not yet!");
+}
+```
+
+You can chain extra checks with `else if`.
+
+## Comparing with ===
+
+| Operator | Meaning |
+| --- | --- |
+| `===` | equal to |
+| `!==` | not equal to |
+| `>` `<` `>=` `<=` | greater / less than (or equal) |
+| `&&` | and: both sides true |
+| `\|\|` | or: at least one side true |
+| `!` | not: flips true and false |
+
+Always use three equals signs. The older `==` tries to convert types before comparing, so `"5" == 5` is `true`, which causes sneaky bugs. With `===`, `"5" === 5` is `false`, because a string is not a number.
+
+## Template literals
+
+Joining strings with `+` gets messy. A **template literal** uses backticks instead of quotes and lets you drop values in with a dollar sign and curly braces:
+
+```js-live
+const name = "Ada";
+const items = 3;
+
+console.log("Hi " + name + ", you have " + items + " items.");
+console.log(`Hi ${name}, you have ${items} items.`);
+
+// Any expression works inside the placeholder:
+console.log(`Next year you will have ${items + 1} items.`);
+
+// Try changing items to 1. Notice "1 items" reads badly. We fix that below.
+```
+
+## The ternary operator
+
+`if` is a *statement*: it runs code. Sometimes you want an *expression* that produces a value, so you can store it or put it inside a string. That is the **ternary operator**: `condition ? valueIfTrue : valueIfFalse`.
+
+```js-live
+const items = 1;
+const label = items === 1 ? "item" : "items";
+console.log(`You have ${items} ${label}.`);
+
+const isLoggedIn = false;
+console.log(isLoggedIn ? "Welcome back!" : "Please log in.");
+
+// Try changing items and isLoggedIn and re-reading the output.
+```
+
+## Truthy, falsy, and &&
+
+Conditions do not have to be booleans. JavaScript treats every value as either **truthy** or **falsy**. There is a short list of falsy values; everything else is truthy:
+
+- `false`, `0`, `""` (the empty string), `null`, `undefined`, and `NaN`.
+
+So `if (name)` means "if name is a non-empty string". This is also why `&&` is useful: `a && b` gives back `a` if `a` is falsy, and otherwise gives back `b`. That makes it a compact "only if" expression:
+
+```js-live
+const unread = 4;
+const username = "";
+
+console.log(unread > 0 && `You have ${unread} new messages`);
+console.log(username || "Guest");
+
+if (username) {
+  console.log("Has a name");
+} else {
+  console.log("Empty string is falsy");
+}
+
+// Try setting unread to 0. What does the && line print now?
+```
+
+<Note>
+Inside React markup you cannot write an `if` statement, only expressions. So React code uses the ternary for "this or that", as in `isLoggedIn ? "Log out" : "Log in"`, and `&&` for "this or nothing", as in `unread > 0 && <Badge />`. Watch out for `0 && ...`: it evaluates to `0`, and React will print that 0 on screen. Compare with `> 0` to be safe.
+</Note>
+
+## Recap
+
+- `if` / `else` run different code depending on a condition.
+- Use `===` and `!==` for comparisons, never `==`.
+- Template literals (backticks) put values into strings with a dollar-sign placeholder.
+- The ternary `a ? b : c` and `a && b` are expressions, which is why React uses them.
+- `false`, `0`, `""`, `null`, `undefined`, and `NaN` are falsy; everything else is truthy.

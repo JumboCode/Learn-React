@@ -1,0 +1,101 @@
+Everything you learned in the CSS module still applies in React. The only question is how to connect your styles to JSX. There are two main tools: the `className` prop, which points at CSS classes, and the `style` prop, which sets inline styles from a JavaScript object.
+
+## className
+
+In JSX you write `className` instead of `class` (because `class` is a reserved word in JavaScript). Otherwise it works exactly like HTML: you write CSS rules in a stylesheet and reference them by class name.
+
+In a real project you would put the CSS in its own file and import it with `import "./App.css";`. The live editor only has one file, so this example places the CSS in a `<style>` tag instead:
+
+```jsx-live
+const css = `
+  .card { border: 1px solid #ddd; border-radius: 8px; padding: 12px; margin-bottom: 8px; }
+  .card-title { margin: 0 0 4px; color: #4b3fd1; }
+  .muted { color: gray; }
+`;
+
+export default function App() {
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <style>{css}</style>
+      <div className="card">
+        <h3 className="card-title">Classes work like HTML</h3>
+        <p className="muted">Just spell it className.</p>
+      </div>
+      {/* Try adding a .card:hover rule to the css string. */}
+    </div>
+  );
+}
+```
+
+## The style prop
+
+The `style` prop takes a JavaScript **object**, not a string. That is why you see double braces: the outer pair means "JavaScript here," and the inner pair is the object literal.
+
+Two rules turn CSS into a style object:
+
+- Property names are **camelCase**: `background-color` becomes `backgroundColor`, `font-size` becomes `fontSize`.
+- Values are strings, except that plain numbers are treated as **pixels** for sizes: `padding: 16` means `16px`. Write a string for any other unit, like `width: "50%"`.
+
+```jsx-live
+const boxStyle = {
+  backgroundColor: "#fef3c7",
+  borderRadius: 8,
+  padding: 16,
+  fontSize: 18,
+  width: "60%",
+};
+
+export default function App() {
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <div style={boxStyle}>A styled box</div>
+      <p style={{ marginTop: 12, color: "teal", fontWeight: "bold" }}>Inline object</p>
+      {/* Try changing padding to 40, or adding border: "2px dashed orange". */}
+    </div>
+  );
+}
+```
+
+Since a style object is a normal object, you can store it in a variable (like `boxStyle`) and reuse it, or combine objects with spread: `style={{ ...boxStyle, color: "red" }}`.
+
+Inline styles are handy for one-off tweaks and values computed from data, but they cannot do hover effects or media queries. For most styling, prefer classes.
+
+## Conditional classes
+
+Since `className` is just a string, you can build it with the tools from the JavaScript module. A template literal with a ternary is the most common pattern:
+
+```jsx-live
+const css = `
+  .tag { display: inline-block; padding: 4px 10px; border-radius: 999px; margin: 4px; background: #eee; }
+  .tag.active { background: #4b3fd1; color: white; }
+`;
+
+function Tag({ label, active }) {
+  return <span className={`tag ${active ? "active" : ""}`}>{label}</span>;
+}
+
+export default function App() {
+  return (
+    <div style={{ fontFamily: "sans-serif", padding: 16 }}>
+      <style>{css}</style>
+      <Tag label="React" active={true} />
+      <Tag label="Vue" active={false} />
+      <Tag label="Svelte" active={false} />
+      {/* Try making Svelte active too. */}
+    </div>
+  );
+}
+```
+
+When `active` is true, the class string is `"tag active"`; otherwise it is just `"tag "`, and the extra space is harmless. The same trick works for inline styles: `style={{ color: done ? "gray" : "black" }}`.
+
+<Note>
+A common mistake is writing `style="color: red"` as you would in HTML. In JSX that is an error: `style` must be an object, like `style={{ color: "red" }}`. And remember the camelCase: `{{ font-size: 12 }}` is not valid JavaScript.
+</Note>
+
+## Recap
+
+- Use `className` to apply CSS classes, exactly like `class` in HTML.
+- `style` takes an object with camelCase property names; plain numbers mean pixels.
+- Build conditional classes with template literals and ternaries.
+- Prefer classes for most styling, and inline styles for small or data-driven values.

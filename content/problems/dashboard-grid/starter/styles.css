@@ -1,0 +1,25 @@
+body {
+  font-family: sans-serif;
+}
+
+.dashboard {
+  /* TODO: a grid with a 200px sidebar column and a flexible main column */
+}
+
+.header,
+.footer {
+  padding: 12px;
+  background-color: #222;
+  color: white;
+  /* TODO: span both columns */
+}
+
+.stats {
+  /* TODO: four equal columns with a 12px gap */
+}
+
+.stat {
+  padding: 12px;
+  background-color: lavender;
+  border-radius: 6px;
+}

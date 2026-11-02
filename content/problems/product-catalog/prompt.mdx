@@ -1,0 +1,37 @@
+An online store keeps its products in an **array of objects**. Write functions that answer questions about the catalog by combining `filter`, `map`, and `find`.
+
+Each product looks like this:
+
+```js
+{ id: 2, name: "Mug", price: 8, inStock: true }
+```
+
+## Requirements
+
+- `inStockNames(products)` returns an array of the **names** of the products that are in stock, in their original order.
+- `findProduct(products, id)` returns the product object with that `id`, or `undefined` if there is none.
+- `affordableNames(products, maxPrice)` returns the names of products that are in stock **and** cost `maxPrice` or less.
+- `totalInStock(products)` returns the sum of the prices of the in-stock products (`0` if there are none).
+
+None of these functions may change the products array or the product objects.
+
+## Examples
+
+```js
+const products = [
+  { id: 1, name: "Notebook", price: 5, inStock: true },
+  { id: 2, name: "Mug", price: 8, inStock: true },
+  { id: 3, name: "Lamp", price: 30, inStock: false },
+  { id: 4, name: "Poster", price: 12, inStock: true },
+];
+
+inStockNames(products); // ["Notebook", "Mug", "Poster"]
+findProduct(products, 3); // { id: 3, name: "Lamp", price: 30, inStock: false }
+affordableNames(products, 10); // ["Notebook", "Mug"]
+totalInStock(products); // 25
+```
+
+## Hints
+
+- Filter first, then map: `products.filter(...).map((product) => product.name)`.
+- For the total, filter the in-stock products, then add up their prices with a loop or `forEach`.

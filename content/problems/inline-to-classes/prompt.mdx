@@ -1,0 +1,17 @@
+Someone styled these buttons by copying the same inline `style` attribute onto every one. Refactor them to use **classes** instead, so the styles live in one place in `styles.css`. The buttons should look exactly the same when you are done.
+
+## Requirements
+
+- In `index.html`, remove **every** `style` attribute.
+- Give all three buttons the class `btn`. The `Delete` button also gets the class `btn-danger` (an element can have both: `class="btn btn-danger"`).
+- Keep the button text the same: `Save`, `Edit`, and `Delete`.
+- In `styles.css`, write a `.btn` rule with:
+  - `padding` of `8px 16px`
+  - `border-radius` of `6px`
+  - `background-color` of `steelblue`
+  - `color` of `white`
+- Write a `.btn-danger` rule that sets `background-color` to `crimson`.
+
+## Hints
+
+- Put the `.btn-danger` rule **after** `.btn`. Both are single-class selectors, so the later one wins the tie.

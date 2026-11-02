@@ -1,0 +1,38 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 16px;
+}
+
+.hero {
+  background-color: #eef;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+.search {
+  margin: 16px 0;
+  display: flex;
+  gap: 8px;
+}
+
+.search input {
+  padding: 8px;
+  flex: 1;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  padding: 4px 12px;
+  background-color: steelblue;
+  color: white;
+  border-radius: 12px;
+}

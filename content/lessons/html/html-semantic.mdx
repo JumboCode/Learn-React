@@ -1,0 +1,95 @@
+You can build almost any layout out of generic boxes. HTML has one called `<div>` ("division"): it means nothing, it just groups things. But HTML also has elements that describe **what** a section of the page is. Using them is called **semantic HTML**, and it makes your pages easier for people, browsers, and teammates to understand.
+
+## Why meaning matters
+
+To your eyes, a navigation bar made of `<div>` elements and one made of `<nav>` can look identical. The difference is who else is reading:
+
+- **Screen readers** offer shortcuts like "jump to main content" or "list the navigation links." They can only do that if the page says which part is which.
+- **Search engines** use the structure to understand what the page is about.
+- **Developers**, including you in three months, can read `<footer>` at a glance. A sixth nested `<div>` tells you nothing.
+
+## The page landmarks
+
+| Element | Meaning |
+| --- | --- |
+| `<header>` | Introductory content: usually the site name or logo, sometimes the nav. |
+| `<nav>` | A group of major navigation links. |
+| `<main>` | The main content of this page. Use only one per page. |
+| `<section>` | A themed chunk of content, usually with its own heading. |
+| `<article>` | A self-contained piece that would make sense on its own: a blog post, a news story, a product card. |
+| `<footer>` | Closing information: copyright, contact links, related links. |
+
+A typical page uses them like this:
+
+```html
+<body>
+  <header>
+    <h1>Jumbo Bakery</h1>
+    <nav>...</nav>
+  </header>
+  <main>
+    <section>...</section>
+    <section>...</section>
+  </main>
+  <footer>...</footer>
+</body>
+```
+
+## section or article?
+
+Ask: "Could this be shared on its own and still make sense?" If yes, like a single blog post or recipe, use `<article>`. If it is just one part of a bigger page, like "Our hours" on a bakery's home page, use `<section>`. An `<article>` can contain sections, and a section can contain several articles.
+
+## When to use div
+
+`<div>` is still useful. Reach for it when you need a box purely for styling or layout and none of the meaningful elements fit. A good habit: pick a semantic element first, and fall back to `<div>` only when nothing else describes the content.
+
+## Try it
+
+```html-live
+<header>
+  <h1>Jumbo Bakery</h1>
+  <nav>
+    <a href="#menu">Menu</a> |
+    <a href="#hours">Hours</a>
+  </nav>
+</header>
+
+<main>
+  <section id="menu">
+    <h2>Today's Menu</h2>
+    <article>
+      <h3>Blueberry Muffin</h3>
+      <p>Baked fresh every morning with local berries.</p>
+    </article>
+    <article>
+      <h3>Sourdough Loaf</h3>
+      <p>A crusty loaf with a 24-hour rise.</p>
+    </article>
+  </section>
+
+  <section id="hours">
+    <h2>Hours</h2>
+    <p>Open every day, 7am to 3pm.</p>
+  </section>
+</main>
+
+<footer>
+  <p>Jumbo Bakery, 123 College Ave.</p>
+</footer>
+
+<!-- Try adding a third <article> for your favorite baked good. -->
+<!-- Then change <main> to <div>: the page looks the same, but the meaning is gone. -->
+```
+
+The preview looks plain because these elements carry meaning, not style. You will make it look good with CSS.
+
+<Note>
+React components often return exactly these elements. A `Header` component returns a `<header>`, a `PostCard` component returns an `<article>`. Splitting a page into semantic pieces now is good practice for splitting it into components later.
+</Note>
+
+## Recap
+
+- Semantic elements describe what content *is*, not how it looks.
+- `<header>`, `<nav>`, `<main>`, and `<footer>` mark the big regions of a page.
+- Use `<article>` for content that stands on its own and `<section>` for a themed part of a page.
+- Use `<div>` only when no meaningful element fits.

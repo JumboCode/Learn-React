@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Specificity Showdown</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+      #title { color: gray; }
+      .message { color: gray; }
+      .todo-list li { color: gray; }
+    </style>
+  </head>
+  <body>
+    <h1 id="title" class="headline">Today's Tasks</h1>
+    <p class="message">You have three tasks.</p>
+    <p class="message alert">One task is overdue!</p>
+    <ul class="todo-list">
+      <li class="done">Water the plants</li>
+      <li>Finish homework</li>
+      <li class="done">Call grandma</li>
+    </ul>
+  </body>
+</html>

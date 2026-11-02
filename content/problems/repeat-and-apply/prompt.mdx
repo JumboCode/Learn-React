@@ -1,0 +1,26 @@
+Write three functions that take **callbacks**: functions passed in as arguments, which your code calls.
+
+## Requirements
+
+- `repeat(n, action)` calls `action` exactly `n` times. Each call receives the current index: `0` the first time, then `1`, and so on up to `n - 1`. If `n` is `0`, `action` is never called. `repeat` does not need to return anything.
+- `applyToAll(list, transform)` calls `transform(item)` once for each item, in order, and returns a **new** array of the results. Do not use `map` here; the point is to build it yourself with `forEach` or `for...of` and `push`. The original `list` must not change.
+- `runLater(callback, ms)` uses `setTimeout` to call `callback` once, after `ms` milliseconds.
+
+## Examples
+
+```js
+repeat(3, (i) => console.log("lap", i));
+// lap 0
+// lap 1
+// lap 2
+
+applyToAll([1, 2, 3], (n) => n * 10); // [10, 20, 30]
+applyToAll(["a", "b"], (s) => s.toUpperCase()); // ["A", "B"]
+
+runLater(() => console.log("ding!"), 1000); // logs "ding!" one second later
+```
+
+## Hints
+
+- A classic counting loop is handy for `repeat`: `for (let i = 0; i < n; i++) ...`.
+- Start `applyToAll` with an empty array, `push` each result into it, then return it.

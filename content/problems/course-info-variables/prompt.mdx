@@ -1,0 +1,22 @@
+Store facts about a course in variables. Each variable is **exported** (the `export` keyword in front of it) so the tests can read it. The starter already has every name; replace the placeholder values.
+
+## Requirements
+
+| Variable | Type | Value |
+| --- | --- | --- |
+| `courseName` | string | `"Learn React"` |
+| `lessonCount` | number | `14` |
+| `isOnline` | boolean | `true` |
+| `instructor` | null | `null` (no instructor has been chosen yet) |
+| `minutesPerLesson` | number | `30` |
+| `totalMinutes` | number | `lessonCount` times `minutesPerLesson`, **calculated** from those two variables |
+| `summary` | string | `"Learn React has 14 lessons"`, **built** by joining `courseName`, `" has "`, `lessonCount`, and `" lessons"` with `+` |
+
+- Use `const` for every variable: none of them need to be reassigned.
+- Watch the types: `14` and `"14"` are different values. `typeof` tells you which one you have.
+
+## Hints
+
+- `*` multiplies two numbers.
+- Adding a number to a string with `+` turns the number into text: `"Room " + 5` is `"Room 5"`.
+- Use `console.log(totalMinutes, typeof totalMinutes)` to check your work in the console panel.

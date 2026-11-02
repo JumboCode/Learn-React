@@ -1,0 +1,14 @@
+body {
+  font-family: sans-serif;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  background-color: steelblue;
+  color: white;
+}
+
+.btn-danger {
+  background-color: crimson;
+}

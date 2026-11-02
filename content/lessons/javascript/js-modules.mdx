@@ -1,0 +1,103 @@
+So far every example has lived in one block of code. Real projects have hundreds of functions, and keeping them in one giant file would be chaos. **Modules** let you split code across files: each file chooses what to share with `export`, and other files pull those pieces in with `import`.
+
+## Named exports
+
+Put `export` in front of anything you want other files to use:
+
+```js
+// math.js
+export const PI = 3.14159;
+
+export function add(a, b) {
+  return a + b;
+}
+
+function secretHelper() {
+  // not exported, so only math.js can use it
+}
+```
+
+Another file imports those names inside curly braces. The names must match exactly:
+
+```js
+// app.js
+import { add, PI } from "./math.js";
+
+console.log(add(2, 3)); // 5
+console.log(PI);
+```
+
+The `"./math.js"` part is a path: `./` means "in the same folder as this file". Anything not exported, like `secretHelper`, stays private to its file.
+
+## Default exports
+
+A file can also have one **default export**, its "main thing". You import a default *without* curly braces, and you can give it any name you like:
+
+```js
+// greet.js
+export default function greet(name) {
+  return `Hello, ${name}!`;
+}
+```
+
+```js
+// app.js
+import greet from "./greet.js";
+import sayHello from "./greet.js"; // same function, different local name
+```
+
+A file can mix both: one default plus any number of named exports.
+
+```js
+// app.js
+import greet, { add, PI } from "./utils.js";
+```
+
+| Kind | Exporting | Importing | How many per file |
+| --- | --- | --- | --- |
+| Named | `export function add` | `import { add } from "./math.js"` | any number |
+| Default | `export default function greet` | `import greet from "./greet.js"` | at most one |
+
+## Importing packages
+
+When the path does not start with `./` or `../`, it refers to an installed **package** rather than one of your files:
+
+```js
+import { useState } from "react";
+```
+
+That line reaches into the `react` package you installed and grabs its named export `useState`.
+
+## Try it
+
+The playground below is a single file, so it cannot import from another one. But you can think of a module as an object of named things. This example groups functions the way `math.js` above would, and shows how importing by name works like destructuring:
+
+```js-live
+// Pretend this object is everything math.js exports.
+const mathModule = {
+  PI: 3.14159,
+  add: (a, b) => a + b,
+  circleArea: (r) => 3.14159 * r * r,
+};
+
+// import { add, circleArea } from "./math.js"; feels a lot like:
+const { add, circleArea } = mathModule;
+
+console.log(add(2, 3));
+console.log(circleArea(2).toFixed(2));
+
+// Try adding a subtract function to mathModule and "importing" it.
+```
+
+This is only an analogy, not how modules work under the hood, but the syntax is deliberately similar.
+
+<Note>
+In React, every component usually lives in its own file and is the default export: `export default function Button() ...`. Other files bring it in with `import Button from "./Button";`. Many build tools let you leave off the `.js` or `.jsx` ending, so you will often see paths without one.
+</Note>
+
+## Recap
+
+- `export` shares a value from a file; anything not exported stays private.
+- Named exports are imported with curly braces and must match by name.
+- A default export is imported without braces, under any name you choose.
+- Paths starting with `./` point to your files; bare names like `"react"` point to packages.

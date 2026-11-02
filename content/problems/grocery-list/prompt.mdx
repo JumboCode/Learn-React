@@ -1,0 +1,16 @@
+Render a grocery list from an array of objects instead of writing each item by hand.
+
+## Requirements
+
+- Export a component named `GroceryList`: `export function GroceryList({ items })`.
+- `items` is an array of objects like `{ id: 1, name: "Apples", quantity: 3 }`.
+- Render a `<ul>` with one `<li>` per item, in the same order as the array. Each item's text is the name followed by the quantity in parentheses, for example `Apples (3)`.
+- Give every `<li>` a `key`. Use the item's `id`, so React never warns about a missing `key`.
+- If `items` is empty, render a paragraph `Your list is empty.` instead of the list.
+- The default export `App` renders `GroceryList` with the `groceries` array from the starter.
+
+## Hints
+
+- `items.map((item) => <li key={item.id}>...</li>)` turns each object into an element.
+- Check `items.length === 0` first and return early for the empty case.
+- The tests also pass their own arrays to `GroceryList`, so do not hard-code any items inside it.

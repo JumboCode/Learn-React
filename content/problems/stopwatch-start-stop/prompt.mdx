@@ -1,0 +1,16 @@
+Build a stopwatch that counts whole seconds and can be started, stopped, and reset.
+
+## Requirements
+
+- Show the elapsed time as `Time: 0s` when the page loads, then `Time: 1s`, `Time: 2s`, and so on.
+- Nothing ticks until the user clicks the **Start** button. While running, the time goes up by 1 every 1000 milliseconds.
+- The **Stop** button pauses it. Clicking **Start** again continues from where it stopped.
+- Clicking **Start** while it is already running must not make it count faster.
+- The **Reset** button stops the stopwatch and sets the time back to 0.
+
+## Hints
+
+- Keep two pieces of state: the number of seconds, and whether it is running.
+- Start a `setInterval` inside `useEffect` only when it is running, and put `running` in the dependency array.
+- Return a cleanup function that calls `clearInterval`. React runs it whenever `running` changes, which is what stops the old timer.
+- Inside the interval, use the updater form `setSeconds((s) => s + 1)`. A plain `seconds + 1` would be stuck on an old value.

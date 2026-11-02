@@ -1,0 +1,14 @@
+The starter code is an FAQ where every `Panel` keeps its own `isOpen` state. That means several answers can be open at once. Turn it into an **accordion**: at most one answer is open at a time.
+
+## Requirements
+
+- Keep the three questions and answers from the starter code. Each question is a **button** whose text is the question, for example **What time do you open?**
+- When the page loads, **no** answers are shown.
+- Clicking a closed question's button shows its answer and **closes** any other open answer.
+- Clicking the open question's button again closes it, so no answers are shown.
+
+## Hints
+
+- Siblings cannot see each other's state. Remove the state from `Panel` and **lift** it to `App`, for example `const [openIndex, setOpenIndex] = useState(null);`.
+- Pass each `Panel` an `isOpen` prop and an `onToggle` callback prop.
+- `null` is a handy value for "nothing is open".

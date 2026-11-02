@@ -1,0 +1,18 @@
+Build a dashboard page layout with **CSS Grid**: a header across the top, a fixed-width sidebar next to the main area, a footer across the bottom, and a row of four stat boxes inside the main area. Only edit `styles.css`.
+
+## Requirements
+
+- `.dashboard`:
+  - `display` is `grid`.
+  - Two columns: a `200px` sidebar and a main area that takes the rest, so `grid-template-columns` is `200px 1fr`.
+  - `row-gap` is `16px` and `column-gap` is `24px`.
+- `.header` and `.footer` each stretch across **both** columns: `grid-column` is `span 2`.
+- `.stats` (inside the main area) is its own grid:
+  - `display` is `grid`.
+  - Four **equal** columns: `repeat(4, 1fr)`.
+  - `gap` is `12px`.
+
+## Hints
+
+- `gap` can take two values: the row gap, then the column gap. You can also set `row-gap` and `column-gap` separately.
+- A grid item can itself be a grid. Its children line up in its own columns.

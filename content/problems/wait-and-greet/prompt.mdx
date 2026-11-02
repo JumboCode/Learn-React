@@ -1,0 +1,26 @@
+Make your own promises with `new Promise` and `setTimeout`, then use them with `async` and `await`.
+
+## Requirements
+
+- `wait(ms)` returns a **promise** that resolves after `ms` milliseconds. It does not need to resolve to any particular value.
+- `greetLater(name, ms)` is an `async` function. It waits `ms` milliseconds (use `wait`), then returns `"Hello, NAME!"` with the given name.
+- `countdown(from, onTick)` is an `async` function. For each number from `from` down to `1`, it waits 1000 milliseconds and then calls `onTick` with that number. After the last tick it returns the string `"Liftoff!"`. With `from` equal to `0`, it does not call `onTick` at all and returns `"Liftoff!"` right away.
+
+## Examples
+
+```js
+await wait(500); // resumes half a second later
+
+await greetLater("Ada", 1000); // "Hello, Ada!" after one second
+
+await countdown(3, (n) => console.log(n));
+// after 1s: 3
+// after 2s: 2
+// after 3s: 1
+// returns "Liftoff!"
+```
+
+## Hints
+
+- Inside `new Promise((resolve) => ...)`, call `setTimeout(resolve, ms)` to resolve later.
+- `await` works inside a loop: `for (let n = from; n >= 1; n--)` with `await wait(1000);` in the body ticks once per second.

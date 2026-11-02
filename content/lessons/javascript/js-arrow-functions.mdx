@@ -1,0 +1,96 @@
+Open almost any React file and you will see `=>` everywhere. That arrow is a shorter way to write a function, called an **arrow function**. It does the same job as the functions from the last lesson, with less typing.
+
+## From function to arrow
+
+Here is the same function written two ways:
+
+```js
+// Regular function
+function double(n) {
+  return n * 2;
+}
+
+// Arrow function
+const double = (n) => {
+  return n * 2;
+};
+```
+
+To turn a regular function into an arrow function: drop the word `function`, store it in a `const`, and put `=>` between the parameters and the body.
+
+## The short forms
+
+Arrow functions get shorter in two common situations.
+
+**Implicit return.** If the body is a single expression, you can drop the curly braces *and* the word `return`. The value of the expression is returned automatically:
+
+```js
+const double = (n) => n * 2;
+```
+
+**One parameter.** With exactly one parameter, the parentheses around it are optional. Many teams keep them anyway for consistency, so you will see both styles:
+
+```js
+const double = n => n * 2;
+```
+
+With zero parameters, or two or more, the parentheses are required:
+
+```js-live
+const sayHello = () => "Hello!";
+const add = (a, b) => a + b;
+const square = (n) => n * n;
+const isEven = (n) => n % 2 === 0;
+
+console.log(sayHello());
+console.log(add(2, 3));
+console.log(square(7));
+console.log(isEven(4), isEven(5));
+
+// Try writing an arrow function called shout that takes a string
+// and returns it in uppercase. Hint: "hi".toUpperCase()
+```
+
+## The braces trap
+
+Once you add curly braces, the automatic return goes away. You must write `return` yourself:
+
+```js-live
+const withBraces = (n) => {
+  n * 2; // calculated, then thrown away
+};
+
+const withReturn = (n) => {
+  return n * 2;
+};
+
+const noBraces = (n) => n * 2;
+
+console.log(withBraces(5)); // undefined
+console.log(withReturn(5)); // 10
+console.log(noBraces(5));   // 10
+
+// Try fixing withBraces so it returns 10 too.
+```
+
+If a function mysteriously returns `undefined`, check for this first.
+
+## When to use which
+
+Both styles work. A common habit is:
+
+- `function` for named, top-level functions (including React components).
+- Arrow functions for small functions written inline, especially ones passed to other functions.
+
+You will start passing functions to other functions in the Callbacks lesson, and that is where arrows really shine.
+
+<Note>
+In React, arrow functions are the standard way to write event handlers right inside your markup, like `onClick={() => setCount(count + 1)}`. Read it as "when clicked, run this little function". The `() =>` matters: you are handing over a function to run *later*, not calling `setCount` right now.
+</Note>
+
+## Recap
+
+- `(params) => expression` is an arrow function that returns the expression.
+- With curly braces, you must write `return` yourself.
+- One parameter can skip its parentheses; zero or several cannot.
+- Arrow functions are everywhere in React, especially as inline event handlers.

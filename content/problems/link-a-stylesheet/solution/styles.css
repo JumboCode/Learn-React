@@ -1,0 +1,13 @@
+body {
+  font-family: sans-serif;
+  background-color: lightyellow;
+}
+
+h1 {
+  color: navy;
+  font-size: 40px;
+}
+
+p {
+  color: gray;
+}
