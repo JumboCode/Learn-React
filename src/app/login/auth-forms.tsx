@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { signIn, signInWithGitHub, signUp, type AuthFormState } from "@/app/auth/actions";
+import { USERNAME_HINT, USERNAME_PATTERN } from "@/lib/username";
 
 const input =
   "mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 outline-none focus:border-accent focus:ring-2 focus:ring-accent/30";
@@ -52,7 +53,18 @@ export function AuthForms({ next }: { next: string }) {
           <>
             <label className="block text-sm font-medium">
               Username
-              <input name="username" required pattern="[a-z0-9_]{3,24}" autoComplete="username" className={input} />
+              <input
+                name="username"
+                required
+                pattern={USERNAME_PATTERN}
+                title={USERNAME_HINT}
+                aria-describedby="username-hint"
+                autoComplete="username"
+                className={input}
+              />
+              <span id="username-hint" className="mt-1 block text-xs font-normal text-muted">
+                {USERNAME_HINT}
+              </span>
             </label>
             <label className="block text-sm font-medium">
               Display name

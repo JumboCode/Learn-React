@@ -4,10 +4,9 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { loginPath, safeNextPath } from "@/lib/redirect";
+import { normalizeUsername, USERNAME_HINT } from "@/lib/username";
 
 export type AuthFormState = { error?: string; notice?: string };
-
-const USERNAME = /^[a-z0-9_]{3,24}$/;
 
 async function requestOrigin(): Promise<string> {
   // Next.js rejects Server Action requests whose Origin does not match the host, so this value is the site itself.
@@ -32,12 +31,10 @@ export async function signIn(_state: AuthFormState, formData: FormData): Promise
 }
 
 export async function signUp(_state: AuthFormState, formData: FormData): Promise<AuthFormState> {
-  const username = field(formData, "username").toLowerCase();
+  const username = normalizeUsername(field(formData, "username"));
   const displayName = field(formData, "displayName");
   const password = formData.get("password")?.toString() ?? "";
-  if (!USERNAME.test(username)) {
-    return { error: "Usernames are 3–24 characters: lowercase letters, numbers, and underscores." };
-  }
+  if (!username) return { error: `Usernames are ${USERNAME_HINT}` };
   if (!displayName) return { error: "Please enter a display name." };
   if (password.length < 8) return { error: "Passwords need at least 8 characters." };
 
