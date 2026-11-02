@@ -16,7 +16,7 @@ export default async function TimelinePage() {
       <section className="mb-12">
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Learn React from the ground up</h1>
         <p className="mt-3 text-lg text-muted">
-          React is built on HTML, CSS, and JavaScript, so that is where we start. Each lesson unlocks the next.
+          Start with HTML, CSS, and JavaScript. Complete a lesson to unlock the next.
         </p>
         <div className="mt-6 flex flex-wrap items-center gap-4">
           {nextLesson && (
