@@ -30,6 +30,11 @@ export function getProblem(id: string): Problem | undefined {
   return BY_ID.get(id);
 }
 
+/** The problem after this one in the default (curriculum) order, or undefined for the last problem. */
+export function nextProblem(problem: Problem): Problem | undefined {
+  return PROBLEMS[problem.order + 1];
+}
+
 export function problemsForLesson(lessonId: string): Problem[] {
   return PROBLEMS.filter((problem) => problem.lesson === lessonId);
 }

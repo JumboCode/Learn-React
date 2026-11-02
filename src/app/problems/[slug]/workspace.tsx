@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSandpack } from "@codesandbox/sandpack-react";
 import { CodeSandbox, type SandboxFiles } from "@/components/code-sandbox";
@@ -22,6 +23,7 @@ export function ProblemWorkspace({
   starter,
   initialResults,
   initiallySolved,
+  next,
   header,
   prompt,
 }: {
@@ -32,6 +34,8 @@ export function ProblemWorkspace({
   starter: Record<string, string>;
   initialResults: TestResult[] | null;
   initiallySolved: boolean;
+  /** Where to go once this problem is solved: the next problem, or the list after the last one. */
+  next: { href: string; label: string };
   header: React.ReactNode;
   prompt: React.ReactNode;
 }) {
@@ -67,24 +71,30 @@ export function ProblemWorkspace({
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
       <section className="min-w-0 space-y-6">
-        <div className="flex items-start justify-between gap-4">
-          {header}
-          {solved && (
-            <span className="shrink-0 rounded-full bg-success-soft px-3 py-1 text-sm font-medium text-success">
-              ✓ Solved
-            </span>
-          )}
-        </div>
+        {header}
         {prompt}
       </section>
 
-      <section aria-label="Code editor" className="min-w-0 overflow-hidden rounded-lg border border-line">
-        <CodeSandbox kind={kind} files={files} layout="stacked" editorHeight={420} outputHeight={280}>
-          <RunBar editable={editable} starter={starter} pending={pending} onSubmit={submit} />
-          {/* Keyed by run, so each new run starts with its own first failure selected. */}
-          <TestResultPanel key={run?.id ?? "none"} run={run} pending={pending} />
-        </CodeSandbox>
-      </section>
+      <div className="min-w-0 space-y-3">
+        {solved && (
+          <div className="flex flex-wrap items-center justify-end gap-3">
+            <span className="rounded-full bg-success-soft px-3 py-1 text-sm font-medium text-success">✓ Solved</span>
+            <Link
+              href={next.href}
+              className="rounded-md bg-accent px-4 py-1.5 text-sm font-medium text-white hover:opacity-90"
+            >
+              {next.label} →
+            </Link>
+          </div>
+        )}
+        <section aria-label="Code editor" className="min-w-0 overflow-hidden rounded-lg border border-line">
+          <CodeSandbox kind={kind} files={files} layout="stacked" editorHeight={420} outputHeight={280}>
+            <RunBar editable={editable} starter={starter} pending={pending} onSubmit={submit} />
+            {/* Keyed by run, so each new run starts with its own first failure selected. */}
+            <TestResultPanel key={run?.id ?? "none"} run={run} pending={pending} />
+          </CodeSandbox>
+        </section>
+      </div>
     </div>
   );
 }

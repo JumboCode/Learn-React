@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { getProblem } from "@/curriculum/problems";
+import { getProblem, nextProblem, type Problem } from "@/curriculum/problems";
 import { MODULE_STYLES, MODULES } from "@/curriculum/modules";
 import { problemSources } from "@/grader/problem-sources";
 import type { TestResult } from "@/grader/results";
@@ -19,6 +19,11 @@ export const maxDuration = 60;
 export async function generateMetadata({ params }: PageProps<"/problems/[slug]">): Promise<Metadata> {
   const problem = getProblem((await params).slug);
   return problem ? { title: problem.title } : {};
+}
+
+function nextProblemLink(problem: Problem) {
+  const next = nextProblem(problem);
+  return next ? { href: `/problems/${next.id}`, label: `Next: ${next.title}` } : { href: "/problems", label: "All problems" };
 }
 
 export default async function ProblemPage({ params }: PageProps<"/problems/[slug]">) {
@@ -60,6 +65,7 @@ export default async function ProblemPage({ params }: PageProps<"/problems/[slug
       starter={editableStarter}
       initialResults={(latest?.results as TestResult[] | undefined) ?? null}
       initiallySolved={problemStatus(statuses, problem.id) === "solved"}
+      next={nextProblemLink(problem)}
       header={
         <header>
           <nav aria-label="Breadcrumb" className="text-sm text-muted">
