@@ -121,7 +121,7 @@ For a hosted project:
 ```bash
 npx supabase login
 npx supabase link --project-ref <project-ref>
-npx supabase db push
+npx supabase db push --remote
 ```
 
 ### 4. Seed the curriculum
@@ -174,7 +174,7 @@ Run `test:db` against a local or development database, not production: it create
    preview data apart).
 3. Deploy, then add `https://<your-domain>/auth/callback` to Supabase's Redirect URLs and set the Site URL to your
    domain. For preview deployments, add `https://*-<your-team>.vercel.app/auth/callback`.
-4. Run `npm run db:seed` with the production variables whenever content changes, and `npx supabase db push` whenever a
+4. Run `npm run db:seed` with the production variables whenever content changes, and `npx supabase db push --remote` whenever a
    migration is added.
 
 The grading route declares `maxDuration = 60` so grading is never cut off by a shorter platform default.
