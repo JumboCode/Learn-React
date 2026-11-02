@@ -11,7 +11,7 @@ export default function ResourcesPage() {
     <div className="mx-auto max-w-3xl">
       <h1 className="text-3xl font-semibold tracking-tight">Resources</h1>
       <p className="mt-2 text-muted">
-        Hand-picked references for going deeper. Each opens in a new tab, so your place here is saved.
+        Good resources for learning more...
       </p>
       {RESOURCES.map((group) => (
         <section key={group.topic} aria-labelledby={`topic-${group.topic}`} className="mt-10">

@@ -16,7 +16,7 @@ export default async function TimelinePage() {
       <section className="mb-12">
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Learn React from the ground up</h1>
         <p className="mt-3 text-lg text-muted">
-          React is built on HTML, CSS, and JavaScript, so that is where we start. Each short lesson unlocks the next.
+          React is built on HTML, CSS, and JavaScript, so that is where we start. Each lesson unlocks the next.
         </p>
         <div className="mt-6 flex flex-wrap items-center gap-4">
           {nextLesson && (
@@ -46,7 +46,7 @@ export default async function TimelinePage() {
               <div>
                 <h2 id={`module-${module.id}`} className="flex items-center gap-2 text-xl font-semibold">
                   <span aria-hidden className={`size-3 rounded-full ${style.bg}`} />
-                  {module.title} Island
+                  {module.title}
                 </h2>
                 <p className="mt-1 text-sm text-muted">{module.description}</p>
               </div>
